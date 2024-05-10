@@ -1,5 +1,5 @@
 ---
-- hosts: 10.1.3.18
+- hosts: all
   tasks:
       - name: ping
         ping:
