@@ -18,7 +18,9 @@
 
       - name: Check if a reboot is needed on all Debian servers
         register: reboot_required_file
-        stat: path=/var/run/reboot-required get_md5=no
+        stat: path=/var/run/reboot-required get_md5=no 
+        when:
+        - ansible_facts['distribution'] == "Debian"
 
       - name: Reboot the box if kernel updated on Debian servers
         reboot:

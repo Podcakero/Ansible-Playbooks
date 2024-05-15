@@ -1,0 +1,30 @@
+---
+- hosts: all
+  tasks:
+      - name: Install Zabbix Repo on Debian Servers
+        apt:
+            state: latest
+            deb: "{{ zabbix_repo_url_debian }}"
+        when:
+        - ansible_facts['distribution'] == "Debian"
+
+      - name: Install packages on Debian Servers
+        apt:
+            state: latest
+            pkg: "{{ packages }}"
+        when:
+        - ansible_facts['distribution'] == "Debian"
+ 
+      - name: Install Zabbix Repo on Rocky Servers
+        yum:
+            state: latest
+            name: "{{ zabbix_repo_url_rocky }}"
+        when:
+        - ansible_facts['distribution'] == "Rocky"
+
+     - name: Install packages on Rocky Servers
+       yum:
+            state: latest
+            name: "{{ packages }}" 
+        when:
+        - ansible_facts['distribution'] == "Rocky"
