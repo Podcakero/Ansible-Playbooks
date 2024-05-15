@@ -28,3 +28,35 @@
             name: "{{ packages }}" 
         when:
         - ansible_facts['distribution'] == "Rocky"
+
+      - name: Set SELINUX to Permissive
+        lineinfile:
+            path: /etc/selinux/config
+            regexp: '^SELINUX='
+            line: SELINUX=permissive
+        when:
+        - ansible_facts['distribution'] == "Rocky"
+
+      - name: Set sshd_config settings 
+        lineinfile:
+            path: /etc/ssh/sshd_config
+            search_string: 'PermitRootLogin'
+            line: '#PermitRootLogin prohibit-password'
+        lineinfile:
+            path: /etc/ssh/sshd_config
+            search_string: 'PubkeyAuthentication'
+            line: '#PubkeyAuthentication yes'
+        lineinfile:
+            path: /etc/ssh/sshd_config
+            search_string: 'PasswordAuthentication'
+            line: 'PassworthAuthentication no'
+        lineinfile:
+            path: /etc/ssh/sshd_config
+            search_string: 'PermitEmptyPasswords'
+            line: '#PermitEmptyPasswords no'
+
+      - name: Ensure Greyson ssh key is in authorized_keys
+        lineinefile: 
+            path: /root/.ssh/authorized_keys
+            regexp: 'Greyson Weimer$'
+            line: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCOGOjSUKj6o7y9QlPdAmZ+c0/KT6mEgOjGyFOJJypcKDq135ADZnISCzWhmdsnlmNxKsXYGzzWEIJ3fiirfzwAgay4gmOmocSrF7+b2/Qorso4r5iLROJCOlNBJhn5Eew0BMDrTlnMOpUYYkh/ZfHv6rApenaridEfRzxcCR5XYMDN081cxvRoYmbLOJHT+F+Ri0MUQtICuZ07xvioDhjld6Jtv7t4uVOhmMm1D+s/F/e8O9OgwFmtH7TspdZa4BlHn/mB6wiXOeAF4RHv4sU0XFMBTDqWwR1QwENeN6CZnbTRhIyjv86yevJPqQfiq+42K59BLp5yFBmIWmuJyiOv Greyson Weimer'
