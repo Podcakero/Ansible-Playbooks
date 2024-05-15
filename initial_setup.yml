@@ -104,3 +104,22 @@
             line: Hostname={{ ansible_facts['fqdn'] }}
         when:
         - ansible_facts['distribution'] != "FreeBSD"
+
+      - name: Enable cockpit.socket
+        ansible.builtin.systemd_service:
+            state: started
+            enabled: true
+            name: cockpit.socket
+
+      - name: Enable zabbix agent
+        ansible.builtin.systemd_service:
+            state: started
+            enabled: true
+            name: zabbix_agent2.service
+
+      - name: Disable and Mask firewalld
+        ansible.builtin.systemd_service
+            state: stopped
+            enabled: false
+            masked: true
+            name: firewalld.service
