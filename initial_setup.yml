@@ -56,7 +56,7 @@
             line: '#PermitEmptyPasswords no'
 
       - name: Ensure Greyson ssh key is in authorized_keys
-        lineinefile: 
+        lineinfile: 
             path: /root/.ssh/authorized_keys
             regexp: 'Greyson Weimer$'
             line: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCOGOjSUKj6o7y9QlPdAmZ+c0/KT6mEgOjGyFOJJypcKDq135ADZnISCzWhmdsnlmNxKsXYGzzWEIJ3fiirfzwAgay4gmOmocSrF7+b2/Qorso4r5iLROJCOlNBJhn5Eew0BMDrTlnMOpUYYkh/ZfHv6rApenaridEfRzxcCR5XYMDN081cxvRoYmbLOJHT+F+Ri0MUQtICuZ07xvioDhjld6Jtv7t4uVOhmMm1D+s/F/e8O9OgwFmtH7TspdZa4BlHn/mB6wiXOeAF4RHv4sU0XFMBTDqWwR1QwENeN6CZnbTRhIyjv86yevJPqQfiq+42K59BLp5yFBmIWmuJyiOv Greyson Weimer'
