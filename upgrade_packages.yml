@@ -10,17 +10,17 @@
         when:
         - ansible_facts['distribution'] == "Debian"
 
-      - name: Upgrade all packages on servers
+      - name: Upgrade all packages on Debian servers
         apt: 
             upgrade: dist
         when:
         - ansible_facts['distribution'] == "Debian"
 
-      - name: Check if a reboot is needed on all servers
+      - name: Check if a reboot is needed on all Debian servers
         register: reboot_required_file
         stat: path=/var/run/reboot-required get_md5=no
 
-      - name: Reboot the box if kernel updated
+      - name: Reboot the box if kernel updated on Debian servers
         reboot:
             msg: "Reboot initiated by Ansible for kernel updates"
             connect_timeout: 5
@@ -32,7 +32,7 @@
         - reboot_required_file.stat.exists
         - ansible_facts['distribution'] == "Debian"
 
-      - name: Update all packages on Rocky Linux
+      - name: Update all packages on Rocky Linux servers
         ansible.builtin.yum:
             name: '*'
             state: latest
