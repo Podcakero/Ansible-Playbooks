@@ -110,12 +110,16 @@
             state: started
             enabled: true
             name: cockpit.socket
+        when:
+        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Enable zabbix agent
         ansible.builtin.systemd_service:
             state: started
             enabled: true
-            name: zabbix_agent2.service
+            name: zabbix-agent2.service
+        when:
+        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Disable and Mask firewalld
         ansible.builtin.systemd_service:
@@ -123,3 +127,5 @@
             enabled: false
             masked: true
             name: firewalld.service
+        when:
+        - ansible_facts['distribution'] != "FreeBSD"
