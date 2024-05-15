@@ -101,6 +101,6 @@
         ansible.builtin.lineinfile:
             path: /etc/zabbix/zabbix_agent2.conf
             search_string: 'Hostname='
-            line: Hostname={{ ansible_facts['nodename'] }}
+            line: Hostname={{ ansible_facts['fqdn'] }}
         when:
         - ansible_facts['distribution'] != "FreeBSD"
