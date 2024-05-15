@@ -128,4 +128,4 @@
             masked: true
             name: firewalld.service
         when:
-        - ansible_facts['distribution'] != "FreeBSD"
+        - ansible_facts['distribution'] == "Rocky"
