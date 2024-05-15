@@ -37,25 +37,25 @@
         when:
         - ansible_facts['distribution'] == "Rocky"
 
-      - name: sshd_config\: Disable Password Authentication  on root 
+      - name: sshd_config - Disable Password Authentication  on root 
         ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             search_string: 'PermitRootLogin'
             line: '#PermitRootLogin prohibit-password'
 
-      - name: sshd_config\: Enable Public Key Authentication
+      - name: sshd_config - Enable Public Key Authentication
         ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             search_string: 'PubkeyAuthentication'
             line: '#PubkeyAuthentication yes'
      
-      - name: sshd_config\: Disable Password Authentication
+      - name: sshd_config - Disable Password Authentication
         ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             search_string: 'PasswordAuthentication'
             line: 'PassworthAuthentication no'
 
-      - name: sshd_config\: Disable Empty Passwords
+      - name: sshd_config - Disable Empty Passwords
         ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             search_string: 'PermitEmptyPasswords'
