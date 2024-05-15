@@ -118,7 +118,7 @@
             name: zabbix_agent2.service
 
       - name: Disable and Mask firewalld
-        ansible.builtin.systemd_service
+        ansible.builtin.systemd_service:
             state: stopped
             enabled: false
             masked: true
