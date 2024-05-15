@@ -2,61 +2,67 @@
 - hosts: all
   tasks:
       - name: Install Zabbix Repo on Debian Servers
-        apt:
+        ansible.builtin.apt:
             state: present
             deb: "{{ zabbix_repo_url_debian }}"
         when:
         - ansible_facts['distribution'] == "Debian"
 
       - name: Install packages on Debian Servers
-        apt:
+        ansible.builtin.apt:
             state: latest
             pkg: "{{ packages }}"
         when:
         - ansible_facts['distribution'] == "Debian"
  
       - name: Install Zabbix Repo on Rocky Servers
-        yum:
+        ansible.builtin.yum:
             state: latest
             name: "{{ zabbix_repo_url_rocky }}"
         when:
         - ansible_facts['distribution'] == "Rocky"
 
       - name: Install packages on Rocky Servers
-        yum:
+        ansible.builtin.yum:
             state: latest
             name: "{{ packages }}" 
         when:
         - ansible_facts['distribution'] == "Rocky"
 
       - name: Set SELINUX to Permissive
-        lineinfile:
+        ansible.builtin.lineinfile:
             path: /etc/selinux/config
             regexp: '^SELINUX='
             line: SELINUX=permissive
         when:
         - ansible_facts['distribution'] == "Rocky"
 
-      - name: Set sshd_config settings 
-        lineinfile:
+      - name: sshd_config: Disable Password Authentication  on root 
+        ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             search_string: 'PermitRootLogin'
             line: '#PermitRootLogin prohibit-password'
-        lineinfile:
+
+      - name: sshd_config: Enable Public Key Authentication
+        ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             search_string: 'PubkeyAuthentication'
             line: '#PubkeyAuthentication yes'
-        lineinfile:
+     
+      - name: sshd_config: Disable Password Authentication
+        ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             search_string: 'PasswordAuthentication'
             line: 'PassworthAuthentication no'
-        lineinfile:
+
+      - name: sshd_configDisable Empty Passwords
+        ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             search_string: 'PermitEmptyPasswords'
             line: '#PermitEmptyPasswords no'
 
       - name: Ensure Greyson ssh key is in authorized_keys
-        lineinfile: 
+        ansible.builtin.lineinfile: 
             path: /root/.ssh/authorized_keys
             regexp: 'Greyson Weimer$'
             line: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCOGOjSUKj6o7y9QlPdAmZ+c0/KT6mEgOjGyFOJJypcKDq135ADZnISCzWhmdsnlmNxKsXYGzzWEIJ3fiirfzwAgay4gmOmocSrF7+b2/Qorso4r5iLROJCOlNBJhn5Eew0BMDrTlnMOpUYYkh/ZfHv6rApenaridEfRzxcCR5XYMDN081cxvRoYmbLOJHT+F+Ri0MUQtICuZ07xvioDhjld6Jtv7t4uVOhmMm1D+s/F/e8O9OgwFmtH7TspdZa4BlHn/mB6wiXOeAF4RHv4sU0XFMBTDqWwR1QwENeN6CZnbTRhIyjv86yevJPqQfiq+42K59BLp5yFBmIWmuJyiOv Greyson Weimer'
