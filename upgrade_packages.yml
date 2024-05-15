@@ -37,4 +37,4 @@
             name: '*'
             state: latest
         when:
-        - ansible_facts['distribution'] == "RockyLinux"
+        - ansible_facts['distribution'] == "Rocky"
