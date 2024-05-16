@@ -170,7 +170,7 @@
               - systemd-cryptenroll 
               - --tpm2-device=auto 
               - --tpm2-pcrs=0
-              - --password '{{ encryption_passphrase }}'
+              - --password='{{ encryption_passphrase }}'
               - /dev/sda3 
         when:
         - ansible_facts['distribution'] == "Debian"
