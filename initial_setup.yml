@@ -164,13 +164,13 @@
         when:
         - ansible_facts['distribution'] == "Rocky"
 
-      - name: Create unlock key file for enrolling TMP
+      - name: Create unlock key file for enrolling TPM
         ansible.builtin.lineinfile:
             path: /tmp/key
-            line: '{{ encryption_passphrade }}'
+            line: '{{ encryption_passphrase }}'
             create: true
         when:
-        - ansible_facts['distribution'] == 'Debian'
+        - ansible_facts['distribution'] != 'FreeBSD'
  
       - name: Enroll TPM into LUKS for Debian Auto-Unlock
         ansible.builtin.command: 
@@ -208,9 +208,16 @@
 
       - name: Enroll TPM into LUKS for Rocky Auto-Unlock
         ansible.builtin.command:
-            cmd: "echo \"{{ encryption_passphrase }}\" | clevis luks bind -d -k - /dev/sda3 tpm2 '{\"hash\":\"sha256\",\"key\":\"rsa\"}'"
+            cmd: "clevis luks bind -d -k /tmp/key /dev/sda3 tpm2 '{\"hash\":\"sha256\",\"key\":\"rsa\"}'"
         when: 
         - ansible_facts['distribution'] == "Rocky" 
+
+      - name: Delete unlock key file for enrolling TPM
+        ansible.builtin.file:
+            path: /tmp/key
+            state: absent
+        when:
+        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Install clevis-dracut for Rocky Auto-Unlock
         ansible.builtin.yum:
