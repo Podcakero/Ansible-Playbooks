@@ -10,6 +10,7 @@
 
       - name: Install packages on Debian Servers
         ansible.builtin.apt:
+            update_cache: yes
             state: latest
             pkg: "{{ packages }}"
         when:
