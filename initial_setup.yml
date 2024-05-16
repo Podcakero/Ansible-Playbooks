@@ -78,7 +78,7 @@
         ansible.builtin.lineinfile: 
             path: /root/.ssh/authorized_keys
             regexp: 'Greyson Weimer$'
-            line: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCOGOjSUKj6o7y9QlPdAmZ+c0/KT6mEgOjGyFOJJypcKDq135ADZnISCzWhmdsnlmNxKsXYGzzWEIJ3fiirfzwAgay4gmOmocSrF7+b2/Qorso4r5iLROJCOlNBJhn5Eew0BMDrTlnMOpUYYkh/ZfHv6rApenaridEfRzxcCR5XYMDN081cxvRoYmbLOJHT+F+Ri0MUQtICuZ07xvioDhjld6Jtv7t4uVOhmMm1D+s/F/e8O9OgwFmtH7TspdZa4BlHn/mB6wiXOeAF4RHv4sU0XFMBTDqWwR1QwENeN6CZnbTRhIyjv86yevJPqQfiq+42K59BLp5yFBmIWmuJyiOv Greyson Weimer'
+            line: "{{ greyson_ssh_key }}"
             create: true
         when:
         - ansible_facts['distribution'] != "FreeBSD"
@@ -163,3 +163,58 @@
             name: firewalld.service
         when:
         - ansible_facts['distribution'] == "Rocky"
+ 
+      - name: Enroll TPM into LUKS for Debian Auto-Unlock
+        ansible.builtin.command: 
+            argv:
+              - systemd-cryptenroll 
+              - --tpm2-device=auto 
+              - --tpm2-pcrs=0
+              - --password '{{ encryption_passphrase }}'
+              - /dev/sda3 
+        when:
+        - ansible_facts['distribution'] == "Debian"
+
+      - name: Edit dracut.conf for Debian Auto-Unlock
+        ansible.builtin.lineinfile:
+            path: /etc/dracut.conf
+            line: 'add_dracutmodules+=" tpm2-tss crypt "'
+        when:
+        - ansible_facts['distribution'] == "Debian"
+
+      - name: Edit Grub config for Debian Auto-Unlock
+        ansible.builtin.lineinfile:
+            path: /etc/default/grub
+            insertafter: '^GRUB_CMDLINE_LINUX="'
+            line: 'rd.auto rd.luks=1 '
+        when:
+        - ansible_facts['distribution'] == "Debian"
+
+      - name: Enroll TPM into LUKS for Rocky Auto-Unlock
+        ansible.builtin.command:
+            cmd: 'echo "{{ encryption_passphrase }}" | clevis luks bind -d -k - /dev/sda3 tpm2 \'{"hash":"sha256","key":"rsa"}\''
+        when: 
+        - ansible_facts['distribution'] == "Rocky" 
+
+      - name: Install clevis-dracut for Rocky Auto-Unlock
+        ansible.builtin.yum:
+            name: clevis-dracut
+            state: latest
+        when: 
+        - ansible_facts['distribution'] == "Rocky"       
+
+      - name: Force regnerate dracut for Auto-Unlock
+        ansible.builtin.command:
+            argv: 
+            - dracut
+            - -fv
+            - --regenerate-all
+        when: 
+        - ansible_facts['distribution'] != "FreeBSD"
+
+      - name: Update grub for Auto-Unlock
+        ansible.builtin.command:
+            argv: 
+            - update-grub
+        when: 
+        - ansible_facts['distribution'] != "FreeBSD"
