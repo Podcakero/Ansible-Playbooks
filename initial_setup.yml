@@ -200,7 +200,7 @@
 
       - name: Enroll TPM into LUKS for Rocky Auto-Unlock
         ansible.builtin.command:
-            cmd: 'echo "{{ encryption_passphrase }}" | clevis luks bind -d -k - /dev/sda3 tpm2 \'{{ '{{' }}"hash":"sha256","key":"rsa"{{ '{{' }}\''
+            cmd: 'echo \"{{ encryption_passphrase }}\" | clevis luks bind -d -k - /dev/sda3 tpm2 \' {{ '{{' }}"hash":"sha256","key":"rsa"{{ '}}' }}\' '
         when: 
         - ansible_facts['distribution'] == "Rocky" 
 
