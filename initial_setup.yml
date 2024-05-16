@@ -106,6 +106,21 @@
             line: Hostname={{ ansible_facts['fqdn'] }}
         when:
         - ansible_facts['distribution'] != "FreeBSD"
+      
+      - name: Create cockpit disallowed users file if it doesn't exist
+        ansible.builtin.lineinfile:
+            path: /etc/cockpit/disallowed-users
+            create: true 
+        when:
+        - ansible_facts['distribution'] != "FreeBSD"
+
+      - name: Remove entry of root in cockpit disallowed users
+        ansible.builtin.lineinfile:
+            path: /etc/cockpit/disallowed-users
+            regexp: '^root'
+            state: absent
+        when:
+        - ansible_facts['distribution'] != "FreeBSD"            
 
       - name: Enable cockpit.socket
         ansible.builtin.systemd_service:
