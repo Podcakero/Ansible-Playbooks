@@ -169,6 +169,7 @@
             path: /tmp/key
             line: '{{ encryption_passphrase }}'
             create: true
+            mode: '0700'
         when:
         - ansible_facts['distribution'] != 'FreeBSD'
  
