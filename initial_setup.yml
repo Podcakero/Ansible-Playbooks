@@ -190,6 +190,14 @@
         when:
         - ansible_facts['distribution'] == "Debian"
 
+      - name: Remove entries in crypttab for Auto-Unlock
+        ansible.builtin.lineinfile:
+            path: /etc/crypttab
+            regexp: '.*'
+            state: absent
+        when:
+        - ansible_facts['distribution'] != "Rocky"
+
       - name: Enroll TPM into LUKS for Rocky Auto-Unlock
         ansible.builtin.command:
             cmd: 'echo "{{ encryption_passphrase }}" | clevis luks bind -d -k - /dev/sda3 tpm2 \'{"hash":"sha256","key":"rsa"}\''
