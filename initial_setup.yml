@@ -163,6 +163,14 @@
             name: firewalld.service
         when:
         - ansible_facts['distribution'] == "Rocky"
+
+      - name: Create unlock key file for enrolling TMP
+        ansible.builtin.lineinfile:
+            path: /tmp/key
+            line: '{{ encryption_passphrade }}'
+            create: true
+        when:
+        - ansible_facts['distribution'] == 'Debian'
  
       - name: Enroll TPM into LUKS for Debian Auto-Unlock
         ansible.builtin.command: 
@@ -170,7 +178,7 @@
               - systemd-cryptenroll 
               - --tpm2-device=auto 
               - --tpm2-pcrs=0
-              - --password='{{ encryption_passphrase }}'
+              - --unlock-key-file=/tmp/key
               - /dev/sda3 
         when:
         - ansible_facts['distribution'] == "Debian"
