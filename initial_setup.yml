@@ -123,6 +123,14 @@
         when:
         - ansible_facts['distribution'] != "FreeBSD"
 
+      - name: Create motd file if it does not exist
+        ansible.builtin.lineinfile:
+            path: /etc/motd
+            line: temp
+            create: yes
+        when:
+        - ansible_facts['distribution'] != "FreeBSD"
+
       - name: Remove text in motd file
         ansible.builtin.lineinfile:
             path: /etc/motd
