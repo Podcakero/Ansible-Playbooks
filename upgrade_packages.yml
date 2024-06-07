@@ -32,9 +32,7 @@
             pre_reboot_delay: 0
             post_reboot_delay: 30
             test_command: uptime
-        when: 
-          - reboot_required_file.stat.exists == "True"
-          - ansible_facts['distribution'] == "Debian"
+        when: reboot_required_file.stat.exists == "True" and ansible_facts['distribution'] == "Debian"
 
       - name: Update all packages on Rocky Linux servers
         ansible.builtin.yum:
