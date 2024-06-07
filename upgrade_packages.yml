@@ -17,8 +17,10 @@
         - ansible_facts['distribution'] == "Debian"
 
       - name: Check if a reboot is needed on all Debian servers
+        stat: 
+            path: /var/run/reboot-required 
+            get_md5: no
         register: reboot_required_file
-        stat: path=/var/run/reboot-required get_md5=no 
         when:
         - ansible_facts['distribution'] == "Debian"
 
