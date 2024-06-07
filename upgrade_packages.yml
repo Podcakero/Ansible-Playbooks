@@ -8,13 +8,13 @@
             name: "*"
             state: latest
         when:
-        - ansible_facts['distribution'] == "Debian"
+          - ansible_facts['distribution'] == "Debian"
 
       - name: Upgrade all packages on Debian servers
         apt: 
             upgrade: dist
         when:
-        - ansible_facts['distribution'] == "Debian"
+          - ansible_facts['distribution'] == "Debian"
 
       - name: Check if a reboot is needed on all Debian servers
         stat: 
@@ -22,7 +22,7 @@
             get_md5: no
         register: reboot_required_file
         when:
-        - ansible_facts['distribution'] == "Debian"
+          - ansible_facts['distribution'] == "Debian"
 
       - name: Reboot the box if kernel updated on Debian servers
         reboot:
@@ -33,12 +33,12 @@
             post_reboot_delay: 30
             test_command: uptime
         when: 
-        - reboot_required_file.stat.exists == "True"
-        - ansible_facts['distribution'] == "Debian"
+          - reboot_required_file.stat.exists == "True"
+          - ansible_facts['distribution'] == "Debian"
 
       - name: Update all packages on Rocky Linux servers
         ansible.builtin.yum:
             name: '*'
             state: latest
         when:
-        - ansible_facts['distribution'] == "Rocky"
+          - ansible_facts['distribution'] == "Rocky"
