@@ -16,7 +16,7 @@
         when:
         - ansible_facts['distribution'] == "Debian"
 
-      - name: Install EPEL on Rocky Server
+      - name: Install EPEL on Rocky Servers
         ansible.builtin.yum:
             state: present
             pkg: "epel-release"
@@ -30,22 +30,19 @@
         when:
         - ansible_facts['distribution'] == "Rocky"
 
-      - name: Install packages on Debian Servers
+      - name: Update cache on Debian Servers
         ansible.builtin.apt:
             update_cache: yes
             state: latest
-            pkg: "{{ packages }}"
         when:
-        - ansible_facts['distribution'] == "Debian"
- 
-      - name: Install packages on Rocky Servers
-        ansible.builtin.yum:
-            state: latest
-            name: "{{ packages }}" 
-        when:
-        - ansible_facts['distribution'] == "Rocky"
+        - ansible_facts{'distribution'] == "Debian"
 
-      - name: Set SELINUX to Permissive
+      - name: Install packages
+        ansible.builtin.package:
+            name: latest
+            name: "{{ packages }}"
+ 
+      - name: Set SELINUX to Permissive on Rocky servers
         ansible.builtin.lineinfile:
             path: /etc/selinux/config
             regexp: '^SELINUX='
@@ -59,8 +56,6 @@
             search_string: 'PermitRootLogin'
             line: '#PermitRootLogin prohibit-password'
             firstmatch: true
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: sshd_config - Enable Public Key Authentication
         ansible.builtin.lineinfile:
@@ -68,8 +63,6 @@
             search_string: 'PubkeyAuthentication'
             line: '#PubkeyAuthentication yes'
             firstmatch: true     
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: sshd_config - Disable Password Authentication
         ansible.builtin.lineinfile:
@@ -77,8 +70,6 @@
             search_string: 'PasswordAuthentication'
             line: 'PasswordAuthentication no'
             firstmatch: true
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: sshd_config - Disable Empty Passwords
         ansible.builtin.lineinfile:
@@ -86,8 +77,6 @@
             search_string: 'PermitEmptyPasswords'
             line: '#PermitEmptyPasswords no'
             firstmatch: true
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Ensure Greyson ssh key is in authorized_keys
         ansible.builtin.lineinfile: 
@@ -95,80 +84,60 @@
             regexp: 'Greyson Weimer$'
             line: "{{ greyson_ssh_key }}"
             create: true
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Set Zabbix Agent passive server
         ansible.builtin.lineinfile:
             path: /etc/zabbix/zabbix_agent2.conf
             search_string: 'Server='
             line: Server=10.1.3.17
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Set Zabbix Agent active server
         ansible.builtin.lineinfile:
             path: /etc/zabbix/zabbix_agent2.conf
             search_string: 'ServerActive='
             line: ServerActive=10.1.3.17
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Set Zabbix Agent hostname
         ansible.builtin.lineinfile:
             path: /etc/zabbix/zabbix_agent2.conf
             search_string: 'Hostname='
             line: Hostname={{ ansible_facts['fqdn'] }}
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
       
       - name: Create cockpit disallowed users file if it doesn't exist
         ansible.builtin.lineinfile:
             path: /etc/cockpit/disallowed-users
             line: '# List of users which are not allowed to login to Cockpit'
             create: true 
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Remove entry of root in cockpit disallowed users
         ansible.builtin.lineinfile:
             path: /etc/cockpit/disallowed-users
             regexp: '^root'
             state: absent
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Create motd file if it does not exist
         ansible.builtin.lineinfile:
             path: /etc/motd
             line: temp
             create: yes
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Remove text in motd file
         ansible.builtin.lineinfile:
             path: /etc/motd
             regexp: '.*'
             state: absent
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Enable cockpit.socket
         ansible.builtin.systemd_service:
             state: started
             enabled: true
             name: cockpit.socket
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Enable zabbix agent
         ansible.builtin.systemd_service:
             state: restarted
             enabled: true
             name: zabbix-agent2.service
-        when:
-        - ansible_facts['distribution'] != "FreeBSD"
 
       - name: Disable and Mask firewalld
         ansible.builtin.systemd_service:
@@ -176,5 +145,3 @@
             enabled: false
             masked: true
             name: firewalld.service
-        when:
-        - ansible_facts['distribution'] == "Rocky"

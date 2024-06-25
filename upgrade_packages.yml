@@ -1,22 +1,18 @@
 ---
 - hosts: all
   tasks:
-      - name: Update apt repo and cache on all Debian servers
+      - name: Update apt repo and cache on Debian Servers
         apt:
             update_cache: yes  
-            cache_valid_time: 3600
+        when:
+          - ansible_facts['distribution'] == "Debian"
+
+      - name: Upgrade all packages
+        package:
             name: "*"
             state: latest
-        when:
-          - ansible_facts['distribution'] == "Debian"
 
-      - name: Upgrade all packages on Debian servers
-        apt: 
-            upgrade: dist
-        when:
-          - ansible_facts['distribution'] == "Debian"
-
-      - name: Check if a reboot is needed on all Debian servers
+      - name: Check if a reboot is needed on Debian Servers
         stat: 
             path: /var/run/reboot-required 
             get_md5: no
@@ -24,7 +20,7 @@
         when:
           - ansible_facts['distribution'] == "Debian"
 
-      - name: Reboot the box if kernel updated on Debian servers
+      - name: Reboot the box if kernel updated on Debian Servers
         reboot:
             msg: "Reboot initiated by Ansible for kernel updates"
             connect_timeout: 5
@@ -36,9 +32,17 @@
           - ansible_facts['distribution'] == "Debian"
           - reboot_required_file.stat.exists == "True"
 
-      - name: Update all packages on Rocky Linux servers
-        ansible.builtin.yum:
-            name: '*'
-            state: latest
-        when:
+      - name: Clean and Remove unused packages on Debian Servers
+        apt:
+            autoclean: yes
+            autoremove: yes
+            purge: true
+            clean: yes
+        when: 
+          - ansible_facts['distribution'] == "Debian"
+
+      - name: Remove unused packages on Rocky Servers
+        dnf: 
+            autoremove: yes
+        when: 
           - ansible_facts['distribution'] == "Rocky"
