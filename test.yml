@@ -11,14 +11,14 @@
             state: present
             deb: "{{ zabbix_repo_url_debian }}"
         when:
-	- ansible_facts['distribution'] == "Debian"
+        - ansible_facts['distribution'] == "Debian"
 
       - name: Install Zabbix Repo on Debian Servers
         ansible.builtin.apt:
             state: present
             deb: "{{ zabbix_repo_url_debian }}"
         when:
-	- ansible_facts['distribution'] == "Debian"
+        - ansible_facts['distribution'] == "Debian"
 
       - name: Stop Zabbix-Agent2 service
         ansible.builtin.service:
