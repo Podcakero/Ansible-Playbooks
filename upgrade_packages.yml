@@ -36,7 +36,6 @@
         apt:
             autoclean: yes
             autoremove: yes
-            purge: true
             clean: yes
         when: 
           - ansible_facts['distribution'] == "Debian"
