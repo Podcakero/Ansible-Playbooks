@@ -1,14 +1,21 @@
 ---
 - hosts: all
   tasks:
-      - name: Install EPEL on Rocky Server
-        ansible.builtin.yum:
-            state: present
-            pkg: "epel-release"
-        when:
-        - ansible_facts['distribution'] == "Rocky"
+      - name: Stop Zabbix-Agent2 service
+        ansible.builtin.service:
+            name: zabbix-agent2
+            state: stopped
 
-      - name: Install packages on Debian Servers
-        ansible.builtin.package:
-            state: latest
-            name: "{{ packages }}"
+      - name: Install Zabbix Repo on Debian Servers
+        ansible.builtin.apt:
+            state: present
+            deb: "{{ zabbix_repo_url_debian }}"
+        when:
+	- ansible_facts['distribution'] == "Debian"
+
+      - name: Install Zabbix Repo on Debian Servers
+        ansible.builtin.apt:
+            state: present
+            deb: "{{ zabbix_repo_url_debian }}"
+        when:
+	- ansible_facts['distribution'] == "Debian"
