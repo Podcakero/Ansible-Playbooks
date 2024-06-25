@@ -1,6 +1,13 @@
 ---
 - hosts: all
   tasks:
+      - name: Install EPEL on Rocky Server
+        ansible.builtin.yum:
+            state: present
+            pkg: "epel-release"
+        when:
+        - ansible_facts['distribution'] == "Rocky"
+
       - name: Install packages on Debian Servers
         ansible.builtin.apt:
             update_cache: yes

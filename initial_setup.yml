@@ -16,6 +16,20 @@
         when:
         - ansible_facts['distribution'] == "Debian"
 
+      - name: Install EPEL on Rocky Server
+        ansible.builtin.yum:
+            state: present
+            pkg: "epel-release"
+        when:
+        - ansible_facts['distribution'] == "Rocky"
+
+      - name: Install Zabbix Repo on Rocky Servers
+        ansible.builtin.yum:
+            state: latest
+            name: "{{ zabbix_repo_url_rocky }}"
+        when:
+        - ansible_facts['distribution'] == "Rocky"
+
       - name: Install packages on Debian Servers
         ansible.builtin.apt:
             update_cache: yes
@@ -24,13 +38,6 @@
         when:
         - ansible_facts['distribution'] == "Debian"
  
-      - name: Install Zabbix Repo on Rocky Servers
-        ansible.builtin.yum:
-            state: latest
-            name: "{{ zabbix_repo_url_rocky }}"
-        when:
-        - ansible_facts['distribution'] == "Rocky"
-
       - name: Install packages on Rocky Servers
         ansible.builtin.yum:
             state: latest
