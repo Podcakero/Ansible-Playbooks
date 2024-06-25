@@ -19,3 +19,8 @@
             deb: "{{ zabbix_repo_url_debian }}"
         when:
 	- ansible_facts['distribution'] == "Debian"
+
+      - name: Stop Zabbix-Agent2 service
+        ansible.builtin.service:
+            name: zabbix-agent2
+            state: started
