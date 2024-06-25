@@ -1,9 +1,18 @@
 ---
 - hosts: all
   tasks:
-      - name: ping
-        ping:
+      - name: Install packages on Debian Servers
+        ansible.builtin.apt:
+            update_cache: yes
+            state: latest
+            pkg: "{{ packages }}"
+        when:
+        - ansible_facts['distribution'] == "Debian"
 
-      - name: Print all available facts
-        ansible.builtin.debug:
-            var: ansible_facts
+      - name: Install packages on Rocky Servers
+        ansible.builtin.yum:
+            state: latest
+            name: "{{ packages }}"
+        when:
+        - ansible_facts['distribution'] == "Rocky"
+
