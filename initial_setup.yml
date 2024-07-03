@@ -50,7 +50,7 @@
             name: latest
             name: "{{ packages }}"
 
-      - import_tasks: upgrade_packages.yml
+      - import_tasks: stubs/upgrade_packages.yml
 
       - import_tasks: stubs/config_setters/sshd_config.yml
 
