@@ -1,0 +1,27 @@
+- name: sshd_config - Disable Password Authentication  on root 
+  ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
+      search_string: 'PermitRootLogin'
+      line: '#PermitRootLogin prohibit-password'
+      firstmatch: true
+
+- name: sshd_config - Enable Public Key Authentication
+  ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
+      search_string: 'PubkeyAuthentication'
+      line: '#PubkeyAuthentication yes'
+      firstmatch: true     
+
+- name: sshd_config - Disable Password Authentication
+  ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
+      search_string: 'PasswordAuthentication'
+      line: 'PasswordAuthentication no'
+      firstmatch: true
+
+- name: sshd_config - Disable Empty Passwords
+  ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
+      search_string: 'PermitEmptyPasswords'
+      line: '#PermitEmptyPasswords no'
+      firstmatch: true
