@@ -26,6 +26,7 @@
       - name: Install Zabbix Repo on Rocky Servers
         ansible.builtin.yum:
             state: latest
+            disable_gpg_check: true
             name: "{{ zabbix_repo_url_rocky }}"
         when:
         - ansible_facts['distribution'] == "Rocky"
