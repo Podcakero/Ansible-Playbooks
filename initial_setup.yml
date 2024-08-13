@@ -101,3 +101,10 @@
             enabled: false
             masked: true
             name: firewalld.service
+
+      - name: Restart SSHD
+        ansible.builtin.systemd_service:
+            state: restarted
+            enabled: false
+            masked: true
+            name: sshd.service
