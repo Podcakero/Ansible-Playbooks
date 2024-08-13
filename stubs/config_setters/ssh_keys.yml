@@ -1,0 +1,12 @@
+- name: Ensure Greyson ssh key is in authorized_keys
+  ansible.builtin.lineinfile: 
+      path: /root/.ssh/authorized_keys
+      regexp: 'Greyson Weimer$'
+      line: "{{ greyson_ssh_key }}"
+      create: true
+- name: Ensure Semaphore ssh key is in authorized_keys
+  ansible.builtin.lineinfile:
+      path: /root/.ssh/authorized_keys
+      regexp: 'semaphore$'
+      line: "{{ semaphore_ssh_key }}"
+      create: true
