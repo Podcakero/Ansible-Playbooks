@@ -44,7 +44,7 @@
             update_cache: yes
             state: latest
         when:
-        - ansible_facts{'distribution'] == "Debian"
+        - ansible_facts['distribution'] == "Debian"
 
       - name: Install packages
         ansible.builtin.package:
