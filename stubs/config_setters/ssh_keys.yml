@@ -10,3 +10,9 @@
       regexp: 'semaphore$'
       line: "{{ semaphore_ssh_key }}"
       create: true
+- name: Ensure Gutknecht ACME ssh key is in authorized_keys
+  ansible.builtin.lineinfile:
+      path: /root/.ssh/authorized_keys
+      regexp: 'acme$'
+      line: "{{ gutknecht_acme_ssh_key }}"
+      create: true
