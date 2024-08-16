@@ -14,5 +14,5 @@
   ansible.builtin.lineinfile:
       path: /root/.ssh/authorized_keys
       regexp: 'acme$'
-      line: "{{ gutknecht_acme_ssh_key }}"
+      line: "{{ acme_ssh_key }}"
       create: true
