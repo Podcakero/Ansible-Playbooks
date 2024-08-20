@@ -101,7 +101,7 @@
             enabled: false
             masked: true
             name: firewalld.service
-	when:
+        when:
         - ansible_facts['distribution'] == "Rocky"
 
       - name: Restart SSHD
