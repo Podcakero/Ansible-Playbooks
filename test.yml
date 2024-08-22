@@ -5,38 +5,6 @@
         community.docker.docker_host_info:
         register: result
 
-      - name: Get info on docker host and list images
-        community.docker.docker_host_info:
-            images: true
-        register: result
-
-      - name: Get info on docker host and list images matching the filter
-        community.docker.docker_host_info:
-            images: true
-            images_filters:
-                label: "mylabel"
-        register: result
-
-     - name: Get info on docker host and verbose list images
-       community.docker.docker_host_info:
-           images: true
-           verbose_output: true
-       register: result
-
-    - name: Get info on docker host and used disk space
-      community.docker.docker_host_info:
-          disk_usage: true
-      register: result
-
-    - name: Get info on docker host and list containers matching the filter
-      community.docker.docker_host_info:
-          containers: true
-          containers_filters:
-              label:
-                  - key1=value1
-                  - key2=value2
-      register: result
-
-    - name: Show host information
-      ansible.builtin.debug:
-        var: result.host_info
+      - name: Show host information
+        ansible.builtin.debug:
+            var: result.host_info
