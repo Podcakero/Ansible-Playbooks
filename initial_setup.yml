@@ -7,7 +7,8 @@
             force: true
             name: delete-me
         when:
-        - ansible_facts['distribution'] == "Debian" or ansible_facts['distribution'] == "Ubuntu"
+        - ansible_facts['distribution'] == "Debian" or 
+        - ansible_facts['distribution'] == "Ubuntu"
 
       - name: Set SELINUX to Permissive on Rocky servers
         ansible.builtin.lineinfile:
@@ -29,7 +30,8 @@
             state: present
             deb: "{{ zabbix_repo_url_debian }}"
         when:
-        - ansible_facts['distribution'] == "Debian"
+        - ansible_facts['distribution'] == "Debian" or
+        - ansible_facts['distribution'] == "Ubuntu"
 
       - name: Install Zabbix Repo on Rocky Servers
         ansible.builtin.yum:
@@ -44,7 +46,8 @@
             update_cache: yes
             state: latest
         when:
-        - ansible_facts['distribution'] == "Debian"
+        - ansible_facts['distribution'] == "Debian" or
+        - ansible_facts['distribution'] == "Ubuntu"
 
       - name: Install packages
         ansible.builtin.package:
