@@ -1,10 +1,3 @@
 ---
 - hosts: all
   tasks:
-      - name: Get info on docker host
-        community.docker.docker_host_info:
-        register: result
-
-      - name: Show host information
-        ansible.builtin.debug:
-            var: result.host_info
