@@ -1,7 +1,7 @@
 ---
 - hosts: all
   tasks:
-      - name: Remove initial delete-me user on Debian Servers
+      - name: Remove initial delete-me user on Debian and Ubuntu Servers
         ansible.builtin.user:
             state: absent
             force: true
@@ -24,7 +24,7 @@
         when:
         - ansible_facts['distribution'] == "Rocky"
 
-      - name: Install Zabbix Repo on Debian Servers
+      - name: Install Zabbix Repo on Debian and Ubuntu Servers
         ansible.builtin.apt:
             state: present
             deb: "{{ zabbix_repo_url_debian }}"
@@ -39,7 +39,7 @@
         when:
         - ansible_facts['distribution'] == "Rocky"
 
-      - name: Update cache on Debian Servers
+      - name: Update cache on Debian and Ubuntu Servers
         ansible.builtin.apt:
             update_cache: yes
             state: latest
@@ -113,7 +113,7 @@
 
       - name: Restart SSH on Ubuntu
         ansible.builtin.systemd_service:
-            state: restartded
+            state: restarted
             name: ssh.service
         when:
         - ansible_facts['distribution'] == "Ubuntu"

@@ -1,4 +1,4 @@
-- name: Update apt repo and cache on Debian Servers
+- name: Update apt repo and cache on Debian and Ubuntu Servers
   apt:
       update_cache: yes  
   when:
@@ -9,7 +9,7 @@
       name: "*"
       state: latest
 
-- name: Check if a reboot is needed on Debian Servers
+- name: Check if a reboot is needed on Debian and Ubuntu Servers
   stat: 
       path: /var/run/reboot-required 
       get_md5: no
@@ -17,7 +17,7 @@
   when:
   - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
-- name: Reboot the box if kernel updated on Debian Servers
+- name: Reboot the box if kernel updated on Debian and Ubuntu Servers
   reboot:
       msg: "Reboot initiated by Ansible for kernel updates"
       connect_timeout: 5
@@ -29,7 +29,7 @@
   - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
   - reboot_required_file.stat.exists == "True"
 
-- name: Clean and Remove unused packages on Debian Servers
+- name: Clean and Remove unused packages on Debian and Ubuntu Servers
   apt:
       autoclean: yes
       autoremove: yes
