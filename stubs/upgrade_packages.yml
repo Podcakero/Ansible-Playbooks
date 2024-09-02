@@ -2,7 +2,7 @@
   apt:
       update_cache: yes  
   when:
-    - ansible_facts['distribution'] == "Debian"
+  - (ansible_facts['distibution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Upgrade all packages
   package:
@@ -15,7 +15,7 @@
       get_md5: no
   register: reboot_required_file
   when:
-  - ansible_facts['distribution'] == "Debian"
+  - (ansible_facts['distibution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Reboot the box if kernel updated on Debian Servers
   reboot:
@@ -26,8 +26,8 @@
       post_reboot_delay: 30
       test_command: uptime
   when: 
-    - ansible_facts['distribution'] == "Debian"
-    - reboot_required_file.stat.exists == "True"
+  - (ansible_facts['distibution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
+  - reboot_required_file.stat.exists == "True"
 
 - name: Clean and Remove unused packages on Debian Servers
   apt:
@@ -35,10 +35,10 @@
       autoremove: yes
       clean: yes
   when: 
-    - ansible_facts['distribution'] == "Debian"
+  - (ansible_facts['distibution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Remove unused packages on Rocky Servers
   dnf: 
       autoremove: yes
   when: 
-    - ansible_facts['distribution'] == "Rocky"
+  - ansible_facts['distribution'] == "Rocky"
