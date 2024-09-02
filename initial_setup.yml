@@ -48,7 +48,7 @@
 
       - name: Install packages
         ansible.builtin.package:
-            name: latest
+            state: latest
             name: "{{ packages }}"
 
       - import_tasks: stubs/upgrade_packages.yml
