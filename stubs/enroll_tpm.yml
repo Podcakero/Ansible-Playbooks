@@ -15,7 +15,7 @@
       - /dev/vda3
       - tpm2
       - '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"0,7"}'
-    stdin: "y\n{{ encryption_passphrase }}"
+    stdin: "{{ encryption_passphrase }}"
   when:
     - ansible_facts['distribution'] == "Rocky"
 
