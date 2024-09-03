@@ -8,9 +8,6 @@
 - name: Enroll TPM - Enroll tpm2 in primary disk on Rocky servers
   ansible.builtin.command:
     argv:
-      - echo
-      - "{{ encryption_password }}"
-      - |
       - /usr/bin/clevis
       - luks
       - bind
@@ -18,6 +15,7 @@
       - /dev/vda3
       - tpm2
       - '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"0,7"}'
+    stdin: "y\n {{ encryption_password }}"
   when:
     - ansible_facts['distribution'] == "Rocky"
 
