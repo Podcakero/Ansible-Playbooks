@@ -8,9 +8,7 @@
 - name: Enroll TPM - Enroll tpm2 in primary disk
   ansible.builtin.command:
     argv:
-      - cat
-      - /root/passphrase
-      - |
+      - cat /root/passphrase |
       - /usr/bin/systemd-cryptenroll
       - /dev/vda3
       - --tpm2-device=auto
