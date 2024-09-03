@@ -1,10 +1,3 @@
-- name: Enroll TPM - Create temporary passphrase file
-  ansible.builtin.lineinfile:
-    path: /root/passphrase
-    line: "{{ encryption_passphrase }}"
-    mode: '0700'
-    create: yes
-  
 - name: Enroll TPM - Enroll tpm2 in primary disk - Run systemd-tty-ask-password-agent on the system
   ansible.builtin.raw: 'echo "tmp" | /usr/bin/systemd-cryptenroll /dev/vda3 --tpm2-device=auto --tpm2-pcrs=0+7'
   args:
@@ -24,11 +17,6 @@
 #      - '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"0,7"}'
 #  when:
 #    - ansible_facts['distribution'] == "Rocky"
-
-- name: Enroll TPM - Remove temporary passphrase file
-  ansible.builtin.file:
-    path: /root/passphrase
-    state: absent
 
 - name: Enroll TPM - Add tpm2 modules to Dracut Config on Ubuntu and Debian servers
   ansible.builtin.lineinfile:
