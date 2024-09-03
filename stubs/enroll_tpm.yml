@@ -12,6 +12,7 @@
       - /dev/vda3
       - --tpm2-device=auto
       - --tpm2-pcrs=0+7
+    stdin: "{{ encryption_passphrase }}"
 #  when:
 #    - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
