@@ -1,6 +1,6 @@
 - name: Enroll TPM - Create temporary passphrase file
   ansible.builtin.lineinfile:
-    path: /tmp/passphrase
+    path: /root/passphrase
     line: "{{ encryption_passphrase }}"
     mode: '0700'
     create: yes
@@ -10,7 +10,7 @@
     argv:
       - /usr/bin/systemd-cryptenroll
       - /dev/vda3
-      - --unlock-key-file=/tmp/passphrase
+      - --unlock-key-file=/root/passphrase
       - --tpm2-device=auto
       - --tpm2-pcrs=0+7
 #  when:
@@ -31,7 +31,7 @@
 
 - name: Enroll TPM - Remove temporary passphrase file
   ansible.builtin.file:
-    path: /tmp/passphrase
+    path: /root/passphrase
     state: absent
 
 - name: Enroll TPM - Add tpm2 modules to Dracut Config on Ubuntu and Debian servers
