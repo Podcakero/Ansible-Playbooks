@@ -1,119 +1,121 @@
 ---
 - hosts: all
   tasks:
-      - name: Remove initial delete-me user on Debian and Ubuntu Servers
-        ansible.builtin.user:
-            state: absent
-            force: true
-            name: delete-me
-        when: 
+    - name: Remove initial delete-me user on Debian and Ubuntu Servers
+      ansible.builtin.user:
+        state: absent
+        force: true
+        name: delete-me
+      when: 
         - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
-      - name: Set SELINUX to Permissive on Rocky servers
-        ansible.builtin.lineinfile:
-            path: /etc/selinux/config
-            regexp: '^SELINUX='
-            line: SELINUX=permissive
-        when:
+    - name: Set SELINUX to Permissive on Rocky servers
+      ansible.builtin.lineinfile:
+        path: /etc/selinux/config
+        regexp: '^SELINUX='
+        line: SELINUX=permissive
+      when:
         - ansible_facts['distribution'] == "Rocky"
 
-      - name: Install EPEL on Rocky Servers
-        ansible.builtin.yum:
-            state: present
-            pkg: "epel-release"
-        when:
+    - name: Install EPEL on Rocky Servers
+      ansible.builtin.yum:
+        state: present
+        pkg: "epel-release"
+      when:
         - ansible_facts['distribution'] == "Rocky"
 
-      - name: Install Zabbix Repo on Debian and Ubuntu Servers
-        ansible.builtin.apt:
-            state: present
-            deb: "{{ zabbix_repo_url_debian }}"
-        when: 
+    - name: Install Zabbix Repo on Debian and Ubuntu Servers
+      ansible.builtin.apt:
+        state: present
+        deb: "{{ zabbix_repo_url_debian }}"
+      when: 
         - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
-      - name: Install Zabbix Repo on Rocky Servers
-        ansible.builtin.yum:
-            state: latest
-            disable_gpg_check: true
-            name: "{{ zabbix_repo_url_rocky }}"
-        when:
+    - name: Install Zabbix Repo on Rocky Servers
+      ansible.builtin.yum:
+        state: latest
+        disable_gpg_check: true
+        name: "{{ zabbix_repo_url_rocky }}"
+      when:
         - ansible_facts['distribution'] == "Rocky"
 
-      - name: Update cache on Debian and Ubuntu Servers
-        ansible.builtin.apt:
-            update_cache: yes
-            state: latest
-        when: 
+    - name: Update cache on Debian and Ubuntu Servers
+      ansible.builtin.apt:
+        update_cache: yes
+        state: latest
+      when: 
         - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
-      - name: Install packages
-        ansible.builtin.package:
-            state: latest
-            name: "{{ packages }}"
+    - name: Install packages
+      ansible.builtin.package:
+        state: latest
+        name: "{{ packages }}"
 
-      - import_tasks: stubs/upgrade_packages.yml
+    - import_tasks: stubs/upgrade_packages.yml
 
-      - import_tasks: stubs/config_setters/sshd_config.yml
+    - import_tasks: stubs/config_setters/sshd_config.yml
 
-      - import_tasks: stubs/config_setters/ssh_keys.yml
+    - import_tasks: stubs/config_setters/ssh_keys.yml
 
-      - import_tasks: stubs/config_setters/zabbix_config.yml
+    - import_tasks: stubs/config_setters/zabbix_config.yml
+
+    - import_tasks: stubs/enroll_tpm.yml
       
-      - name: Create cockpit disallowed users file if it doesn't exist
-        ansible.builtin.lineinfile:
-            path: /etc/cockpit/disallowed-users
-            line: '# List of users which are not allowed to login to Cockpit'
-            create: true 
+    - name: Create cockpit disallowed users file if it doesn't exist
+      ansible.builtin.lineinfile:
+        path: /etc/cockpit/disallowed-users
+        line: '# List of users which are not allowed to login to Cockpit'
+        create: true 
 
-      - name: Remove entry of root in cockpit disallowed users
-        ansible.builtin.lineinfile:
-            path: /etc/cockpit/disallowed-users
-            regexp: '^root'
-            state: absent
+    - name: Remove entry of root in cockpit disallowed users
+      ansible.builtin.lineinfile:
+        path: /etc/cockpit/disallowed-users
+        regexp: '^root'
+        state: absent
 
-      - name: Create motd file if it does not exist
-        ansible.builtin.lineinfile:
-            path: /etc/motd
-            line: temp
-            create: yes
+    - name: Create motd file if it does not exist
+      ansible.builtin.lineinfile:
+        path: /etc/motd
+        line: temp
+        create: yes
 
-      - name: Remove text in motd file
-        ansible.builtin.lineinfile:
-            path: /etc/motd
-            regexp: '.*'
-            state: absent
+    - name: Remove text in motd file
+      ansible.builtin.lineinfile:
+        path: /etc/motd
+        regexp: '.*'
+        state: absent
 
-      - name: Enable and Start cockpit.socket
-        ansible.builtin.systemd_service:
-            state: started
-            enabled: true
-            name: cockpit.socket
+    - name: Enable and Start cockpit.socket
+      ansible.builtin.systemd_service:
+        state: started
+        enabled: true
+        name: cockpit.socket
 
-      - name: Enable and Restart zabbix agent
-        ansible.builtin.systemd_service:
-            state: restarted
-            enabled: true
-            name: zabbix-agent2.service
+    - name: Enable and Restart zabbix agent
+      ansible.builtin.systemd_service:
+        state: restarted
+        enabled: true
+        name: zabbix-agent2.service
 
-      - name: Disable and Mask firewalld
-        ansible.builtin.systemd_service:
-            state: stopped
-            enabled: false
-            masked: true
-            name: firewalld.service
-        when:
+    - name: Disable and Mask firewalld
+      ansible.builtin.systemd_service:
+        state: stopped
+        enabled: false
+        masked: true
+        name: firewalld.service
+      when:
         - ansible_facts['distribution'] == "Rocky"
 
-      - name: Restart SSHD
-        ansible.builtin.systemd_service:
-            state: restarted
-            name: sshd.service
-        when:
+    - name: Restart SSHD
+      ansible.builtin.systemd_service:
+        state: restarted
+        name: sshd.service
+      when:
         - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "Debian")
 
-      - name: Restart SSH on Ubuntu
-        ansible.builtin.systemd_service:
-            state: restarted
-            name: ssh.service
-        when:
+    - name: Restart SSH on Ubuntu
+      ansible.builtin.systemd_service:
+        state: restarted
+        name: ssh.service
+      when:
         - ansible_facts['distribution'] == "Ubuntu"
