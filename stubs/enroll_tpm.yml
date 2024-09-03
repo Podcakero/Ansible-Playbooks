@@ -9,7 +9,7 @@
   ansible.builtin.command:
     argv:
       - echo
-      - "Fidoate!mywoolsox1"
+      - "{{ encryption_password }}"
       - |
       - /usr/bin/clevis
       - luks
