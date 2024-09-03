@@ -36,7 +36,7 @@
 - name: Enroll TPM - Add tpm2 modules to Dracut Config on Ubuntu and Debian servers
   ansible.builtin.lineinfile:
     path: /etc/dracut.conf.d/tpm2_auto_unlock.conf
-    line: "add_dracutmodules+=" tpm2-tss crypt ""
+    line: 'add_dracutmodules+=" tpm2-tss crypt "'
     create: yes
   when: 
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
