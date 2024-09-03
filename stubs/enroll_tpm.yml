@@ -10,7 +10,7 @@
     argv:
       - cat
       - /root/passphrase
-      - \| 
+      - |
       - /usr/bin/systemd-cryptenroll
       - /dev/vda3
       - --tpm2-device=auto
