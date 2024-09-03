@@ -50,7 +50,7 @@
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Enroll TPM - Remove entry from /etc/crypttab on Ubuntu and Debian servers
-  ansible.builtin.lineinfine:
+  ansible.builtin.lineinfile:
     path: /etc/crypttab
     regex: ".*"
     state: absent
