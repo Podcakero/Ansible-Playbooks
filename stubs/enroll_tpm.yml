@@ -5,10 +5,10 @@
     mode: '0700'
     create: yes
   
-- name: Enroll TPM - Enroll tpm2 in primary disk
-  ansible.builtin.shell:
-    cmd: "/usr/bin/systemd-cryptenroll /dev/vda3 --tpm2-device=auto --tpm2-pcrs=0+7"
-    stdin: "{{ encryption_passphrase }}"
+- name: Enroll TPM - Enroll tpm2 in primary disk - Run systemd-tty-ask-password-agent on the system
+  ansible.builtin.raw: 'echo "tmp" | /usr/bin/systemd-cryptenroll /dev/vda3 --tpm2-device=auto --tpm2-pcrs=0+7'
+  args:
+    executable: /bin/bash
 #  when:
 #    - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
@@ -65,6 +65,6 @@
 - name: Enroll TPM - Update Grub on Ubuntu and Debian servers
   ansible.builtin.command:
     argv:
-      - /usr/bin/update-grub
+      - /usr/sbin/update-grub
   when: 
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
