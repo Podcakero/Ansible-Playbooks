@@ -25,6 +25,8 @@
       - dracut
       - -fv
       - --regenerate-all
+  when:
+    - ansible_facts['distribution'] == "Rocky"
 
 - name: Enroll TPM - Add tpm2 modules to Dracut Config on Ubuntu and Debian servers
   ansible.builtin.lineinfile:
