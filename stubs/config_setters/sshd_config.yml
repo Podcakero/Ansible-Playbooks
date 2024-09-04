@@ -1,4 +1,4 @@
-- name: SSHD Config - Disable Password Authentication  on root 
+- name: SSHD Config - Disable Password Authentication on root 
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     search_string: 'PermitRootLogin'
