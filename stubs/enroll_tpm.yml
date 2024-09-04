@@ -58,7 +58,14 @@
   when: 
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
-- name: Enroll TPM - Regenerate Dracut for Rocky server
+- name: Enroll TPM - Install clevis-dracut on Rocky servers
+  ansible.builtin.yum:
+    state: present
+    pkg: "clevis-dracut"
+  when:
+    - ansible_facts['distribution'] == "Rocky"
+
+- name: Enroll TPM - Regenerate Dracut on Rocky servers
   ansible.builtin.command:
     argv: 
       - dracut
