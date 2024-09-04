@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: rockylinux:debian
   tasks:
     - name: Remove initial delete-me user on Debian and Ubuntu Servers
       ansible.builtin.user:
