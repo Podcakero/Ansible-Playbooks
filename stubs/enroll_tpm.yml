@@ -19,15 +19,6 @@
   when:
     - ansible_facts['distribution'] == "Rocky"
 
-- name: Enroll TPM - Regenerate Dracut for Rocky server
-  ansible.builtin.command:
-    argv: 
-      - dracut
-      - -fv
-      - --regenerate-all
-  when:
-    - ansible_facts['distribution'] == "Rocky"
-
 - name: Enroll TPM - Add tpm2 modules to Dracut Config on Ubuntu and Debian servers
   ansible.builtin.lineinfile:
     path: /etc/dracut.conf.d/tpm2_auto_unlock.conf
@@ -66,3 +57,12 @@
       - /usr/sbin/update-grub
   when: 
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
+
+- name: Enroll TPM - Regenerate Dracut for Rocky server
+  ansible.builtin.command:
+    argv: 
+      - dracut
+      - -fv
+      - --regenerate-all
+  when:
+    - ansible_facts['distribution'] == "Rocky"
