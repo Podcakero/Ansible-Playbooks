@@ -5,6 +5,6 @@
       ansible.builtin.apt:
         name: "*zabbix*"
         autoremove: true
-	autoclean: true
-	state: absent
-	purge: true	
+        autoclean: true
+        state: absent
+        purge: true
