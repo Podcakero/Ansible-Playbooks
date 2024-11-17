@@ -1,3 +1,10 @@
 ---
 - hosts: all
   tasks:
+	name: Remove zabbix
+	ansible.builtin.apt:
+		name: *zabbox*
+		autoremove: true
+		autoclean: true
+		state: absent
+	
