@@ -3,7 +3,7 @@
   tasks:
     - name: Remove zabbix
       ansible.builtin.apt:
-        name: *zabbox*
+        name: "*zabbix*"
         autoremove: true
 	autoclean: true
 	state: absent
