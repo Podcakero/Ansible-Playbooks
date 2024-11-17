@@ -8,3 +8,13 @@
         autoclean: true
         state: absent
         purge: true
+      when:
+        - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
+
+    - name: Remove zabbix
+      ansible.builtin.yum:
+        name: "*zabbix*"
+        autoremove: yes
+        state: absent
+      when:
+        - (ansible_facts['distribution'] == "Rocky")
