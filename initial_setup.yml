@@ -24,21 +24,6 @@
       when:
         - ansible_facts['distribution'] == "Rocky"
 
-    - name: Install Zabbix Repo on Debian and Ubuntu Servers
-      ansible.builtin.apt:
-        state: present
-        deb: "{{ zabbix_repo_url_debian }}"
-      when: 
-        - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
-
-    - name: Install Zabbix Repo on Rocky Servers
-      ansible.builtin.yum:
-        state: latest
-        disable_gpg_check: true
-        name: "{{ zabbix_repo_url_rocky }}"
-      when:
-        - ansible_facts['distribution'] == "Rocky"
-
     - name: Update cache on Debian and Ubuntu Servers
       ansible.builtin.apt:
         update_cache: yes
@@ -56,8 +41,6 @@
     - import_tasks: stubs/config_setters/sshd_config.yml
 
     - import_tasks: stubs/config_setters/ssh_keys.yml
-
-    - import_tasks: stubs/config_setters/zabbix_config.yml
 
     - import_tasks: stubs/enroll_tpm.yml
       
@@ -91,12 +74,6 @@
         enabled: true
         name: cockpit.socket
 
-    - name: Enable and Restart zabbix agent
-      ansible.builtin.systemd_service:
-        state: restarted
-        enabled: true
-        name: zabbix-agent2.service
-
     - name: Disable and Mask firewalld
       ansible.builtin.systemd_service:
         state: stopped
@@ -119,3 +96,4 @@
         name: ssh.service
       when:
         - ansible_facts['distribution'] == "Ubuntu"
+
