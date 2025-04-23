@@ -18,3 +18,17 @@
       regexp: 'acme$'
       line: "{{ acme_ssh_key }}"
       create: true
+
+- name: Ensure Greyson USB-A ssh key is in authorized_keys
+  ansible.builtin.lineinfile:
+      path: /root/.ssh/authorized_keys
+      regexp: 'Greyson Weimer USB-A Yubikey SSH Key$'
+      line: "{{ greyson_ssh_yubikey_usb-a_key }}"
+      create: true
+
+- name: Ensure Greyson USB-C ssh key is in authorized_keys
+  ansible.builtin.lineinfile:
+      path: /root/.ssh/authorized_keys
+      regexp: 'Greyson Weimer USB-C Yubikey SSH Key$'
+      line: "{{ greyson_ssh_yubikey_usb-c_key }}"
+      create: true

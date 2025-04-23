@@ -1,20 +1,5 @@
 ---
 - hosts: all
   tasks:
-    - name: Remove zabbix
-      ansible.builtin.apt:
-        name: "*zabbix*"
-        autoremove: true
-        autoclean: true
-        state: absent
-        purge: true
-      when:
-        - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
+    - import_tasks: stubs/config_setters/ssh_keys.yml
 
-    - name: Remove zabbix
-      ansible.builtin.yum:
-        name: "*zabbix*"
-        autoremove: yes
-        state: absent
-      when:
-        - (ansible_facts['distribution'] == "Rocky")
