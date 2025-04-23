@@ -25,3 +25,10 @@
       search_string: 'PermitEmptyPasswords'
       line: '#PermitEmptyPasswords no'
       firstmatch: true
+
+- name: SSHD Config - Enable Public Key Auth User Verification
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    search_string: 'PubkeyAuthOptions'
+    line: 'PubkeyAuthOptions verify-required'
+    firstmatch: true
