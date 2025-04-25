@@ -4,7 +4,6 @@
       - ca-certificates
       - curl
     state: present
-    update_cache: true
 
 - name: Install apt keyring
   ansible.builtin.command:
@@ -34,6 +33,10 @@
     dest: /etc/apt/sources.list.d/docker.repo
     mode: "0644"
 
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+
 - name: Install Docker Engine Packages
   ansible.builtin.apt:
     name:
@@ -43,7 +46,6 @@
       - docker-buildx-plugin
       - docker-compose-plugin"
     state: present
-    update_cache: true
 
 - name: Enable Docker service on startup
   ansible.builtin.systemd:
