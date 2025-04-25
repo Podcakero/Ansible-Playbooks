@@ -1,6 +1,6 @@
 - name: Install Docker Engine Pre-Requisites
   ansible.builtin.dnf:
-    name: "dnf-plugins-core"
+    name: dnf-plugins-core
     state: present
 
 - name: Install Docker-CE repo
@@ -15,7 +15,12 @@
 
 - name: Install Docker Engine Packages
   ansible.builtin.dnf:
-    name: "docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin"
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
     state: present
 
 - name: Enable Docker service on startup
