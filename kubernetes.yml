@@ -1,4 +1,5 @@
 ---
 - name: Kubernetes Role Setup
+  hosts: all
   roles:
     - kubernetes
