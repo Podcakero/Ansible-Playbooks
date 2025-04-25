@@ -1,9 +1,6 @@
 - name: Enable IPv4 Forwarding
   ansible.builtin.import_tasks: enable_ipv4_forwarding.yml
 
-- name: Apply Kubelet.conf Template
-  ansible.builtin.import_tasks: apply_kubelet_config.yml
-
 - name: Install Docker Engine on Debian and Ubuntu Servers
   ansible.builtin.import_tasks: install_docker_engine_debian.yml
   when:
@@ -19,3 +16,6 @@
 
 - name: Install Kubernetes Packages
   ansible.builtin.import_tasks: install_kubernetes_packages.yml
+
+#- name: Apply Kubelet.conf Template
+#  ansible.builtin.import_tasks: apply_kubelet_config.yml
