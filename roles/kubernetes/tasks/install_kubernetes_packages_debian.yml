@@ -16,7 +16,7 @@
   ansible.builtin.raw: 'curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg'
   register: output
   changed_when: output.rc == 0
-  when: k8sgpg.stat.exists
+  when: k8sgpg.stat.exists is not defined
 
 - name: Add Kubernetes Repo
   ansible.builtin.template:
