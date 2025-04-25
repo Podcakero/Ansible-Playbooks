@@ -1,0 +1,45 @@
+- name: Install pre-requisites
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gpg
+    state: present
+
+- name: Download Kubernetes Repo GPG Key
+  ansible.builtin.command:
+    argv:
+      - curl
+      - -fsSL
+      - https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key
+      - \|
+      - gpg
+      - --dearmor
+      - -o
+      - /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  register: output
+  changed_when: output.rc == 0
+
+- name: Add Kubernetes Repo
+  ansible.builtin.template:
+    src: templates/kubernetes.list.j2
+    dest: /etc/apt/sources.list.d/kubernetes.list
+    mode: "0644"
+
+- name: Install Kubernetes Packages
+  ansible.builtin.apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: present
+    update_cache: true
+
+- name: Pin Kubernetes Package Versions
+  ansible.builtin.dpkg_selections:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    selection: hold
