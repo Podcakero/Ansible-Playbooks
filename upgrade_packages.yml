@@ -1,4 +1,5 @@
 ---
-- hosts: all
+- name: Upgrade Packages
+  hosts: all
   tasks:
-    - import_tasks: stubs/upgrade_packages.yml
+    - ansible.builtin.import_tasks: stubs/upgrade_packages.yml

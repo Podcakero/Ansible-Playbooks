@@ -1,6 +1,11 @@
 {
-    "ansible.python.interpreterPath": "/bin/python",
+    "ansible.python.interpreterPath": "/home/gweimer/GitHub/Ansible-Playbooks/.venv/bin/python",
     "yaml.schemas": {
-        "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/tasks": "file:///etc/semaphore/Ansible-Playbooks/roles/kubernetes/tasks/set_cgroup_systemd.yml"
+        "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/tasks": [
+            "file:///etc/semaphore/Ansible-Playbooks/roles/kubernetes/tasks/set_cgroup_systemd.yml",
+            "file:///home/gweimer/GitHub/Ansible-Playbooks/stubs/upgrade_packages.yml",
+            "file:///home/gweimer/GitHub/Ansible-Playbooks/stubs/config_setters/sshd_config.yml",
+            "file:///home/gweimer/GitHub/Ansible-Playbooks/stubs/config_setters/ssh_keys.yml"
+        ]
     }
 }

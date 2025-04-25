@@ -1,9 +1,10 @@
 - name: Ensure Greyson ssh key is in authorized_keys
-  ansible.builtin.lineinfile: 
+  ansible.builtin.lineinfile:
     path: /root/.ssh/authorized_keys
     regexp: 'Greyson Weimer$'
     line: "{{ greyson_ssh_key }}"
     create: true
+    mode: "0600"
 
 - name: Ensure Semaphore ssh key is in authorized_keys
   ansible.builtin.lineinfile:
@@ -11,6 +12,7 @@
     regexp: 'semaphore$'
     line: "{{ semaphore_ssh_key }}"
     create: true
+    mode: "0600"
 
 - name: Ensure Gutknecht ACME ssh key is in authorized_keys
   ansible.builtin.lineinfile:
@@ -18,6 +20,7 @@
     regexp: 'acme$'
     line: "{{ acme_ssh_key }}"
     create: true
+    mode: "0600"
 
 - name: Ensure Greyson USB-A ssh key is in authorized_keys
   ansible.builtin.lineinfile:
@@ -25,6 +28,7 @@
     regexp: 'Greyson Weimer USB-A Yubikey SSH Key$'
     line: "{{ greyson_ssh_yubikey_usb_a_key }}"
     create: true
+    mode: "0600"
 
 - name: Ensure Greyson USB-C ssh key is in authorized_keys
   ansible.builtin.lineinfile:
@@ -32,3 +36,4 @@
     regexp: 'Greyson Weimer USB-C Yubikey SSH Key$'
     line: "{{ greyson_ssh_yubikey_usb_c_key }}"
     create: true
+    mode: "0600"

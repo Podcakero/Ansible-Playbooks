@@ -1,44 +1,43 @@
 - name: Update apt repo and cache on Debian and Ubuntu Servers
-  apt:
-    update_cache: yes  
+  ansible.builtin.apt:
+    update_cache: true
   when:
-  - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
+    - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Upgrade all packages
-  package:
+  ansible.builtin.package:
     name: "*"
     state: latest
 
 - name: Check if a reboot is needed on Debian and Ubuntu Servers
-  stat: 
-      path: /var/run/reboot-required 
-      get_md5: no
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
   register: reboot_required_file
   when:
-  - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
+    - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Reboot the box if kernel updated on Debian and Ubuntu Servers
-  reboot:
+  ansible.builtin.reboot:
     msg: "Reboot initiated by Ansible for kernel updates"
     connect_timeout: 5
     reboot_timeout: 300
     pre_reboot_delay: 0
     post_reboot_delay: 30
     test_command: uptime
-  when: 
-  - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
-  - reboot_required_file.stat.exists == "True"
+  when:
+    - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
+    - reboot_required_file.stat.exists == "True"
 
 - name: Clean and Remove unused packages on Debian and Ubuntu Servers
-  apt:
-    autoclean: yes
-    autoremove: yes
-    clean: yes
-  when: 
-  - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
+  ansible.builtin.apt:
+    autoclean: true
+    autoremove: true
+    clean: true
+  when:
+    - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Remove unused packages on Rocky Servers
-  dnf: 
-    autoremove: yes
-  when: 
-  - ansible_facts['distribution'] == "Rocky"
+  ansible.builtin.dnf:
+    autoremove: true
+  when:
+    - ansible_facts['distribution'] == "Rocky"

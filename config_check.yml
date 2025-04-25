@@ -1,3 +1,4 @@
 ---
-- hosts: all
+- name: Configuration Check
+  hosts: all
   tasks:

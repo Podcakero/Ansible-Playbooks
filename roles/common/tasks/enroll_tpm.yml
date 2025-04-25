@@ -2,9 +2,11 @@
   ansible.builtin.raw: 'echo "tmp" | /usr/bin/systemd-cryptenroll /dev/sda3 --tpm2-device=auto --tpm2-pcrs=0+7'
   args:
     executable: /bin/bash
+  register: output
+  changed_when: output.rc == 0
   when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
-    
+
 - name: Enroll TPM - Enroll tpm2 in primary disk on Rocky servers
   ansible.builtin.command:
     argv:
@@ -16,6 +18,8 @@
       - tpm2
       - '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"0,7"}'
     stdin: "{{ encryption_passphrase }}"
+  register: output
+  changed_when: output.rc == 0
   when:
     - ansible_facts['distribution'] == "Rocky"
 
@@ -23,8 +27,11 @@
   ansible.builtin.lineinfile:
     path: /etc/dracut.conf.d/tpm2_auto_unlock.conf
     line: 'add_dracutmodules+=" tpm2-tss crypt "'
-    create: yes
-  when: 
+    create: true
+    mode: "0600"
+  register: output
+  changed_when: output.rc == 0
+  when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Enroll TPM - Enabled tpm2 auto unlock on Ubuntu and Debian servers
@@ -32,7 +39,7 @@
     path: /etc/default/grub
     search_string: 'GRUB_CMDLINE_LINUX='
     line: 'GRUB_CMDLINE_LINUX="rd.auto rd.luks=1"'
-  when: 
+  when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Enroll TPM - Remove entry from /etc/crypttab on Ubuntu and Debian servers
@@ -40,7 +47,7 @@
     path: /etc/crypttab
     regex: ".*"
     state: absent
-  when: 
+  when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Enroll TPM - Regenerate Dracut on Ubuntu and Debian servers
@@ -48,18 +55,22 @@
     argv:
       - /usr/bin/dracut
       - -f
-  when: 
+  register: output
+  changed_when: output.rc == 0
+  when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Enroll TPM - Update Grub on Ubuntu and Debian servers
   ansible.builtin.command:
     argv:
       - /usr/sbin/update-grub
-  when: 
+  register: output
+  changed_when: output.rc == 0
+  when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Enroll TPM - Install clevis-dracut on Rocky servers
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     state: present
     pkg: "clevis-dracut"
   when:
@@ -67,9 +78,11 @@
 
 - name: Enroll TPM - Regenerate Dracut on Rocky servers
   ansible.builtin.command:
-    argv: 
+    argv:
       - dracut
       - -fv
       - --regenerate-all
+  register: output
+  changed_when: output.rc == 0
   when:
     - ansible_facts['distribution'] == "Rocky"
