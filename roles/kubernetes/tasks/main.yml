@@ -1,0 +1,10 @@
+- import_tasks: enable_ipv4_forwarding.yml
+
+- import_tasks: set_cgroup_systemd.yml
+
+- import_tasks: install_docker_engine.yml
+
+- import_tasks: install_ovn_kubernetes.yml
+
+- import_tasks: install_kubernetes_packages.yml
+
