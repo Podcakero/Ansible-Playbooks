@@ -3,4 +3,3 @@
     src: templates/kubelet.conf.j2
     dest: /etc/kubernetes/kubelet.conf
     mode: "0644"
-    
