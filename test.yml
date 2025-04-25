@@ -1,5 +1,7 @@
 ---
-- hosts: all
+- name: Test Playbook
+  hosts: all
   tasks:
-    - import_tasks: stubs/config_setters/ssh_keys.yml
-    - import_tasks: stubs/config_setters/sshd_config.yml
+    - name: Display ansible_facts
+      ansible.builtin.debug:
+        var: ansible_facts
