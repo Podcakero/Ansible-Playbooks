@@ -1,1 +1,1 @@
-deb [arch={% if ansible_facts['architecture'] == 'x86_64'%}amd64{% endif %} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_facts['distribution_release'] }} stable"
+deb [arch={% if ansible_facts['architecture'] == 'x86_64'%}amd64{% endif %} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_facts['distribution_release'] }} stable
