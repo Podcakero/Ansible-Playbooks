@@ -33,7 +33,17 @@
     state: present
     update_cache: true
 
-- name: Pin Kubernetes Package Versions
+- name: Pin kubelet Package Versions
   ansible.builtin.dpkg_selections:
-    name: kubelet kubeadm kubectl
+    name: kubelet
+    selection: hold
+
+- name: Pin kubeadm Package Versions
+  ansible.builtin.dpkg_selections:
+    name: kubeadm
+    selection: hold
+
+- name: Pin kubectl Package Versions
+  ansible.builtin.dpkg_selections:
+    name: kubectl
     selection: hold
