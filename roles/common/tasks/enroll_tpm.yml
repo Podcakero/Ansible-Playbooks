@@ -30,7 +30,7 @@
     create: true
     mode: "0600"
   register: output
-  changed_when: output.rc == 0
+  changed_when: output == "*context changed"
   when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
