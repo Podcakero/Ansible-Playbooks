@@ -57,6 +57,6 @@
 
 - name: Enable CRI-Dockerd service on startup
   ansible.builtin.systemd:
-    service: cri-dockerd
+    service: cri-docker
     state: started
     enabled: true
