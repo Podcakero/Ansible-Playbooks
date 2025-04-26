@@ -18,3 +18,13 @@ debian:
 proxmox:
     hosts:
         10.1.4.22:
+k3s_cluster:
+    children:
+        server:
+            hosts:
+                10.1.3.22
+        agent:
+            hosts:
+                10.1.3.23
+                10.1.3.24
+                10.1.3.25
