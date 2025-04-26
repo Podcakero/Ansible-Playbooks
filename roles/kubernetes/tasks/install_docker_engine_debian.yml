@@ -1,0 +1,62 @@
+- name: Install ca-certificates and curl
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+
+- name: Install apt keyring
+  ansible.builtin.command:
+    argv:
+      - install
+      - -m
+      - "0755"
+      - -d
+      - /etc/apt/keyrings
+  register: output
+  changed_when: output.rc == 0
+
+- name: Download docker repo GPG Key
+  ansible.builtin.command:
+    argv:
+      - curl
+      - -fsSL
+      - https://download.docker.com/linux/debian/gpg
+      - -o
+      - /etc/apt/keyrings/docker.asc
+  register: output
+  changed_when: output.rc == 0
+
+- name: Add Docker repo
+  ansible.builtin.template:
+    src: templates/docker.list.j2
+    dest: /etc/apt/sources.list.d/docker.list
+    mode: "0644"
+
+- name: Install Docker Engine Packages
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: true
+
+- name: Enable Docker service on startup
+  ansible.builtin.systemd:
+    service: docker
+    state: started
+    enabled: true
+
+- name: Install CRI-Dockerd
+  ansible.builtin.apt:
+    deb: https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.17/cri-dockerd_0.3.17.3-0.debian-bookworm_amd64.deb
+    state: present
+
+- name: Enable CRI-Dockerd service on startup
+  ansible.builtin.systemd:
+    service: cri-docker
+    state: started
+    enabled: true

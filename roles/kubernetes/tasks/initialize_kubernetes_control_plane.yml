@@ -1,0 +1,9 @@
+- name: Initialize Control Plane Node
+  ansible.builtin.command:
+    argv:
+      - kubeadm
+      - init
+      - --config
+      - /etc/kubernetes/kubernetes.conf
+  register: output
+  changed_when: output.rc == 0

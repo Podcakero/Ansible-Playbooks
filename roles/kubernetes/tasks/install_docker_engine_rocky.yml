@@ -1,0 +1,41 @@
+- name: Install Docker Engine Pre-Requisites
+  ansible.builtin.dnf:
+    name: dnf-plugins-core
+    state: present
+
+- name: Install Docker-CE repo
+  ansible.builtin.command:
+    argv:
+      - dnf
+      - config-manager
+      - --add-repo
+      - https://download.docker.com/linux/rhel/docker-ce.repo
+  register: output
+  changed_when: output.rc == 0
+
+- name: Install Docker Engine Packages
+  ansible.builtin.dnf:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+
+- name: Enable Docker service on startup
+  ansible.builtin.systemd:
+    service: docker
+    state: started
+    enabled: true
+
+- name: Install CRI-Dockerd
+  ansible.builtin.dnf:
+    name: 'https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.17/cri-dockerd-0.3.17-3.fc36.x86_64.rpm'
+    state: present
+
+- name: Enable CRI-Dockerd service on startup
+  ansible.builtin.systemd:
+    service: cri-docker
+    state: started
+    enabled: true

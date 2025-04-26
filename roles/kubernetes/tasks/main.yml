@@ -1,10 +1,32 @@
-- import_tasks: enable_ipv4_forwarding.yml
+- name: Enable IPv4 Forwarding
+  ansible.builtin.import_tasks: enable_ipv4_forwarding.yml
 
-- import_tasks: set_cgroup_systemd.yml
+- name: Install Docker Engine on Debian and Ubuntu Servers
+  ansible.builtin.import_tasks: install_docker_engine_debian.yml
+  when:
+    - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
-- import_tasks: install_docker_engine.yml
+- name: Install Docker Engine on Rocky Linux Servers
+  ansible.builtin.import_tasks: install_docker_engine_rocky.yml
+  when:
+    - ansible_facts['distribution'] == "Rocky"
 
-- import_tasks: install_ovn_kubernetes.yml
+- name: Install Kubernetes Packages on Debian and Ubuntu Servers
+  ansible.builtin.import_tasks: install_kubernetes_packages_debian.yml
+  when:
+    - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
-- import_tasks: install_kubernetes_packages.yml
+- name: Install Kubernetes Packages on Rocky Linux Servers
+  ansible.builtin.import_tasks: install_kubernetes_packages_rocky.yml
+  when:
+    - ansible_facts['distribution'] == "Rocky"
 
+- name: Apply Kubelet.conf Template
+  ansible.builtin.import_tasks: create_kubernetes_config.yml
+
+- name: Initialize Kubernetes Control Plane Node
+  ansible.builtin.import_tasks: initialize_kubernetes_control_plane.yml
+  run_once: true
+
+- name: Join rest of nodes to cluster
+  ansible.builtin.import_tasks: join_kubernetes_node.yml

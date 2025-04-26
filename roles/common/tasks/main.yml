@@ -3,7 +3,7 @@
     state: absent
     force: true
     name: delete-me
-  when: 
+  when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Set SELINUX to Permissive on Rocky servers
@@ -15,7 +15,7 @@
     - ansible_facts['distribution'] == "Rocky"
 
 - name: Install EPEL on Rocky Servers
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     state: present
     pkg: "epel-release"
   when:
@@ -23,9 +23,9 @@
 
 - name: Update cache on Debian and Ubuntu Servers
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     state: latest
-  when: 
+  when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
 - name: Install packages
@@ -33,19 +33,20 @@
     state: latest
     name: "{{ packages }}"
 
-- import_tasks: upgrade_packages.yml
+- ansible.builtin.import_tasks: upgrade_packages.yml
 
-- import_tasks: sshd_config.yml
+- ansible.builtin.import_tasks: sshd_config.yml
 
-- import_tasks: ssh_keys.yml
+- ansible.builtin.import_tasks: ssh_keys.yml
 
-- import_tasks: enroll_tpm.yml
-      
+- ansible.builtin.import_tasks: enroll_tpm.yml
+
 - name: Create cockpit disallowed users file if it doesn't exist
   ansible.builtin.lineinfile:
     path: /etc/cockpit/disallowed-users
     line: '# List of users which are not allowed to login to Cockpit'
-    create: true 
+    create: true
+    mode: "0644"
 
 - name: Remove entry of root in cockpit disallowed users
   ansible.builtin.lineinfile:
@@ -57,7 +58,8 @@
   ansible.builtin.lineinfile:
     path: /etc/motd
     line: temp
-    create: yes
+    create: true
+    mode: "0644"
 
 - name: Remove text in motd file
   ansible.builtin.lineinfile:
