@@ -40,4 +40,4 @@
   ansible.builtin.dnf:
     autoremove: true
   when:
-    - ansible_facts['distribution'] == "Rocky"
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")

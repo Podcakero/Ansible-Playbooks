@@ -21,7 +21,7 @@
   register: output
   changed_when: output.rc == 0
   when:
-    - ansible_facts['distribution'] == "Rocky"
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distrbution'] == "RedHat")
 
 - name: Enroll TPM - Add tpm2 modules to Dracut Config on Ubuntu and Debian servers
   ansible.builtin.lineinfile:
@@ -74,7 +74,7 @@
     state: present
     pkg: "clevis-dracut"
   when:
-    - ansible_facts['distribution'] == "Rocky"
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distrbution'] == "RedHat")
 
 - name: Enroll TPM - Regenerate Dracut on Rocky servers
   ansible.builtin.command:
@@ -85,4 +85,4 @@
   register: output
   changed_when: output.rc == 0
   when:
-    - ansible_facts['distribution'] == "Rocky"
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distrbution'] == "RedHat")

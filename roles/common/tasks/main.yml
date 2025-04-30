@@ -12,14 +12,14 @@
     regexp: '^SELINUX='
     line: SELINUX=permissive
   when:
-    - ansible_facts['distribution'] == "Rocky"
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
 
 - name: Install EPEL on Rocky Servers
   ansible.builtin.dnf:
     state: present
     pkg: "epel-release"
   when:
-    - ansible_facts['distribution'] == "Rocky"
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
 
 - name: Update cache on Debian and Ubuntu Servers
   ansible.builtin.apt:
@@ -80,14 +80,14 @@
     masked: true
     name: firewalld.service
   when:
-    - ansible_facts['distribution'] == "Rocky"
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
 
 - name: Restart SSHD
   ansible.builtin.systemd_service:
     state: restarted
     name: sshd.service
   when:
-    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "Debian")
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat") or (ansible_facts['distribution'] == "Debian")
 
 - name: Restart SSH on Ubuntu
   ansible.builtin.systemd_service:
