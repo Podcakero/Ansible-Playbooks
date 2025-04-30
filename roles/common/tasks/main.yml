@@ -14,26 +14,12 @@
   when:
     - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
 
-- name: Enable EPEL Repo on RHEL Servers
-  community.general.rhsm_repository:
-    name: codeready-builder-for-rhel-{{ ansible_facts['distribution_major_version'] }}-{{ ansible_facts['architecture'] }}-rpms
-  when: 
-    - ansible_facts['distribution'] == "RedHat"
-    - ansible_facts['distribution_major_version'] != "10"
-
-- name: Enable EPEL Repo on RHEL 10 Servers
-  community.general.rhsm_repository:
-    name: crb
-  when:
-    - ansible_facts['distribution'] == "RedHat"
-    - ansible_facts['distribution_major_version'] == "10"
-
 - name: Install EPEL on Rocky Servers
   ansible.builtin.dnf:
     state: present
-    pkg: "dnf install epel-release"
+    pkg: epel-release
   when:
-    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
+    - ansible_facts['distribution'] == "Rocky"
 
 - name: Update cache on Debian and Ubuntu Servers
   ansible.builtin.apt:
@@ -45,7 +31,9 @@
 - name: Install packages
   ansible.builtin.package:
     state: latest
-    name: {{ packages }}
+    name: "{{ packages }}"
+  when:
+    - ansible_facts['distribution'] != "RedHat"
 
 - ansible.builtin.import_tasks: upgrade_packages.yml
 
