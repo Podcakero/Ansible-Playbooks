@@ -14,10 +14,16 @@
   when:
     - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
 
+- name: Enable EPEL Repo on RHEL Servers
+  community.general.rhsm_repository:
+    name: codeready-builder-for-rhel-9-$(arch)-rpms
+  when: 
+    - ansible_facts['distribution'] == "RedHat"
+
 - name: Install EPEL on Rocky Servers
   ansible.builtin.dnf:
     state: present
-    pkg: "epel-release"
+    pkg: "dnf install epel-release"
   when:
     - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
 
