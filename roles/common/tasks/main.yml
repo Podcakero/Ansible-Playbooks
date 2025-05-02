@@ -6,13 +6,13 @@
   when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
-- name: Set SELINUX to Permissive on Rocky servers
-  ansible.builtin.lineinfile:
-    path: /etc/selinux/config
-    regexp: '^SELINUX='
-    line: SELINUX=permissive
-  when:
-    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
+#- name: Set SELINUX to Permissive on Rocky servers
+#  ansible.builtin.lineinfile:
+#    path: /etc/selinux/config
+#    regexp: '^SELINUX='
+#    line: SELINUX=permissive
+#  when:
+#    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
 
 - name: Install EPEL on Rocky Servers
   ansible.builtin.dnf:
