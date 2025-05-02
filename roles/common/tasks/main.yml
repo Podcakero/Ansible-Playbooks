@@ -41,7 +41,7 @@
 
 - ansible.builtin.import_tasks: ssh_keys.yml
 
-- ansible.builtin.import_tasks: enroll_tpm.yml
+#- ansible.builtin.import_tasks: enroll_tpm.yml
 
 - name: Create cockpit disallowed users file if it doesn't exist
   ansible.builtin.lineinfile:
