@@ -31,6 +31,10 @@ mariadb_cluster:
         10.1.3.17:
         10.1.3.18:
         10.1.3.19:
+mariadb_maxscale:
+    hosts:
+        10.1.3.20:
+        10.1.3.21:
 vms:
     hosts:
         10.1.3.11:
@@ -51,3 +55,4 @@ containers:
         dns_dist:
         dns_admin:
         mariadb_cluster:
+        mariadb_maxscale:
