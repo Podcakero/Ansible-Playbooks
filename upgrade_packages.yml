@@ -2,4 +2,4 @@
 - name: Upgrade Packages
   hosts: all
   tasks:
-    - ansible.builtin.import_tasks: stubs/upgrade_packages.yml
+    - ansible.builtin.import_tasks: roles/common/tasks/upgrade_packages.yml
