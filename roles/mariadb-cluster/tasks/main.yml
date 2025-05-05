@@ -7,3 +7,14 @@
 - name: Execute MariaDB Repo Script
   ansible.builtin.shell:
     cmd: /tmp/mariadb_repo_script.sh
+
+- name: Install MariaDB packages
+  ansible.builtin.package:
+    name: 
+      - MariaDB-server 
+      - galera-4 
+      - MariaDB-client 
+      - MariaDB-shared 
+      - MariaDB-backup 
+      - MariaDB-common
+    state: latest
