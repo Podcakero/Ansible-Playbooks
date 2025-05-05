@@ -4,6 +4,7 @@
     executable: /bin/bash
   register: output
   changed_when: output.rc == 0
+  creates: /root/tpm_enrolled
   when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
@@ -20,6 +21,7 @@
     stdin: "{{ encryption_passphrase }}"
   register: output
   changed_when: output.rc == 0
+  creates: /root/tpm_enrolled
   when:
     - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
 

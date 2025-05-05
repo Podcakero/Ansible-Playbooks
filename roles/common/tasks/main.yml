@@ -6,13 +6,14 @@
   when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
 
-#- name: Set SELINUX to Permissive on Rocky servers
-#  ansible.builtin.lineinfile:
-#    path: /etc/selinux/config
-#    regexp: '^SELINUX='
-#    line: SELINUX=permissive
-#  when:
-#    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
+- name: Set SELINUX to Permissive on Rocky servers
+  ansible.builtin.lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=permissive
+  when:
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
+    - inventory_hostname in groups["vms"]
 
 - name: Install EPEL on Rocky Servers
   ansible.builtin.dnf:
@@ -41,7 +42,9 @@
 
 - ansible.builtin.import_tasks: ssh_keys.yml
 
-#- ansible.builtin.import_tasks: enroll_tpm.yml
+- ansible.builtin.import_tasks: enroll_tpm.yml
+  when: 
+    - inventory_hostname in groups["vms"]
 
 - name: Create cockpit disallowed users file if it doesn't exist
   ansible.builtin.lineinfile:
@@ -75,14 +78,15 @@
     enabled: true
     name: cockpit.socket
 
-#- name: Disable and Mask firewalld
-#  ansible.builtin.systemd_service:
-#    state: stopped
-#    enabled: false
-#    masked: true
-#    name: firewalld.service
-#  when:
-#    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
+- name: Disable and Mask firewalld
+  ansible.builtin.systemd_service:
+    state: stopped
+    enabled: false
+    masked: true
+    name: firewalld.service
+  when:
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
+    - inventory_hostname in groups["vms"]
 
 - name: Restart SSHD
   ansible.builtin.systemd_service:
