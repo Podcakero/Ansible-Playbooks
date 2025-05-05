@@ -20,7 +20,6 @@
     stdin: "{{ encryption_passphrase }}"
   register: output
   changed_when: output.rc == 0
-  creates: /root/tpm_enrolled
   when:
     - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
 
