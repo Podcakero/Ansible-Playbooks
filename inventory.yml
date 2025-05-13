@@ -2,9 +2,13 @@ proxmox:
     hosts:
         10.1.4.22:
 dhcp:
-    hosts:
-        10.1.3.3:
-        10.1.3.4:
+    children:
+        primary:
+            hosts:
+                10.1.3.3:
+        standby:
+            hosts:
+                10.1.3.4:
 dhcp_admin:
     hosts:
         10.1.3.13:
@@ -55,6 +59,21 @@ lidarr:
 qbittorrent:
     hosts:
         10.1.3.32:
+nginx_proxy:
+    hosts:
+        10.1.3.40:
+        10.1.3.41:
+        10.1.3.42:
+haproxy:
+    hosts:
+        10.1.3.45:
+        10.1.3.46:
+web:
+    children:
+        nginx:
+            hosts:
+        apache:
+            hosts:
 vms:
     hosts:
         10.1.3.15:
@@ -77,7 +96,10 @@ containers:
         mariadb_maxscale:
         postgresql:
         jellyfin:
-        audiobookshelf
+        audiobookshelf:
         prowlarr:
         lidarr:
         qbittorrent:
+        nginx_proxy:
+        haproxy:
+        web:
