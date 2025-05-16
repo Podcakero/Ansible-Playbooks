@@ -1,0 +1,24 @@
+- name: Update apt repo and cache on Debian and Ubuntu Servers
+  ansible.builtin.apt:
+    update_cache: true
+  when:
+    - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
+
+- name: Upgrade all packages
+  ansible.builtin.package:
+    name: "*"
+    state: latest
+
+- name: Clean and Remove unused packages on Debian and Ubuntu Servers
+  ansible.builtin.apt:
+    autoclean: true
+    autoremove: true
+    clean: true
+  when:
+    - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")
+
+- name: Remove unused packages on Rocky Servers
+  ansible.builtin.dnf:
+    autoremove: true
+  when:
+    - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
