@@ -1,0 +1,5 @@
+---
+- name: NetData Setup
+  hosts: netdata
+  roles:
+    - netdata
