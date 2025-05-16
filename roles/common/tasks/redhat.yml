@@ -39,13 +39,15 @@
 
 - name: Install packages
   block:
-    - ansible.builtin.package:
+    - name: Install packages (Rocky)
+      ansible.builtin.package:
         state: latest
         name: "{{ rocky_packages }}"
       when:
         - ansible_facts['distribution'] == "Rocky"
 
-    - ansible.builtin.package:
+    - name: Install packages (Redhat)
+      ansible.builtin.package:
         state: latest
         name: "{{ redhat_packages }}"
       when:

@@ -11,13 +11,15 @@
 
 - name: Install packages
   block:
-    - ansible.builtin.package:
+    - name: Install packages
+      ansible.builtin.package:
         state: latest
         name: "{{ debian_packages }}"
       when:
         - ansible_facts['distribution'] == "Debian"
 
-    - ansible.builtin.package:
+    - name: Install packages
+      ansible.builtin.package:
         state: latest
         name: "{{ ubuntu_packages }}"
       when:
