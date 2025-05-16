@@ -1,0 +1,101 @@
+- name: Set SELINUX to Permissive
+  ansible.builtin.lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=permissive
+  when:
+    - inventory_hostname in lookup('inventory_hostnames', 'vms')
+
+- name: Configure Rocky Repos
+  when:
+    - ansible_facts['distribution'] == "Rocky"
+  block:
+    - name: Configure rocky-addons.repo
+      ansible.builtin.template:
+        src: templates/rocky-addons.repo
+        dest: /etc/yum.repos.d/rocky-addons.repo
+
+    - name: Configure rocky-devel.repo
+      ansible.builtin.template:
+        src: templates/rocky-devel.repo
+        dest: /etc/yum.repos.d/rocky-devel.repo
+    
+    - name: Configure rocky-extras.repo
+      ansible.builtin.template:
+        src: templates/rocky-extras.repo
+        dest: /etc/yum.repos.d/rocky-extras.repo
+
+    - name: Configure rocky.repo
+      ansible.builtin.template:
+        src: templates/rocky.repo
+        dest: /etc/yum.repos.d/rocky.repo
+
+- name: Install EPEL
+  ansible.builtin.dnf:
+    state: present
+    pkg: epel-release
+  when:
+    - ansible_facts['distribution'] == "Rocky"
+
+- name: Install packages
+  block:
+    - ansible.builtin.package:
+        state: latest
+        name: "{{ rocky_packages }}"
+      when:
+        - ansible_facts['distribution'] == "Rocky"
+
+    - ansible.builtin.package:
+        state: latest
+        name: "{{ redhat_packages }}"
+      when:
+        - ansible_facts['distribution'] == "RedHat"
+
+- name: Run tasks for all_distros
+  ansible.builtin.import_tasks: all_distros.yml
+
+- name: Disable and Mask firewalld
+  when: 
+    - inventory_hostname in lookup('inventory_hostnames', 'vms')
+  ansible.builtin.systemd_service:
+    state: stopped
+    enabled: false
+    masked: true
+    name: firewalld.service
+
+- name: Setup TPM Auto-Unlock
+  when: 
+    - inventory_hostname in lookup('inventory_hostnames', 'vms')
+  block:
+    - name: \[Setup TPM Auto-Unlock\] Enroll tpm2 in primary disk on Rocky servers
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/clevis
+          - luks
+          - bind
+          - -d
+          - /dev/sda3
+          - tpm2
+          - '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"0,7"}'
+        stdin: "{{ encryption_passphrase }}"
+      register: output
+      changed_when: output.rc == 0
+
+    - name: \[Setup TPM Auto-Unlock\] Install clevis-dracut on Rocky servers
+      ansible.builtin.dnf:
+        state: present
+        pkg: "clevis-dracut"
+
+    - name: \[Setup TPM Auto-Unlock\] Regenerate Dracut on Rocky servers
+      ansible.builtin.command:
+        argv:
+          - dracut
+          - -fv
+          - --regenerate-all
+      register: output
+      changed_when: output.rc == 0
+
+- name: Restart SSHD
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: sshd.service

@@ -1,5 +1,5 @@
 {
-    "ansible.python.interpreterPath": "/home/gweimer/GitHub/Ansible-Playbooks/.venv/bin/python",
+    "ansible.python.interpreterPath": "c:\\Users\\Greyson Weimer\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
     "yaml.schemas": {
         "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/tasks": [
             "file:///etc/semaphore/Ansible-Playbooks/roles/kubernetes/tasks/set_cgroup_systemd.yml",

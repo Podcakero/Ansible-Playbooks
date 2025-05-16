@@ -85,7 +85,7 @@ vms:
         10.1.3.52:
         10.1.3.53:
 containers:
-    hosts:
+    children:
         dhcp:
         dhcp_admin:
         dns_auth:
