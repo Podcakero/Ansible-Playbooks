@@ -12,22 +12,22 @@
   block:
     - name: Configure rocky-addons.repo
       ansible.builtin.template:
-        src: templates/rocky-addons.repo
+        src: rocky-addons.repo.j2
         dest: /etc/yum.repos.d/rocky-addons.repo
 
     - name: Configure rocky-devel.repo
       ansible.builtin.template:
-        src: templates/rocky-devel.repo
+        src: rocky-devel.repo.j2
         dest: /etc/yum.repos.d/rocky-devel.repo
     
     - name: Configure rocky-extras.repo
       ansible.builtin.template:
-        src: templates/rocky-extras.repo
+        src: templates/rocky-extras.repo.j2
         dest: /etc/yum.repos.d/rocky-extras.repo
 
     - name: Configure rocky.repo
       ansible.builtin.template:
-        src: templates/rocky.repo
+        src: templates/rocky.repo.j2
         dest: /etc/yum.repos.d/rocky.repo
 
 - name: Install EPEL
