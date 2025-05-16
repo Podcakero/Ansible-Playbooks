@@ -2,4 +2,4 @@
 - name: NetData Setup
   hosts: all
   roles:
-    - netdata
+    - netdata-parent
