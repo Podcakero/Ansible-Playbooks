@@ -4,7 +4,7 @@
 	# pthread stack size = 8MiB
 	# cpu cores = 2
 	# libuv worker threads = 16
-	profile = child
+	profile = parent
 	# host access prefix = 
 	# hostname = netdata-01
 
@@ -142,7 +142,7 @@
 	# tls ciphers = none
 	# ses max tg_des_window = 15
 	# des max tg_des_window = 15
-	mode = none
+	mode = static-threaded
 	# listen backlog = 4096
 	# default port = 19999
 	# bind to = *

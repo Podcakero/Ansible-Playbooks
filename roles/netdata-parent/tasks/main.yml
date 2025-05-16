@@ -1,0 +1,26 @@
+- name: Stop NetData service
+  ansible.builtin.systemd_service:
+    state: stopped
+    name: netdata.service
+    
+- name: Apply NetData Parent stream.conf
+  ansible.builtin.template:
+    src: stream.conf.j2
+    dest: /etc/netdata/stream.conf
+
+- name: Apply NetData Parent netdata.conf
+  ansible.builtin.template:
+    src: netdata.conf.j2
+    dest: /etc/netdata/netdata.conf
+
+#- name: Copy over netdata cache
+#  ansible.posix.synchronize:
+#    archive: true
+#    src: /var/cache/netdata
+#    dest: /var/cache/netdata
+#  delegate_to: {{ lookup('ansible.builtin.inventory_hostnames', 'netdata') | reject('equalto', inventory_hostname)[0] }}
+
+- name: Start NetData service
+  ansible.builtin.systemd_service:
+    state: started
+    name: netdata.service
