@@ -4,4 +4,4 @@
   tasks:
     - name: Display variable
       ansible.builtin.debug:
-        var: "{{ variable }}""
+        var: "{{ variable }}"
