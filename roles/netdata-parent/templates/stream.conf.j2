@@ -1,6 +1,6 @@
 [stream]
     enabled = yes
-    destination = {{ lookup('ansible.builtin.inventory_hostnames', 'netdata') | join(' ') }}
+    destination = {{ groups['netdata'] | join(' ') }}
     api key = {{ netdata_api_key }}
 [{{ netdata_api_key }}]
     type = api
