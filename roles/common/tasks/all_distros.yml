@@ -2,6 +2,21 @@
   ansible.builtin.script: 
     cmd: netdata.sh
 
+- name: Apply NetData netdata.conf
+  ansible.builtin.template:
+    src: netdata.conf.j2
+    dest: /etc/netdata/netdata.conf
+
+- name: Apply NetData stream.conf
+  ansible.builtin.template:
+    src: stream.conf.j2
+    dest: /etc/netdata/stream.conf
+
+- name: Restart NetData service
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: netdata.service
+
 - name: Upgrade Packages
   ansible.builtin.import_tasks: upgrade_packages.yml
 
