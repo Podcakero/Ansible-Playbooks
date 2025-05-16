@@ -1,6 +1,6 @@
 - name: Install NetData
   ansible.builtin.script: 
-    cmd: netdata.sh --non-interactive --stable-channel --disable-telemetry
+    cmd: netdata.sh
 
 - name: Upgrade Packages
   ansible.builtin.import_tasks: upgrade_packages.yml
