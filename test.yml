@@ -6,16 +6,11 @@
     #  ansible.builtin.debug:
     #    var: "{{ variable }}"
 
-    - name: Remove netdata stream.conf
-      ansible.builtin.file:
-        path: /etc/netdata/stream.conf
-        state: absent
+    - name: Install NetData
+      ansible.builtin.script: 
+        cmd: netdata.sh "{{ netdata_claim_token }}" "{{ netdata_room_token }}"
 
     - name: Restart netdata service
       ansible.builtin.systemd_service:
         name: netdata.service
         state: restarted
-
-    - name: Install NetData
-      ansible.builtin.script: 
-        cmd: netdata.sh "{{ netdata_claim_token }}" "{{ netdata_room_token }}"
