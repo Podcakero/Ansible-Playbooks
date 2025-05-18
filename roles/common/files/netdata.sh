@@ -1917,9 +1917,9 @@ try_static_install() {
       # shellcheck disable=SC1090,SC1091
       . "${tmpdir}/install-type"
       cat > "${tmpdir}/install-type" <<- EOF
-        INSTALL_TYPE='kickstart-static'
-        PREBUILT_ARCH='${PREBUILT_ARCH}'
-        EOF
+	INSTALL_TYPE='kickstart-static'
+	PREBUILT_ARCH='${PREBUILT_ARCH}'
+	EOF
       run_as_root chown netdata:netdata "${tmpdir}/install-type"
       run_as_root cp "${tmpdir}/install-type" "${install_type_file}"
     fi
@@ -2167,10 +2167,10 @@ prepare_offline_install_source() {
   if [ "${DRY_RUN}" -ne 1 ]; then
     progress "Preparing install script."
     cat > "install.sh" <<-EOF
-        #!/bin/sh
-        dir=\$(CDPATH= cd -- "\$(dirname -- "\$0")" && pwd)
-        "\${dir}/kickstart.sh" --offline-install-source "\${dir}" \${@}
-        EOF
+	#!/bin/sh
+	dir=\$(CDPATH= cd -- "\$(dirname -- "\$0")" && pwd)
+	"\${dir}/kickstart.sh" --offline-install-source "\${dir}" \${@}
+	EOF
     chmod +x "install.sh"
   else
     progress "Would create install script"
