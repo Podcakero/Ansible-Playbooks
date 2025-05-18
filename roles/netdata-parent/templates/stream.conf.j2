@@ -1,7 +1,0 @@
-[stream]
-    enabled = yes
-    destination = {{ groups['netdata'] | join(' ') }}
-    api key = {{ netdata_api_key }}
-[{{ netdata_api_key }}]
-    type = api
-    enabled = yes

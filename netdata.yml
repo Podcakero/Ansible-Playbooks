@@ -1,5 +1,0 @@
----
-- name: NetData Setup
-  hosts: all
-  roles:
-    - netdata-parent

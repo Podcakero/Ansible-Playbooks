@@ -1,7 +1,7 @@
 - name: Install NetData
   ansible.builtin.script: 
-    cmd: netdata.sh
-
+    cmd: netdata.sh {{ netdata_claim_token }} {{ netdata_claim_room }}
+ 
 - name: Apply NetData netdata.conf
   ansible.builtin.template:
     src: netdata.conf.j2
