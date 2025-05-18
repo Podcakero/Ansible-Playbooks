@@ -1,1 +1,1 @@
-wget -O /tmp/netdata-kickstart.sh https://get.netdata.cloud/kickstart.sh && sh /tmp/netdata-kickstart.sh --non-interactive --stable-channel --disable-telemetry
+wget -O /tmp/netdata-kickstart.sh https://get.netdata.cloud/kickstart.sh && sh /tmp/netdata-kickstart.sh --non-interactive --stable-channel --disable-telemetry --claim-token $1 --claim-rooms $2 --claim-url https://app.netdata.cloud/
