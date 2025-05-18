@@ -8,7 +8,7 @@
 
     - name: Install NetData
       ansible.builtin.script: 
-        cmd: netdata.sh "{{ netdata_claim_token }}" "{{ netdata_room_token }}"
+        cmd: netdata.sh --non-interactive --disable-telemetry --stable-channel --claim-token "{{ netdata_claim_token }}" --claim-rooms "{{ netdata_room_token }}" --claim-url https://app.netdata.cloud
 
     - name: Restart netdata service
       ansible.builtin.systemd_service:
