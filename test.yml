@@ -15,3 +15,7 @@
       ansible.builtin.systemd_service:
         name: netdata.service
         state: restarted
+
+    - name: Install NetData
+      ansible.builtin.script: 
+        cmd: netdata.sh "{{ netdata_claim_token }}" "{{ netdata_room_token }}"
