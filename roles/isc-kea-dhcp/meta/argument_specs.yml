@@ -1,0 +1,2260 @@
+---
+argument_specs:
+  main:
+    short_description: "ISC Kea DHCP Installer"
+    description:
+      - "ISC Kea DHCP Server Installer"
+      - "For the Podcake.net Homelab"
+    author:
+      - "Greyson Weimer"
+    options:
+      kea_version:
+        type: "str"
+        required: false
+        default: "latest"
+        description:
+          - "The version of ISC Kea DHCP Server to Install"
+          - "Version Keywords:"
+          - " - latest, stable = Current Stable"
+          - " - old, eol = Old Stable"
+          - " - dev = Development"
+
+      kea_dhcp4_options:
+        type: "dict"
+        required: false
+        default:
+          enabled: true
+        description:
+          - "Options for configuring Kea DHCP4 Server"
+        options:
+          enabled:
+            type: "bool"
+            required: true
+            description:
+              - "Whether to enable ISC Kea DHCP4 Server"
+          allocator:
+            type: "str"
+            choices:
+              - "iterative"
+              - "random"
+              - "flq"
+            required: false
+            description:
+              - "Address allocation strategy."
+          authoritative:
+            type: "bool"
+            required: false
+          boot_file_name:
+            type: "str"
+            required: false
+          calculate_tee_times:
+            type: "bool"
+            required: false
+          control_sockets:
+            type: "list"
+            elements: "dict"
+            required: false
+            required_together:
+              - ["cert_file", "key_file", "trust_anchor"]
+            required_by:
+              "cert_required": ["cert_file", "key_file", "trust_anchor"]
+            required_if:
+              - ["socket_type", "http", "socket_address"]
+              - ["socket_type", "https", ["socket_address", "cert_file", "key_file", "trust_anchor"]]
+              - ["socket_type", "unix", "socket_name"]
+            mutually_exclusive:
+              - ["socket_name", "socket_address"]
+              - ["socket_name", "authentication"]
+              - ["socket_name", "cert_file"]
+              - ["socket_name", "key_file"]
+              - ["socket_name", "trust_anchor"]
+              - ["socket_name", "cert_required"]
+            options:
+              authentication:
+                type: "dict"
+                required: false
+                options:
+                  clients:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    options:
+                      user:
+                        type: "str"
+                        required: false
+                      password:
+                        type: "str"
+                        required: false
+              cert_file:
+                type: "path"
+                required: false
+              cert_required:
+                type: "bool"
+                required: false
+              key_file:
+                type: "path"
+                required: false
+              socket_address:
+                type: "str"
+                required: false
+              socket_name:
+                type: "str"
+                required: false
+              socket_type:
+                type: "str"
+                choices:
+                  - "unix"
+                  - "http"
+                  - "https"
+                required: true
+          ddns_conflict_resolution_mode:
+            type: "str"
+            choices:
+              - "check-with-dhcid"
+              - "no-check-with-dhcid"
+              - "check-exists-with-dhcid"
+              - "no-check-without-dhcid"
+            required: false
+          ddns_generated_prefix:
+            type: "str"
+            required: false
+          ddns_override_client_update:
+            type: "bool"
+            required: false
+          ddns_override_no_update:
+            type: "bool"
+            required: false
+          ddns_qualifying_suffix:
+            type: "str"
+            required: false
+          ddns_replace_client_name:
+            type: "str"
+            choices:
+              - "never"
+              - "always"
+              - "when-present"
+              - "when-not-present"
+            required: false
+          ddns_send_updates:
+            type: "bool"
+            required: false
+          ddns_ttl:
+            type: "int"
+            required: false
+          ddns_ttl_percent:
+            type: "float"
+            required: false
+          ddns_ttl_mix:
+            type: "int"
+            required: false
+          ddns_ttl_max:
+            type: "int"
+            required: false
+          ddns_update_on_renew:
+            type: "str"
+            required: false
+          decline_probation_period:
+            type: "int"
+            required: false
+          dhcp_ddns:
+            type: "dict"
+            required: false
+            options:
+              enable_updates:
+                type: "bool"
+                required: false
+              max_queue_size:
+                type: "int"
+                required: false
+              ncr_format:
+                type: "str"
+                choices:
+                  - "JSON"
+                required: false
+              ncr_protocol:
+                type: "str"
+                choices:
+                  - "UDP"
+                required: false
+              sender_ip:
+                type: "str"
+                required: false
+              sender_port:
+                type: "int"
+                required: false
+              server_ip:
+                type: "str"
+                required: false
+              server_port:
+                type: "int"
+                required: false
+          dhcp_queue_control:
+            type: "dict"
+            required: false
+            options:
+              capacity:
+                type: "int"
+                required: false
+              enable_queue:
+                type: "bool"
+                required: false
+              queue_type:
+                type: "str"
+                choices:
+                  - "kea-ring4"
+                required: false
+          dhcp4o6_port:
+            type: "int"
+            required: false
+          early_global_reservations_lookup:
+            type: "bool"
+            required: false
+          echo_client_id:
+            type: "bool"
+            required: false
+          expired_leases_processing:
+            type: "dict"
+            required: false
+            options:
+              flush_reclaimed_timer_wait_time:
+                type: "int"
+                required: false
+              hold_reclaimed_time:
+                type: "int"
+                required: false
+              max_reclaim_leases:
+                type: "int"
+                required: false
+              max_reclaim_time:
+                type: "int"
+                required: false
+              reclaim_timer_wait_time:
+                type: "int"
+                required: false
+              unwarned_reclaim_cycles:
+                type: "int"
+                required: false
+          hooks_libraries:
+            type: "list"
+            elements: "dict"
+            required: false
+            required_if:
+              - ["library", "/usr/lib64/kea/hooks/libdhcp_ha.so", "high_availabilit"]
+            options:
+              library:
+                type: "str"
+                required: true
+              parameters:
+                type: "dict"
+                required: false
+                options:
+                  high_availability:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    required_together:
+                      - ["cert_file", "key_file", "trust_anchor"]
+                    required_by:
+                      "require_client_certs": ["cert_file", "key_file", "trust_anchor"]
+                    options:
+                      cert_file:
+                        type: "str"
+                        required: false
+                      delayed_updates_limit:
+                        type: "int"
+                        required: false
+                      heartbeat-delay:
+                        type: "int"
+                        required: false
+                      key_file:
+                        type: "str"
+                        required: false
+                      max_ack_delay:
+                        type: "int"
+                        required: false
+                      max_rejected_lease_updates:
+                        type: "int"
+                        required: false
+                      max_response_delay:
+                        type: "int"
+                        required: false
+                      max_unacked_clients:
+                        type: "int"
+                        required: false
+                      mode:
+                        type: "str"
+                        choices:
+                          - "load-balancing"
+                          - "passive-backup"
+                          - "hot-standby"
+                        required: true
+                      multi_threading:
+                        type: "dict"
+                        required: false
+                        options:
+                          enable:
+                            type: "bool"
+                            required: false
+                          http_client_threads:
+                            type: "int"
+                            required: false
+                          http_dedicated_listener:
+                            type: "int"
+                            required: false
+                          http_listener_threads:
+                            type: "int"
+                            required: false
+                      peers:
+                        type: "list"
+                        elements: "dict"
+                        required: true
+                        mutually_exclusive:
+                          - ["basic_auth_password", "basic_auth_password_file"]
+                        options:
+                          auto_failover:
+                            type: "bool"
+                            required: false
+                          basic_auth_password:
+                            type: "str"
+                            required: false
+                          basic_auth_password_file:
+                            type: "str"
+                            required: false
+                          basic_auth_user:
+                            type: "str"
+                            required: false
+                          peer_name:
+                            type: "str"
+                            required: true
+                          peer_role:
+                            type: "str"
+                            choices:
+                              - "primary"
+                              - "secondary"
+                              - "backup"
+                            required: true
+                          peer_url:
+                            type: "str"
+                            required: true
+                      require_client_certs:
+                        type: "str"
+                        required: false
+                      restrict_commands:
+                        type: "str"
+                        required: false
+                      send_lease_updates:
+                        type: "bool"
+                        required: false
+                      sync_leases:
+                        type: "bool"
+                        required: false
+                      sync_page_limit:
+                        type: "int"
+                        required: false
+                      sync_timeout:
+                        type: "int"
+                        required: false
+                      this_server_name:
+                        type: "str"
+                        required: true
+                      wait_backup_ack:
+                        type: "bool"
+                        required: false
+          host_reservation_identifiers:
+            type: "list"
+            elements: "str"
+            choices:
+              - "hw-address"
+              - "duid"
+              - "client-id"
+              - "circuit-id"
+            required: false
+          hostname_char_replacement:
+            type: "str"
+            required: false
+          hostname_char_set:
+            type: "str"
+            required: false
+          hosts_databases:
+            type: "list"
+            elements: "dict"
+            required: false
+            required_together:
+              - ["cert_file", "key_file", "trust_anchor"]
+            options:
+              cert_file:
+                type: "path"
+                required: false
+              host:
+                type: "str"
+                required: false
+              key_file:
+                type: "path"
+                required: false
+              max_reconnect_tries:
+                type: "int"
+                required: false
+              db_name:
+                type: "str"
+                required: true
+              on_fail:
+                type: "str"
+                choices:
+                  - "stop-retry-exit"
+                  - "serve-retry-exit"
+                  - "serve-retry-continue"
+                required: false
+              db_password:
+                type: "str"
+                required: false
+              db_port:
+                type: "int"
+                required: false
+              retry_on_startup:
+                type: "bool"
+                required: false
+              trust_anchor:
+                type: "path"
+                required: false
+              db_type:
+                type: "str"
+                choices:
+                  - "mysql"
+                  - "postgresql"
+                required: true
+              db_user:
+                type: "str"
+                required: true
+          interfaces_config:
+            type: "dict"
+            required: false
+            default:
+              interfaces: ["eth0"]
+            options:
+              interfaces:
+                type: "list"
+                elements: "str"
+                required: true
+              re_detect:
+                type: "bool"
+                required: false
+          ip_reservations_unique:
+            type: "bool"
+            required: false
+          lease_database:
+            type: "dict"
+            required: false
+            required_together:
+              - ["cert_file", "key_file", "trust_anchor"]
+            default:
+              db_type: "memfile"
+              db_name: "/var/lib/kea/dhcp4.leases"
+            options:
+              cert_file:
+                type: "path"
+                required: false
+              db_host:
+                type: "str"
+                required: false
+              key_file:
+                type: "path"
+                required: false
+              max_reconnect_tries:
+                type: "int"
+                required: false
+              db_name:
+                type: "str"
+                required: true
+              on_fail:
+                type: "str"
+                choices:
+                  - "stop-retry-exit"
+                  - "serve-retry-exit"
+                  - "serve-retry-continue"
+                required: false
+              db_password:
+                type: "str"
+                required: false
+              persist:
+                type: "bool"
+                required: false
+              db_port:
+                type: "int"
+                required: false
+              retry_on_startup:
+                type: "bool"
+                required: false
+              trust_anchor:
+                type: "path"
+                required: false
+              db_type:
+                type: "str"
+                choices:
+                  - "memfile"
+                  - "mysql"
+                  - "postgresql"
+                required: true
+              db_user:
+                type: "str"
+                required: true
+          loggers:
+            type: "list"
+            elements: "dict"
+            required: false
+            options:
+              debuglevel:
+                type: "int"
+                required: false
+              logger_name:
+                type: "str"
+                required: true
+              output_options:
+                type: "list"
+                elements: "dict"
+                required: false
+                options:
+                  flush:
+                    type: "bool"
+                    required: false
+                  maxsize:
+                    type: "int"
+                    required: false
+                  maxver:
+                    type: "int"
+                    required: false
+                  output:
+                    type: "str"
+                    required: true
+                  pattern:
+                    type: "str"
+                    required: false
+              severity:
+                type: "str"
+                choices:
+                  - "DEBUG"
+                  - "INFO"
+                  - "WARN"
+                  - "ERROR"
+                  - "FATAL"
+                required: true
+          match_client_id:
+            type: "bool"
+            required: false
+          multi_threading:
+            type: "dict"
+            required: false
+            options:
+              enable_multi_threading:
+                type: "bool"
+                required: false
+              packet_queue_size:
+                type: "int"
+                required: false
+              thread_pool_size:
+                type: "int"
+                required: false
+          next_server:
+            type: "str"
+            required: false
+          option_data:
+            type: "list"
+            elements: "dict"
+            required: false
+            required_one_of:
+              - ["code", "option_name"]
+            options:
+              always_send:
+                type: "bool"
+                required: false
+              code:
+                type: "int"
+                required: false
+              csv_format:
+                type: "bool"
+                required: false
+              data:
+                type: "str"
+                required: true
+              option_name:
+                type: "str"
+                required: false
+              never_send:
+                type: "bool"
+                required: false
+              space:
+                type: "str"
+                required: false
+          option_def:
+            type: "list"
+            elements: "dict"
+            required: false
+            options:
+              array:
+                type: "bool"
+                required: false
+              code:
+                type: "int"
+                required: true
+              encapsulate:
+                type: "str"
+                required: false
+              option_name:
+                type: "str"
+                required: true
+              record_types:
+                type: "str"
+                required: false
+              space:
+                type: "str"
+                required: false
+              option_type:
+                type: "str"
+                required: true
+          parked_packet_limit:
+            type: "int"
+            required: false
+          rebind_timer:
+            type: "int"
+            required: false
+            default: 2000
+          renew_timer:
+            type: "int"
+            required: false
+            default: 1000
+          reservations_global:
+            type: "bool"
+            required: false
+          reservations_in_subnet:
+            type: "bool"
+            required: false
+          reservations_lookup_first:
+            type: "bool"
+            required: false
+          reservations_out_of_pool:
+            type: "bool"
+            required: false
+          sanity_checks:
+            type: "dict"
+            options:
+              extended_info_checks:
+                type: "str"
+                choices:
+                  - "none"
+                  - "fix"
+                  - "strict"
+                  - "pedantic"
+                required: false
+              lease_checks:
+                type: "str"
+                choices:
+                  - "none"
+                  - "warn"
+                  - "fix"
+                  - "fix-del"
+                  - "del"
+                required: false
+          server_hostname:
+            type: "str"
+            required: false
+          server_tag:
+            type: "str"
+            required: false
+          shared_networks:
+            type: "list"
+            elements: "dict"
+            required: false
+            options:
+              network_name:
+                type: "str"
+                required: true
+              interface:
+                type: "str"
+                required: true
+              subnet4:
+                type: "list"
+                elements: "dict"
+                required: true
+                options:
+                  subnet_id:
+                    type: "int"
+                    required: true
+                  option_data:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    required_one_of:
+                      - ["code", "option_name"]
+                    options:
+                      always_send:
+                        type: "bool"
+                        required: false
+                      code:
+                        type: "int"
+                        required: false
+                      csv_format:
+                        type: "bool"
+                        required: false
+                      data:
+                        type: "str"
+                        required: true
+                      option_name:
+                        type: "str"
+                        required: false
+                      never_send:
+                        type: "bool"
+                        required: false
+                      space:
+                        type: "str"
+                        required: false
+                  subnet_cidr:
+                    type: "str"
+                    required: true
+                  pools:
+                    type: "list"
+                    elements: "str"
+                    required: true
+                    options:
+                      pool:
+                        type: "str"
+                        required: true
+              option_data:
+                type: "list"
+                elements: "dict"
+                required: false
+                required_one_of:
+                  - ["code", "option_name"]
+                options:
+                  always_send:
+                    type: "bool"
+                    required: false
+                  code:
+                    type: "int"
+                    required: false
+                  csv_format:
+                    type: "bool"
+                    required: false
+                  data:
+                    type: "str"
+                    required: true
+                  option_name:
+                    type: "str"
+                    required: false
+                  never_send:
+                    type: "bool"
+                    required: false
+                  space:
+                    type: "str"
+                    required: false
+          stash_agent_options:
+            type: "bool"
+            required: false
+          statistic_default_sample_age:
+            type: "int"
+            required: false
+          statistic_default_sample_count:
+            type: "int"
+            required: false
+          store_extended_info:
+            type: "bool"
+            required: false
+          subnet4:
+            type: "list"
+            elements: "dict"
+            required: false
+            default:
+              - subnet_id: 1
+                subnet_cidr: "192.168.1.1/24"
+                pools:
+                  - pool: "192.168.1.1 - 192.168.1.255"
+            options:
+              4o6_interface:
+                type: "str"
+                required: false
+              4o6_interface_id:
+                type: "str"
+                required: false
+              4o6_subnet:
+                type: "str"
+                required: false
+              allocator:
+                type: "str"
+                choices:
+                  - "iterative"
+                  - "random"
+                  - "flq"
+                required: false
+              calculate_tee_times:
+                type: "bool"
+                required: false
+              ddns_qualifying_suffix:
+                type: "str"
+                required: false
+              subnet_id:
+                type: "int"
+                required: true
+              max_valid_lifetime:
+                type: "int"
+                required: false
+              min_valid_lifetime:
+                type: "int"
+                required: false
+              option_data:
+                type: "list"
+                elements: "dict"
+                required: false
+                required_one_of:
+                  - ["code", "option_name"]
+                options:
+                  always_send:
+                    type: "bool"
+                    required: false
+                  code:
+                    type: "int"
+                    required: false
+                  csv_format:
+                    type: "bool"
+                    required: false
+                  data:
+                    type: "str"
+                    required: true
+                  option_name:
+                    type: "str"
+                    required: false
+                  never_send:
+                    type: "bool"
+                    required: false
+                  space:
+                    type: "str"
+                    required: false
+              pools:
+                type: "list"
+                elements: "str"
+                required: true
+                options:
+                  option_data:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    required_one_of:
+                      - ["code", "option_name"]
+                    options:
+                      always_send:
+                        type: "bool"
+                        required: false
+                      code:
+                        type: "int"
+                        required: false
+                      csv_format:
+                        type: "bool"
+                        required: false
+                      data:
+                        type: "str"
+                        required: true
+                      option_name:
+                        type: "str"
+                        required: false
+                      never_send:
+                        type: "bool"
+                        required: false
+                      space:
+                        type: "str"
+                        required: false
+                  pool:
+                    type: "str"
+                    required: true
+              rebind_timer:
+                type: "int"
+                required: false
+              relay:
+                type: "dict"
+                required: false
+                options:
+                  ip_addressess:
+                    type: "list"
+                    elements: "str"
+                    required: false
+              renew_timer:
+                type: "int"
+                required: false
+              reservations:
+                type: "list"
+                elements: "dict"
+                required: false
+                required_one_of:
+                  - ["client_id", "circuit_id", "duid", "hw-address"]
+                options:
+                  boot_file_name:
+                    type: "str"
+                    required: false
+                  client_classes:
+                    type: "list"
+                    elements: "str"
+                    required: false
+                  client_id:
+                    type: "str"
+                    required: false
+                  circuit_id:
+                    type: "str"
+                    required: false
+                  duid:
+                    type: "str"
+                    required: false
+                  hostname:
+                    type: "str"
+                    required: false
+                  hw_address:
+                    type: "str"
+                    required: false
+                  ip_address":
+                    type: "str"
+                    required: false
+                  next_server:
+                    type: "str"
+                    required: false
+                  option_data:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    required_one_of:
+                      - ["code", "option_name"]
+                    options:
+                      always_send:
+                        type: "bool"
+                        required: false
+                      code:
+                        type: "int"
+                        required: false
+                      csv_format:
+                        type: "bool"
+                        required: false
+                      data:
+                        type: "str"
+                        required: true
+                      option_name:
+                        type: "str"
+                        required: false
+                      never_send:
+                        type: "bool"
+                        required: false
+                      space:
+                        type: "str"
+                        required: false
+                  server_hostname:
+                    type: "str"
+                    required: false
+              store_extended_info:
+                type: "bool"
+                required: false
+              subnet_cidr:
+                type: "str"
+                required: true
+              t1_percent:
+                type: "float"
+                required: false
+              t2_percent:
+                type: "float"
+                required: false
+              valid_lifetime:
+                type: "int"
+                required: false
+          t1_percent:
+            type: "float"
+            required: false
+          t2_percent:
+            type: "float"
+            required: false
+          valid_lifetime:
+            type: "int"
+            required: false
+            default: 4000
+
+      kea_dhcp6_options:
+        type: "dict"
+        required: false
+        default:
+          enabled: true
+        description:
+          - "Options for configuring Kea DHCP6 Server"
+        options:
+          enabled:
+            type: "bool"
+            required: true
+            description:
+              - "Whether to enable ISC Kea DHCP6 Server"
+          allocator:
+            type: "str"
+            choices:
+              - "iterative"
+              - "random"
+            required: false
+            description:
+              - "Address allocation strategy."
+          calculate_tee_times:
+            type: "bool"
+            required: false
+          control_sockets:
+            type: "list"
+            elements: "dict"
+            required: false
+            required_together:
+              - ["cert_file", "key_file", "trust_anchor"]
+            required_by:
+              "cert_required": ["cert_file", "key_file", "trust_anchor"]
+            required_if:
+              - ["socket_type", "http", "socket_address"]
+              - ["socket_type", "https", ["socket_address", "cert_file", "key_file", "trust_anchor"]]
+              - ["socket_type", "unix", "socket_name"]
+            mutually_exclusive:
+              - ["socket_name", "socket_address"]
+              - ["socket_name", "authentication"]
+              - ["socket_name", "cert_file"]
+              - ["socket_name", "key_file"]
+              - ["socket_name", "trust_anchor"]
+              - ["socket_name", "cert_required"]
+            options:
+              authentication:
+                type: "dict"
+                required: false
+                options:
+                  clients:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    options:
+                      user:
+                        type: "str"
+                        required: false
+                      password:
+                        type: "str"
+                        required: false
+              cert_file:
+                type: "path"
+                required: false
+              cert_required:
+                type: "bool"
+                required: false
+              key_file:
+                type: "path"
+                required: false
+              socket_address:
+                type: "str"
+                required: false
+              socket_name:
+                type: "str"
+                required: false
+              socket_type:
+                type: "str"
+                choices:
+                  - "unix"
+                  - "http"
+                  - "https"
+                required: true
+          ddns_conflict_resolution_mode:
+            type: "str"
+            choices:
+              - "check-with-dhcid"
+              - "no-check-with-dhcid"
+              - "check-exists-with-dhcid"
+              - "no-check-without-dhcid"
+            required: false
+          ddns_generated_prefix:
+            type: "str"
+            required: false
+          ddns_override_client_update:
+            type: "bool"
+            required: false
+          ddns_override_no_update:
+            type: "bool"
+            required: false
+          ddns_qualifying_suffix:
+            type: "str"
+            required: false
+          ddns_replace_client_name:
+            type: "str"
+            choices:
+              - "never"
+              - "always"
+              - "when-present"
+              - "when-not-present"
+            required: false
+          ddns_send_updates:
+            type: "bool"
+            required: false
+          ddns_ttl:
+            type: "int"
+            required: false
+          ddns_ttl_percent:
+            type: "float"
+            required: false
+          ddns_ttl_mix:
+            type: "int"
+            required: false
+          ddns_ttl_max:
+            type: "int"
+            required: false
+          ddns_update_on_renew:
+            type: "str"
+            required: false
+          decline_probation_period:
+            type: "int"
+            required: false
+          dhcp_ddns:
+            type: "dict"
+            required: false
+            options:
+              enable_updates:
+                type: "bool"
+                required: false
+              max_queue_size:
+                type: "int"
+                required: false
+              ncr_format:
+                type: "str"
+                choices:
+                  - "JSON"
+                required: false
+              ncr_protocol:
+                type: "str"
+                choices:
+                  - "UDP"
+                required: false
+              sender_ip:
+                type: "str"
+                required: false
+              sender_port:
+                type: "int"
+                required: false
+              server_ip:
+                type: "str"
+                required: false
+              server_port:
+                type: "int"
+                required: false
+          dhcp_queue_control:
+            type: "dict"
+            required: false
+            options:
+              capacity:
+                type: "int"
+                required: false
+              enable_queue:
+                type: "bool"
+                required: false
+              queue_type:
+                type: "str"
+                choices:
+                  - "kea-ring4"
+                required: false
+          dhcp4o6_port:
+            type: "int"
+            required: false
+          early_global_reservations_lookup:
+            type: "bool"
+            required: false
+          expired_leases_processing:
+            type: "dict"
+            required: false
+            options:
+              flush_reclaimed_timer_wait_time:
+                type: "int"
+                required: false
+              hold_reclaimed_time:
+                type: "int"
+                required: false
+              max_reclaim_leases:
+                type: "int"
+                required: false
+              max_reclaim_time:
+                type: "int"
+                required: false
+              reclaim_timer_wait_time:
+                type: "int"
+                required: false
+              unwarned_reclaim_cycles:
+                type: "int"
+                required: false
+          hooks_libraries:
+            type: "list"
+            elements: "dict"
+            required: false
+            required_if:
+              - ["library", "/usr/lib64/kea/hooks/libdhcp_ha.so", "parameters"]
+            options:
+              library:
+                type: "str"
+                required: true
+              parameters:
+                type: "dict"
+                required: false
+                options:
+                  high_availability:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    required_together:
+                      - ["cert_file", "key_file", "trust_anchor"]
+                    required_by:
+                      "require_client_certs": ["cert_file", "key_file", "trust_anchor"]
+                    options:
+                      cert_file:
+                        type: "str"
+                        required: false
+                      delayed_updates_limit:
+                        type: "int"
+                        required: false
+                      heartbeat-delay:
+                        type: "int"
+                        required: false
+                      key_file:
+                        type: "str"
+                        required: false
+                      max_ack_delay:
+                        type: "int"
+                        required: false
+                      max_rejected_lease_updates:
+                        type: "int"
+                        required: false
+                      max_response_delay:
+                        type: "int"
+                        required: false
+                      max_unacked_clients:
+                        type: "int"
+                        required: false
+                      mode:
+                        type: "str"
+                        choices:
+                          - "load-balancing"
+                          - "passive-backup"
+                          - "hot-standby"
+                        required: true
+                      multi_threading:
+                        type: "dict"
+                        required: false
+                        options:
+                          enable:
+                            type: "bool"
+                            required: false
+                          http_client_threads:
+                            type: "int"
+                            required: false
+                          http_dedicated_listener:
+                            type: "int"
+                            required: false
+                          http_listener_threads:
+                            type: "int"
+                            required: false
+                      peers:
+                        type: "list"
+                        elements: "dict"
+                        required: true
+                        mutually_exclusive:
+                          - ["basic_auth_password", "basic_auth_password_file"]
+                        options:
+                          auto_failover:
+                            type: "bool"
+                            required: false
+                          basic_auth_password:
+                            type: "str"
+                            required: false
+                          basic_auth_password_file:
+                            type: "str"
+                            required: false
+                          basic_auth_user:
+                            type: "str"
+                            required: false
+                          peer_name:
+                            type: "str"
+                            required: true
+                          peer_role:
+                            type: "str"
+                            choices:
+                              - "primary"
+                              - "secondary"
+                              - "backup"
+                            required: true
+                          peer_url:
+                            type: "str"
+                            required: true
+                      require_client_certs:
+                        type: "str"
+                        required: false
+                      restrict_commands:
+                        type: "str"
+                        required: false
+                      send_lease_updates:
+                        type: "bool"
+                        required: false
+                      sync_leases:
+                        type: "bool"
+                        required: false
+                      sync_page_limit:
+                        type: "int"
+                        required: false
+                      sync_timeout:
+                        type: "int"
+                        required: false
+                      this_server_name:
+                        type: "str"
+                        required: true
+                      wait_backup_ack:
+                        type: "bool"
+                        required: false
+          host_reservation_identifiers:
+            type: "list"
+            elements: "str"
+            choices:
+              - "hw-address"
+              - "duid"
+            required: false
+          hostname_char_replacement:
+            type: "str"
+            required: false
+          hostname_char_set:
+            type: "str"
+            required: false
+          hosts_databases:
+            type: "list"
+            elements: "dict"
+            required: false
+            required_together:
+              - ["cert_file", "key_file", "trust_anchor"]
+            options:
+              cert_file:
+                type: "path"
+                required: false
+              host:
+                type: "str"
+                required: false
+              key_file:
+                type: "path"
+                required: false
+              max_reconnect_tries:
+                type: "int"
+                required: false
+              db_name:
+                type: "str"
+                required: true
+              on_fail:
+                type: "str"
+                choices:
+                  - "stop-retry-exit"
+                  - "serve-retry-exit"
+                  - "serve-retry-continue"
+                required: false
+              db_password:
+                type: "str"
+                required: false
+              db_port:
+                type: "int"
+                required: false
+              retry_on_startup:
+                type: "bool"
+                required: false
+              trust_anchor:
+                type: "path"
+                required: false
+              db_type:
+                type: "str"
+                choices:
+                  - "mysql"
+                  - "postgresql"
+                required: true
+              db_user:
+                type: "str"
+                required: true
+          interfaces_config:
+            type: "dict"
+            required: false
+            default:
+              interfaces: ["eth0"]
+            options:
+              interfaces:
+                type: "list"
+                elements: "str"
+                required: true
+              re_detect:
+                type: "bool"
+                required: false
+          ip_reservations_unique:
+            type: "bool"
+            required: false
+          lease_database:
+            type: "dict"
+            required: false
+            required_together:
+              - ["cert_file", "key_file", "trust_anchor"]
+            default:
+              db_type: "memfile"
+              db_name: "/var/lib/kea/dhcp4.leases"
+            options:
+              cert_file:
+                type: "path"
+                required: false
+              db_host:
+                type: "str"
+                required: false
+              key_file:
+                type: "path"
+                required: false
+              max_reconnect_tries:
+                type: "int"
+                required: false
+              db_name:
+                type: "str"
+                required: true
+              on_fail:
+                type: "str"
+                choices:
+                  - "stop-retry-exit"
+                  - "serve-retry-exit"
+                  - "serve-retry-continue"
+                required: false
+              db_password:
+                type: "str"
+                required: false
+              persist:
+                type: "bool"
+                required: false
+              db_port:
+                type: "int"
+                required: false
+              retry_on_startup:
+                type: "bool"
+                required: false
+              trust_anchor:
+                type: "path"
+                required: false
+              db_type:
+                type: "str"
+                choices:
+                  - "memfile"
+                  - "mysql"
+                  - "postgresql"
+                required: true
+              db_user:
+                type: "str"
+                required: true
+          loggers:
+            type: "list"
+            elements: "dict"
+            required: false
+            options:
+              debuglevel:
+                type: "int"
+                required: false
+              logger_name:
+                type: "str"
+                required: true
+              output_options:
+                type: "list"
+                elements: "dict"
+                required: false
+                options:
+                  flush:
+                    type: "bool"
+                    required: false
+                  maxsize:
+                    type: "int"
+                    required: false
+                  maxver:
+                    type: "int"
+                    required: false
+                  output:
+                    type: "str"
+                    required: true
+                  pattern:
+                    type: "str"
+                    required: false
+              severity:
+                type: "str"
+                choices:
+                  - "DEBUG"
+                  - "INFO"
+                  - "WARN"
+                  - "ERROR"
+                  - "FATAL"
+                required: true
+          mac_sources:
+            type: "list"
+            elements: "str"
+            choices:
+              - "any"
+              - "raw"
+              - "duid"
+              - "ipv6-link-local"
+              - "client-link-addr-option"
+              - "remote-id"
+              - "subscriber-id"
+              - "docsis-cmts"
+              - "docsis-modem"
+            required: false
+          multi_threading:
+            type: "dict"
+            required: false
+            options:
+              enable_multi_threading:
+                type: "bool"
+                required: false
+              packet_queue_size:
+                type: "int"
+                required: false
+              thread_pool_size:
+                type: "int"
+                required: false
+          option_data:
+            type: "list"
+            elements: "dict"
+            required: false
+            required_one_of:
+              - ["code", "option_name"]
+            options:
+              always_send:
+                type: "bool"
+                required: false
+              code:
+                type: "int"
+                required: false
+              csv_format:
+                type: "bool"
+                required: false
+              data:
+                type: "str"
+                required: true
+              option_name:
+                type: "str"
+                required: false
+              never_send:
+                type: "bool"
+                required: false
+              space:
+                type: "str"
+                required: false
+          option_def:
+            type: "list"
+            elements: "dict"
+            required: false
+            options:
+              array:
+                type: "bool"
+                required: false
+              code:
+                type: "int"
+                required: true
+              encapsulate:
+                type: "str"
+                required: false
+              option_name:
+                type: "str"
+                required: true
+              record_types:
+                type: "str"
+                required: false
+              space:
+                type: "str"
+                required: false
+              option_type:
+                type: "str"
+                required: true
+          parked_packet_limit:
+            type: "int"
+            required: false
+          pd_allocation:
+            type: "str"
+            choices:
+              - "iterative"
+              - "random"
+              - "flq"
+            required: false
+          rebind_timer:
+            type: "int"
+            required: false
+            default: 2000
+          relay_supplied_options:
+            type: "list"
+            elements: "int"
+            required: false
+          renew_timer:
+            type: "int"
+            required: false
+            default: 1000
+          reservations_global:
+            type: "bool"
+            required: false
+          reservations_in_subnet:
+            type: "bool"
+            required: false
+          reservations_lookup_first:
+            type: "bool"
+            required: false
+          reservations_out_of_pool:
+            type: "bool"
+            required: false
+          sanity_checks:
+            type: "dict"
+            options:
+              extended_info_checks:
+                type: "str"
+                choices:
+                  - "none"
+                  - "fix"
+                  - "strict"
+                  - "pedantic"
+                required: false
+              lease_checks:
+                type: "str"
+                choices:
+                  - "none"
+                  - "warn"
+                  - "fix"
+                  - "fix-del"
+                  - "del"
+                required: false
+          server_id:
+            type: "dict"
+            required: false
+            options:
+              enterprise:id:
+                type: "int"
+                required: false
+              htype:
+                type: "int"
+                required: false
+              identitifer:
+                type: "str"
+                required: false
+              persist:
+                type: "bool"
+                required: false
+              time:
+                type: "int"
+                required: false
+              id_type:
+                type: "str"
+                choices:
+                  - "LLT"
+                  - "EN"
+                  - "LL"
+                required: false
+          server_tag:
+            type: "str"
+            required: false
+          shared_networks:
+            type: "list"
+            elements: "dict"
+            required: false
+            options:
+              network_name:
+                type: "str"
+                required: true
+              interface:
+                type: "str"
+                required: true
+              subnet6:
+                type: "list"
+                elements: "dict"
+                required: true
+                options:
+                  subnet_id:
+                    type: "int"
+                    required: true
+                  option_data:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    required_one_of:
+                      - ["code", "option_name"]
+                    options:
+                      always_send:
+                        type: "bool"
+                        required: false
+                      code:
+                        type: "int"
+                        required: false
+                      csv_format:
+                        type: "bool"
+                        required: false
+                      data:
+                        type: "str"
+                        required: true
+                      option_name:
+                        type: "str"
+                        required: false
+                      never_send:
+                        type: "bool"
+                        required: false
+                      space:
+                        type: "str"
+                        required: false
+                  subnet_cidr:
+                    type: "str"
+                    required: true
+                  pools:
+                    type: "list"
+                    elements: "str"
+                    required: true
+                    options:
+                      pool:
+                        type: "str"
+                        required: true
+              option_data:
+                type: "list"
+                elements: "dict"
+                required: false
+                required_one_of:
+                  - ["code", "option_name"]
+                options:
+                  always_send:
+                    type: "bool"
+                    required: false
+                  code:
+                    type: "int"
+                    required: false
+                  csv_format:
+                    type: "bool"
+                    required: false
+                  data:
+                    type: "str"
+                    required: true
+                  option_name:
+                    type: "str"
+                    required: false
+                  never_send:
+                    type: "bool"
+                    required: false
+                  space:
+                    type: "str"
+                    required: false
+          statistic_default_sample_age:
+            type: "int"
+            required: false
+          statistic_default_sample_count:
+            type: "int"
+            required: false
+          store_extended_info:
+            type: "bool"
+            required: false
+          subnet6:
+            type: "list"
+            elements: "dict"
+            required: false
+            default:
+              - subnet_id: 1
+                subnet_cidr: "2001:db8:1::/64"
+                pools:
+                  - pool: "2001:db8:1::1-2001:db8:1::ffff"
+            options:
+              allocator:
+                type: "str"
+                choices:
+                  - "iterative"
+                  - "random"
+                  - "flq"
+                required: false
+              calculate_tee_times:
+                type: "bool"
+                required: false
+              subnet_id:
+                type: "int"
+                required: true
+              interface:
+                type: "str"
+                required: false
+              max_valid_lifetime:
+                type: "int"
+                required: false
+              min_valid_lifetime:
+                type: "int"
+                required: false
+              option_data:
+                type: "list"
+                elements: "dict"
+                required: false
+                required_one_of:
+                  - ["code", "option_name"]
+                options:
+                  always_send:
+                    type: "bool"
+                    required: false
+                  code:
+                    type: "int"
+                    required: false
+                  csv_format:
+                    type: "bool"
+                    required: false
+                  data:
+                    type: "str"
+                    required: true
+                  option_name:
+                    type: "str"
+                    required: false
+                  never_send:
+                    type: "bool"
+                    required: false
+                  space:
+                    type: "str"
+                    required: false
+              pools:
+                type: "list"
+                elements: "str"
+                required: true
+                options:
+                  option_data:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    required_one_of:
+                      - ["code", "option_name"]
+                    options:
+                      always_send:
+                        type: "bool"
+                        required: false
+                      code:
+                        type: "int"
+                        required: false
+                      csv_format:
+                        type: "bool"
+                        required: false
+                      data:
+                        type: "str"
+                        required: true
+                      option_name:
+                        type: "str"
+                        required: false
+                      never_send:
+                        type: "bool"
+                        required: false
+                      space:
+                        type: "str"
+                        required: false
+                  pool:
+                    type: "str"
+                    required: true
+              rapid_commit:
+                type: "bool"
+                required: false
+              rebind_timer:
+                type: "int"
+                required: false
+              relay:
+                type: "dict"
+                required: false
+                options:
+                  ip_addressess:
+                    type: "list"
+                    elements: "str"
+                    required: false
+              renew_timer:
+                type: "int"
+                required: false
+              reservations:
+                type: "list"
+                elements: "dict"
+                required: false
+                required_one_of:
+                  - ["client_id", "circuit_id", "duid", "hw-address"]
+                options:
+                  client_classes:
+                    type: "list"
+                    elements: "str"
+                    required: false
+                  duid:
+                    type: "str"
+                    required: false
+                  hostname:
+                    type: "str"
+                    required: false
+                  hw_address:
+                    type: "str"
+                    required: false
+                  ip_address":
+                    type: "str"
+                    required: false
+                  next_server:
+                    type: "str"
+                    required: false
+                  option_data:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    required_one_of:
+                      - ["code", "option_name"]
+                    options:
+                      always_send:
+                        type: "bool"
+                        required: false
+                      code:
+                        type: "int"
+                        required: false
+                      csv_format:
+                        type: "bool"
+                        required: false
+                      data:
+                        type: "str"
+                        required: true
+                      option_name:
+                        type: "str"
+                        required: false
+                      never_send:
+                        type: "bool"
+                        required: false
+                      space:
+                        type: "str"
+                        required: false
+                  server_hostname:
+                    type: "str"
+                    required: false
+              store_extended_info:
+                type: "bool"
+                required: false
+              subnet_cidr:
+                type: "str"
+                required: true
+              t1_percent:
+                type: "float"
+                required: false
+              t2_percent:
+                type: "float"
+                required: false
+              valid_lifetime:
+                type: "int"
+                required: false
+          t1_percent:
+            type: "float"
+            required: false
+          t2_percent:
+            type: "float"
+            required: false
+          valid_lifetime:
+            type: "int"
+            required: false
+            default: 4000
+
+      kea_dhcp_ddns_options:
+        type: "dict"
+        required: false
+        default:
+          enabled: false
+        description:
+          - "Options for configuring Kea DHCP DDNS Server"
+        options:
+          enabled:
+            type: "bool"
+            required: true
+          control_sockets:
+            type: "list"
+            elements: "dict"
+            required: false
+            required_together:
+              - ["cert_file", "key_file", "trust_anchor"]
+            required_by:
+              "cert_required": ["cert_file", "key_file", "trust_anchor"]
+            required_if:
+              - ["socket_type", "https", ["cert_file", "key_file", "trust_anchor"]]
+              - ["socket_type", "unix", "socket_name"]
+            mutually_exclusive:
+              - ["socket_name", "authentication"]
+              - ["socket_name", "cert_file"]
+              - ["socket_name", "cert_required"]
+              - ["socket_name", "key_file"]
+              - ["socket_name", "socket_address"]
+              - ["socket_name", "socket_port"]
+              - ["socket_name", "trust_anchor"]
+            options:
+              authentication:
+                type: "dict"
+                required: false
+                options:
+                  clients:
+                    type: "list"
+                    elements: "dict"
+                    required: false
+                    options:
+                      user:
+                        type: "str"
+                        required: false
+                      password:
+                        type: "str"
+                        required: false
+              cert_file:
+                type: "path"
+                required: false
+              cert_required:
+                type: "bool"
+                required: false
+              key_file:
+                type: "path"
+                required: false
+              socket_address:
+                type: "str"
+                required: false
+              socket_name:
+                type: "path"
+                required: false
+              socket_port:
+                type: "int"
+                required: false
+              socket_type:
+                type: "str"
+                choices:
+                  - "unix"
+                  - "http"
+                  - "https"
+                required: true
+          dns_server_timeout:
+            type: "int"
+            required: false
+          forward_ddns:
+            type: "dict"
+            required: false
+            options:
+              zone_name:
+                type: "str"
+                required: true
+              key_name:
+                type: "str"
+                required: false
+              dns_servers:
+                type: "list"
+                elements: "dict"
+                required: true
+                options:
+                  hostname:
+                    type: "str"
+                    required: false
+                  key_name:
+                    type: "str"
+                    required: false
+                  ip_address:
+                    type: "str"
+                    required: true
+                  port:
+                    type: "int"
+                    required: false
+          ip_address:
+            type: "str"
+            required: false
+          loggers:
+            type: "list"
+            elements: "dict"
+            required: false
+            options:
+              debuglevel:
+                type: "int"
+                required: false
+              logger_name:
+                type: "str"
+                required: true
+              output_options:
+                type: "list"
+                elements: "dict"
+                required: false
+                options:
+                  flush:
+                    type: "bool"
+                    required: false
+                  maxsize:
+                    type: "int"
+                    required: false
+                  maxver:
+                    type: "int"
+                    required: false
+                  output:
+                    type: "str"
+                    required: true
+                  pattern:
+                    type: "str"
+                    required: false
+              severity:
+                type: "str"
+                choices:
+                  - "DEBUG"
+                  - "INFO"
+                  - "WARN"
+                  - "ERROR"
+                  - "FATAL"
+                required: true
+          ncr_format:
+            type: "str"
+            choices:
+              - "JSON"
+            required: false
+          ncr_protocol:
+            type: "str"
+            choices:
+              - "UDP"
+            required: false
+          port:
+            type: "int"
+            required: false
+          reverse_ddns:
+            type: "dict"
+            required: false
+            options:
+              zone_name:
+                type: "str"
+                required: true
+              key_name:
+                type: "str"
+                required: false
+              dns_servers:
+                type: "list"
+                elements: "dict"
+                required: true
+                options:
+                  hostname:
+                    type: "str"
+                    required: false
+                  key_name:
+                    type: "str"
+                    required: false
+                  ip_address:
+                    type: "str"
+                    required: true
+                  port:
+                    type: "int"
+                    required: false
+          tsig_keys:
+            type: "list"
+            elements: "dict"
+            required: false
+            mutually_exclusive:
+              - ["secret", "secret_file"]
+            required_one_of:
+              - ["secret", "secret_file"]
+            options:
+              algorithm:
+                type: "str"
+                choices:
+                  - "HMAC-MD5"
+                  - "HMAC-SHA1"
+                  - "HMAC-SHA224"
+                  - "HMAC-SHA256"
+                  - "HMAC-SHA384"
+                  - "HMAC-SHA512"
+                required: true
+              digest_bits:
+                type: "int"
+                required: false
+              key_name:
+                type: "str"
+                required: true
+              secret:
+                type: "str"
+                required: false
+              secret_file:
+                type: "path"
+                required: false
+      
+      stork_agent_options:
+        type: "dict"
+        required: false
+        default:
+          enabled: false
+        description:
+          - "Options for configuring ISC Stork Agent"
+        options:
+          enabled:
+            type: "bool"
+            required: true
+            description:
+              - "Whether to enable ISC Stork Agent"
+          version:
+            type: "str"
+            required: false
+            default: "latest"
+            description:
+              - "The version of ISC Stork Agent to Install"
+              - "Version Keywords:"
+              - " - latest, stable = Current Stable"
+              - " - old, eol = approaching EOL"
+              - " - dev = Development"
+          agent_host:
+            type: "str"
+            required: false
+            default: "0.0.0.0"
+            description:
+              - "The IP or hostname to listen on for incoming Stork server connections"
+          agent_port:
+            type: "int"
+            required: false
+            default: 8080
+            description:
+              - "the TCP port to listen on for incoming Stork server connections"
+          agent_listen_stork_only:
+            type: "bool"
+            required: false
+            description:
+              - "Listen for commands from the Stork server only, but not for Prometheus requests"
+          gent_listen_prometheus_only:
+            type: "bool"
+            required: false
+            description:
+              - "Listen for Prometheus requests only, but not for commands from the Stork server"
+          agent_skip_tls_cert_verification:
+            type: "bool"
+            required: false
+            default: true
+            description:
+              - "Skip TLS certificate verification when the Stork Agent connects to Kea over TLS and Kea uses self-signed certificates"
+          agent_server_url:
+            type: "str"
+            required: false
+            description:
+              - "Stork Server URL used by the agent to send REST commands to the server during agent registration"
+          log_level:
+            type: "str"
+            choices:
+              - "DEBUG"
+              - "INFO"
+              - "WARN"
+              - "ERROR"
+            required: false
+            default: "WARN"
+            description:
+              - "Set logging level"
+              - "Supported values are: DEBUG, INFO, WARN, ERROR"
+          clicolor:
+            type: "bool"
+            required: false
+            description:
+              - "Disable output colorization"
+          agent_hook_directory:
+            type: "str"
+            required: false
+            description:
+              - "Path to the hook directory"
+          stork_agent_prometheus_kea_exporter_address:
+            type: "str"
+            required: false
+            description:
+              - "The IP or hostname on which the agent exports Kea statistics to Prometheus"
+          stork_agent_prometheus_kea_exporter_port:
+            type: "int"
+            required: false
+            description:
+              - "The port on which the agent exports Kea statistics to Prometheus"
+          stork_agent_prometheus_kea_exporter_interval:
+            type: "int"
+            required: false
+            description:
+              - "How often the agent collects stats from Kea, in seconds"
+          stork_agent_prometheus_kea_exporter_per_subnet_stats:
+            type: "bool"
+            required: false
+            description:
+              - "Enable or disable collecting per-subnet stats from Kea"
+          stork_agent_prometheus_bind9_exporter_address:
+            type: "str"
+            required: false
+            description:
+              - "the IP or hostname on which the agent exports BIND 9 statistics to Prometheus"
+          stork_agent_prometheus_bind9_exporter_port:
+            type: "int"
+            required: false
+            description:
+              - "the port on which the agent exports BIND 9 statistics to Prometheus"
+          stork_agent_prometheus_bind9_exporter_interval:
+            type: "int"
+            required: false
+            description:
+              - "how often the agent collects stats from BIND 9, in seconds"
