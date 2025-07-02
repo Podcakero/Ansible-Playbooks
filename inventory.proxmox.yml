@@ -1,0 +1,10 @@
+---
+plugin: community.general.proxmox
+user: api@pam
+token_id: semaphore
+token_secret: '{{ proxmox_api_key }}'
+url: https://proxmox.podcake.net/
+validate_certs: true
+want_facts: true
+compose:
+  ansible_host: proxmox_ipconfig0.ip | defalt(proxmox_net0.ip) | ipaddr('address')
