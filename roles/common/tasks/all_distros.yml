@@ -52,3 +52,25 @@
     state: started
     enabled: true
     name: cockpit.socket
+
+- name: Create ACME Client Certificate Automation
+  ansibleguy.opnsense.acme_action:
+    name: "Update certificate on {{ ansible_hostname }}.podcake.net"
+    enabled: true
+    type: configd_upload_sftp
+    sftp_host: "{{ ansible_hostname }}.podcake.net"
+    sftp_user: root
+    sftp_identity_type: rsa
+    sftp_remote_path: "/etc/pki/tls/certs"
+
+- name: Create ACME Client Certificate
+  ansibleguy.opnsense.acme_certificate:
+    name: "{{ ansible_hostname }}.podcake.net"
+    enabled: true
+    account: "Greyson"
+    validation: "Cloudflare"
+    auto_renew: true
+    renew_interval: 60
+    restart_actions: 
+      - "Update certificate on {{ ansible_hostname }}.podcake.net"
+    
