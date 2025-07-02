@@ -1,0 +1,76 @@
+{{ '{' }}
+    "Dhcp4": {{ '{' }}
+        {% if kea_dhcp4_options.allocator is defined %}
+        "allocator": {{ kea_dhcp4_options.allocator }},
+        {% endif %}
+        {% if kea_dhcp4_options.authoritative is defined %}
+        "authoritative": {{ kea_dhcp4_options.authoritative }},
+        {% endif %}
+        {% if kea_dhcp4_options.boot_file_name is defined %}
+        "boot-file-name": {{ kea_dhcp4_options.allocator.boot_file_name }},
+        {% endif %}
+        {% if kea_dhcp4_options.calculate_tee_times is defined %}
+        "calculate-tee-times": {{ kea_dhcp4_options.calculate_tee_times }},
+        {% endif %}
+        {% if kea_dhcp4_options.control_sockets is defined %}
+        "control-sockets": {{ '[' }}
+            {% for control_socket in kea_dhcp4_options.control_sockets %}
+            {{ '{' }}
+                {{ control_socket_macro(control_socket) }}
+            {{ '},' }}
+        {{ '],' }}
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_conflict_resolution_mode is defined %}
+        "ddns-conflict-resolution-mode": {{ kea_dhcp4_options.ddns_conflict_resolution_mode }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_generated_prefix is defined %}
+        "ddns-generated-prefix": {{ kea_dhcp4_options.ddns_conflict_resolution_mode }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_override_client_update is defined %}
+        "ddns-override-client-update": {{ kea_dhcp4_options.ddns_override_client_update }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_override_no_update is defined %}
+        "ddns-override-no-update": {{ kea_dhcp4_options.ddns_override_no_update }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_qualifying_suffix is defined %}
+        "ddns-qualifying-suffix": {{ kea_dhcp4_options.ddns_qualifying_suffix }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_replace_client_name is defined %}
+        "ddns-replace-client-name": {{ kea_dhcp4_options.ddns_replace_client_name }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_send_updates is defined %}
+        "ddns-send-updates": {{ kea_dhcp4_options.ddns_send_updates }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_ttl is defined %}
+        "ddns-ttl": {{ kea_dhcp4_options.ddns_ttl }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_ttl_percent is defined %}
+        "ddns-ttl-percent": {{ kea_dhcp4_options.ddns_ttl_percent }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_ttl_min is defined %}
+        "ddns-ttl-min": {{ kea_dhcp4_options.ddns_ttl_min }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_ttl_max is defined %}
+        "ddns-ttl-max": {{ kea_dhcp4_options.ddns_ttl_max }},
+        {% endif %}
+        {% if kea_dhcp4_options.ddns_update_on_renew is defined %}
+        "ddns-update-on-renew": {{ kea_dhcp4_options.ddns_update_on_renew }},
+        {% endif %}
+        {% if kea_dhcp4_options.decline_probation_period is defined %}
+        "decline-probabtion-period": {{ kea_dhcp4_options.decline_probation_period }},
+        {% endif %}
+        {% if kea_dhcp4_options.dhcp_ddns is defined %}
+        "dhcp-ddns": {{ '{' }}
+            {% if kea_dhcp4_options.dhcp_ddns.enable_updates is defined %}
+            "enable-updates": {{ kea_dhcp4_options.dhcp_ddns.enable_updates }},
+            {% endif %}
+            {% if kea_dhcp4_options.dhcp_ddns.max_queue_size is defined %}
+            "max-queue-size": {{ kea_dhcp4_options.dhcp_ddns.max_queue_size }},
+            {% endif %}
+            {% if kea_dhcp4_options.dhcp_ddns.ncr_format is defined %}
+            "ncr-format": {{ kea_dhcp4_options.dhcp_ddns.ncr_format }},
+            {% endif %}
+        {{ '},' }}
+        {% endif %}
+    {{ '}' }}
+{{ '}' }}

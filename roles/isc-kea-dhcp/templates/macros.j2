@@ -1,0 +1,427 @@
+{% macro authentication_macro(authentication) %}
+    {% if authentication.clients is defined %}
+    "clients": {{ "[" }}
+        {% for client in authentication.clients%}
+        {{ '{' }}
+        {{ client_macro(client) }},
+        {{ '}' }}
+        {% endfor %}
+    {{ "]," }}
+    {% endif %}
+    {% if authenticaion.realm is defined %}
+    "realm": {{ authentication.realm }},
+    {% endif %}
+    {% if authentication.auth_type is defined %}
+    "type": {{ authentication.auth_type }}
+    {% endif %}
+{% endmacro %}
+
+{% macro client_macro(client) %}
+    {% if client.directory is defined %}
+    "directory": {{ client.directory }},
+    {% endif %}
+    {% if client.password is defined %}
+    "password": {{ client.password }},
+    {% endif %}
+    {% if client.password_file is defined %}
+    "password-file": {{ client.password_file }},
+    {% end if%}
+    {% if client.user is defined %}
+    "user": {{ client.user }},
+    {% endif %}
+    {% if client.user_file is defined %}
+    "user-file": {{ client.user_file }}
+    {% endif %}
+{% endmacro %}
+
+{% macro control_socket_macro(control_socket) %}
+    {% if control_socket.authentication is defined %}
+    {{ authentication_macro(control_socket.authentication) }},
+    {% endif %}
+    {% if control_socket.cert_file is defined %}
+    "cert-file": {{ control_socket.cert_file }},
+    {% endif %}
+    {% if control_socket.cert_required is defined %}
+    "cert-required": {{ control_socket.cert_requried }},
+    {% endif %}
+    {% if control_socket.key_file is defined %}
+    "key-file": {{ control_socket.key_file }},
+    {% endif %}
+    {% if control_socket.socket_address is defined %}
+    "socket-address": {{ control_socket.socket_address }},
+    {% endif %}
+    {% if control_socket.socket_name is defined %}
+    "socket-name": {{ control_socket.socket_name }},
+    {% endif %}
+    {% if control_socket.socket_port is defined %}
+    "socket-port": {{ control_socket.socket_port }},
+    {% endif %}
+    {% if control_socket.socket_type is defined %}
+    "socket-type": {{ control_socket.socket_type }}
+    {% endif %}
+{% endmacro %}
+
+{% macro hooks_library_macro(hooks_library) %}
+    "library": {{ hooks_library.library }},
+    {% if hooks_library.parameters is defined %}
+    "parameters": {{ '{' }}
+        {% if hooks_library.parameters.high_availability is defined %}
+        "high-availability": {{ '[' }}
+            {{ '{' }}
+                {% if hooks_library.parameters.high_availability.cert_file is defined %}
+                "cert-file": {{ hooks_library.parameters.high_availability.cert_file }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.delayed_updates_limit is defined %}
+                "delayed-updates-limit": {{ hooks_library.parameters.high_availability.delayed_updates_limit }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.heartbeat_delay is defined %}
+                "heartbeat-delay": {{ hooks_library.parameters.high_availability.heartbeat_delay }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.key_file is defined %}
+                "key-file": {{ hooks_library.parameters.high_availability.key_file }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.max_ack_delay is defined %}
+                "max-ack-delay": {{ hooks_library.parameters.high_availability.max_ack_delay }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.max_rejected_lease_updates is defined %}
+                "max-rejected-lease-updates": {{ hooks_library.parameters.high_availability.max_rejected_lease_updates }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.max_response_delay is defined %}
+                "max-response-delay": {{ hooks_library.parameters.high_availability.max_response_delay }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.max_unacked_clients is defined %}
+                "max-unacked-clients": {{ hooks_library.parameters.high_availability.max_unacked_clients }},
+                {% endif %}
+                "mode": {{ hooks_library.parameters.high_availability.mode }},
+                {% if hooks_library.parameters.high_availability.multi_threading is defined %}
+                {{ '{' }}
+                    {% if hooks_library.parameters.high_availability.multi_threading.enable is defined %}
+                    "enable": {{ hooks_library.parameters.high_availability.multi_threading.enable }},
+                    {% endif %}
+                    {% if hooks_library.parameters.high_availability.multi_threading.http_client_threads is defined %}
+                    "http-client-threads": {{ hooks_library.parameters.high_availability.multi_threading.http_client_threads }},
+                    {% endif %}
+                    {% if hooks_library.parameters.high_availability.multi_threading.http_dedicated_listener is defined %}
+                    "http-dedicated-listener": {{ hooks_library.parameters.high_availability.multi_threading.http_dedicated_listener }},
+                    {% endif %}
+                    {% if hooks_library.parameters.high_availability.multi_threading.http_listener_threads is defined %}
+                    "http-listener-threads": {{ hooks_library.parameters.high_availability.multi_threading.http_listener_threads }}
+                    {% endif %}
+                {{ '}' }},
+                {% endif %}
+                "peers": {{ '[' }}
+                    {% for peer in hooks_library.parameters.high_availability.peers %}
+                    {{ '{' }}
+                        {% if peer.auto_failover is defined %}
+                        "auto-failover": {{ peer.auto_failover }},
+                        {% endif %}
+                        {% if peer.basic_auth_password is defined %}
+                        "basic-auth-password": {{ peer.basic_auth_password }},
+                        {% endif %}
+                        {% if peer.basic_auth_password_file is defined %}
+                        "basic-auth-password-file": {{ peer.basic_auth_password_file }},
+                        {% endif %}
+                        {% if peer.basic_auth_user is defined %}
+                        "basic-auth-user": {{ peer.basic_auth_user }},
+                        {% endif %}
+                        "name": {{ peer.peer_name }},
+                        "role": {{ peer.peer_role }},
+                        "url": {{ peer.peer_url }},
+                    {{ '}' }}
+                    {% endfor %}
+                {{ ']' }},
+                {% if hooks_library.parameters.high_availability.require_client_certs is defined %}
+                "require-client-certs": {{ hooks_library.parameters.high_availability.require_client_certs }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.restrict_commands is defined %}
+                "restrict-commands": {{ hooks_library.parameters.high_availability.restrict_commands }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.send_lease_updates is defined %}
+                "send-lease-updates": {{ hooks_library.parameters.high_availability.send_lease_updates }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.sync_leases is defined %}
+                "sync-leases": {{ hooks_library.parameters.high_availability.sync_leases }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.sync_page_limit is defined %}
+                "sync-page-limit": {{ hooks_library.parameters.high_availability.sync_page_limit }},
+                {% endif %}
+                {% if hooks_library.parameters.high_availability.sync_timeout is defined %}
+                "sync-timeout": {{ hooks_library.parameters.high_availability.sync_timeout }},
+                {% endif %}
+                "this-server-name": {{ hooks_library.parameters.high_availability.this_server_name }},
+                {% if hooks_library.parameters.high_availability.wait_backup_ack is defined %}
+                "wait-backup-ack": {{ hooks_library.parameters.high_availability.wait_backup_ack }}
+                {% endif %}
+            {{ '}' }}
+        {{ ']' }}
+        {% endif %}
+    {{ '}' }}
+    {% endif %}
+{% endmacro %}
+
+{% macro database_macro(database) %}
+    {% if database.cert_file is defined %}
+    "cert-file": {{ database.cert_file }},
+    {% endif %}
+    {% if database.host is defined %}
+    "host": {{ database.host }},
+    {% endif %}
+    {% if database.key_file is defined %}
+    "key-file": {{ database.key_file }},
+    {% endif %}
+    {% if database.max_reconnect_tries is defined %}
+    "max-reconnect-tries": {{ database.max_reconnect_tries }},
+    {% endif %}
+    "name": {{ database.db_name }},
+    {% if database.on_fail is defined %}
+    "on-fail": {{ database.on_fail }},
+    {% endif %}
+    {% if database.db_password is defined %}
+    "password": {{ database.db_password }},
+    {% endif %}
+    {% if database.db_port is defined %}
+    "port": {{ database.db_port }},
+    {% endif %}
+    {% if database.retry_on_startup is defined %}
+    "retry-on-startup": {{ database.retry_on_startup }},
+    {% endif %}
+    {% if database.trust_anchor is defined %}
+    "trust-anchor": {{ database.trust_anchor }},
+    {% endif %}
+    "type": {{ database.db_type }},
+    {% if database.db_user is defined %}
+    "user": {{ database.db_user }}
+    {% endif %}
+{% endmacro %}
+
+{% macro logger_macro(logger) %}
+    {% if logger.debuglevel is defined %}
+    "debuglevel": {{ logger.debuglevel }},
+    {% endif %}
+    "name": {{ logger.logger_name }},
+    {% if logger.output_options is defined %}
+    "output-options": {{ '[' }}
+        {% for output_option in logger.output_options %}
+        {{ '{' }}
+            {% if output_option.flush is defined %}
+            "flush": {{ output_option.flush }},
+            {% endif %}
+            {% if output_option.maxsize is defined %}
+            "maxsize": {{ output_option.maxsize }},
+            {% endif %}
+            {% if output_option.maxver is defined %}
+            "maxver": {{ output_option.maxver }},
+            {% endif %}
+            "output": {{ output_option.output }},
+            {% if output_option.pattern is defined %}
+            "pattern": {{ output_option.pattern }}
+            {% endif %}
+        {{ '},' }}
+        {% endfor %}
+    {{ '],' }}
+    "severity": {{ logger.severity }}
+{% endmacro %}
+
+{% macro option_data_macro(option_data) %}
+    {% if option_data.always_send is defined %}
+    "always-send": {{ option_data.always_send }},
+    {% endif %}
+    {% if option_data.code is defined %}
+    "code": {{ option_data.code }},
+    {% endif %}
+    {% if option_data.csv_format is defined %}
+    "csv-format": {{ option_data.csv_format }},
+    {% endif %}
+    {% if option_data.data is defined %}
+    "data": {{ option_data.data }},
+    {% endif %}
+    {% if option_data.option_name is defined %}
+    "name": {{ option_data.option_name }},
+    {% endif %}
+    {% if option_data.never_send is defined %}
+    "never-send": {{ option_data.never_send }},
+    {% endif %}
+    {% if option_data.space is defined %}
+    "space": {{ option_data.space }}
+    {% endif %}
+{% endmacro %}
+
+{% macro option_def_macro(option_def) %}
+    {% if option_def.array is defined %}
+    "array": {{ option_def.array }},
+    {% endif %}
+    "code": {{ option_def.code }},
+    {% if option_def.encapsulate is defined %}
+    "encapsulate": {{ option_def.encapsulate }},
+    {% endif %}
+    "name": {{ option_def.option_name }},
+    {% if option_def.record_types is defined %}
+    "record-types": {{ option_def.record_types }},
+    {% endif %}
+    {% if option_def.space is defined %}
+    "space": {{ option_def.space }},
+    {% endif %}
+    {% if option_def.option_type is defined %}
+    "type": {{ option_def.option_type }}
+    {% endif %}
+{% endmacro %}
+
+{% macro shared_network_macro(shared_network) %}
+    "name": {{ shared_network.network_name }},
+    "interface": {{ shared_network.interface }},
+    "subnet4": {{ '[' }}
+        {% for subnet in shared_network.subnet4 %}
+        {{ '{' }}
+            {{ subnet4_macro(subnet) }}
+        {{ '},' }}
+        {% endfor %}
+    {{ '],' }}
+    "option_data": {{ '[' }}
+        {% for option in shared_network.option_data %}
+        {{ '{' }}
+            {{ option_data_macro(option) }}
+        {{ '},' }}
+        {% endfor %}
+    {{ ']' }}
+{% endmacro %}
+
+{% macro subnet4_macro(subnet4) %}
+    {% if subnet4.4o6_interface is defined %}
+    "4o6-interface": {{ subnet4.4o6_interface }},
+    {% endif %}
+    {% if subnet4.4o6_interface_id is defined %}
+    "4o6-interface-id": {{ subnet4.4o6_interface_id }},
+    {% endif %}
+    {% if subnet4.4o6_subnet is defined %}
+    "4o6-subnet": {{ subnet4.4o6_subnet }},
+    {% endif %}
+    {% if subnet4.allocator is defined %}
+    "allocator": {{ subnet4.allocator }},
+    {% endif %}
+    {% if subnet4.calculate_tee_times is defined %}
+    "calulate-tee-times": {{ subnet4.calculate_tee_times }},
+    {% endif %}
+    {% if subnet4.ddns_qualifying_suffix is defined %}
+    "ddns-qualifying-suffix": {{ subnet4.ddns_qualifying_suffix }},
+    {% endif %}
+    "id": {{ subnet4.subnet_id }},
+    {% if subnet4.max_valid_lifetime is defined %}
+    "max-valid-lifetime": {{ subnet4.max_valid_lifetime }},
+    {% endif %}
+    {% if subnet4.min_valid_lifetime is defined %}
+    "min-valid-lifetime": {{ subnet4.min_valid_lifetime }},
+    {% endif %}
+    {% if subnet4.option_data is defined %}
+    "option_data": {{ '[' }}
+        {% for option in subnet4.option_data %}
+        {{ '{' }}
+            {{ option_data_macro(option) }}
+        {{ '},' }}
+        {% endfor %}
+    {{ '],' }}
+    {% endif %}
+    "pools": {{ '[' }}
+        {% for pool in subnet4.pools %}
+        {{ '{' }}
+            {{ subnet4_pool_macro(pool) }}
+        {{ '},' }}
+        {% endfor %}
+    {{ '],' }}
+    {% if subnet4.rebind_timer is defined %}
+    "rebind-timer": {{ subnet4.rebind_timer }},
+    {% endif %}
+    {% if subnet4.relay is defined %}
+    "relay": {{ '{' }}
+        {% if subnet4.relay.ip_addresses is defined %}
+        "ip-addresses": {{ '[' }}
+            {% for ip_address in subnet4.relay.ip_addresses %}
+            {{ ip_address }},
+            {% endfor %}
+        {{ ']' }}
+        {% endif %}
+    {{ '},' }}
+    {% endif %}
+    {% if subnet4.renew_timer is defined %}
+    "renew-timer": {{ subnet4.renew_timer }},
+    {% endif %}
+    {% if subnet4.reservations is defined %}
+    "reservations": {{ '[' }}
+        {% for reservation in subnet4.reservations %}
+        {{ '{' }}
+            {{ reservation4_macro(reservation) }}
+        {{ '},' }}
+        {% endfor %}
+    {{ '],' }}
+    {% endif %}
+    {% if subnet4.store_extended_info is defined %}
+    "store-extended-info": {{ subnet4.store_extended_info }},
+    {% endif %}
+    "subnet": {{ subnet4.subnet_cidr }},
+    {% if subnet4.t1_percent is defined %}
+    "t1-percent": {{ subnet4.t1_percent }},
+    {% endif %}
+    {% if subnet4.t2_percent is defined %}
+    "t2-percent": {{ subnet4.t2_percent }},
+    {% endif %}
+    {% if subnet4.valid_lifetime is defined %}
+    "valid-lifetime": {{ subnet4.valid_lifetime }}
+{% endmacro %}
+
+{% macro subnet4_pool_macro(subnet4_pool) %}
+    {% if subnet4_pool.option_data is defined %}
+    "option_data": {{ '[' }}
+        {% for option in subnet4_pool.option_data %}
+        {{ '{' }}
+            {{ option_data_macro(option) }}
+        {{ '},' }}
+        {% endfor %}
+    {{ '],' }}
+    {% endif %}
+    "pool": {{ subnet4_pool.pool }}
+{% endmacro %}
+
+{% macro reservation4_macro(reservation4) %}
+    {% if reservation4.boot_file_name is defined %}
+    "boot-file-name": {{ reservation4.boot_file_name }},
+    {% endif %}
+    {% if reservation4.client_classes is defined %}
+    "client-classes": {{ '[' }}
+        {% for client_class in reservation4.client_classes %}
+        {{ client_class }},
+        {% endfor %}
+    {{ '],' }}
+    {% endif %}
+    {% if reservation4.client_id is defined %}
+    "client-id": {{ reservation4.client_id }},
+    {% endif %}
+    {% if reservation4.circuit_id is defined %}
+    "circuit-id": {{ reservation4.circuit_id }},
+    {% endif %}
+    {% if reservation4.duid is defined %}
+    "duid": {{ reservation4.duid }},
+    {% endif %}
+    {% if reservation4.hostname is defined %}
+    "hostname": {{ reservation4.hostname }},
+    {% endif %}
+    {% if reservation4.hw_address is defined %}
+    "hw-address": {{ reservation4.hw_address }},
+    {% endif %}
+    {% if reservation4.ip_address is defined %}
+    "ip-address": {{ reservation4.ip_address }},
+    {% endif %}
+    {% if reservation4.next_server is defined %}
+    "next-server": {{ reservation4.next_server }},
+    {% endif %}
+    {% if reservation4.option_data is defined %}
+    "option-data": {{ '[' }}
+        {% for option in reservation4.option_data %}
+        {{ '{' }}
+            {{ option_data_macro(option) }}
+        {{ '},' }}
+        {% endfor %}
+    {{ '],' }}
+    {% endif %}
+    {% if reservation4.server_hostname is defined %}
+    "server-hostname": {{ reservation4.server_hostname }}
+    {% endif %}
+{% endmacro %}
