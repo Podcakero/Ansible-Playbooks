@@ -2,15 +2,7 @@
 - name: Test Playbook
   hosts: all
   tasks:
-    #- name: Display variable
-    #  ansible.builtin.debug:
-    #    var: "{{ variable }}"
-
-    - name: Install NetData
-      ansible.builtin.script: 
-        cmd: netdata.sh --non-interactive --disable-telemetry --stable-channel --claim-token "{{ netdata_claim_token }}" --claim-rooms "{{ netdata_room_token }}" --claim-url https://app.netdata.cloud
-
-    - name: Restart netdata service
-      ansible.builtin.systemd_service:
-        name: netdata.service
-        state: restarted
+    - name: Display variable
+      ansible.builtin.debug:
+        var: "{{ variable }}"
+        
