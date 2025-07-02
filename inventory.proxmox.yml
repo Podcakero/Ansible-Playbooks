@@ -1,4 +1,3 @@
----
 plugin: community.general.proxmox
 user: api@pam
 token_id: semaphore
