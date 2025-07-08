@@ -70,6 +70,49 @@
             {% if kea_dhcp4_options.dhcp_ddns.ncr_format is defined %}
             "ncr-format": {{ kea_dhcp4_options.dhcp_ddns.ncr_format }},
             {% endif %}
+            {% if kea_dhcp4_options.dhcp_ddns.ncr_protocol is defined %}
+            "ncr-protocol": {{ kea_dhcp4_options.dhcp_ddns.ncr_protocol }},
+            {% endif %}
+            {% if kea_dhcp4_options.dhcp_ddns.sender_ip is defined %}
+            "sender-ip": {{ kea_dhcp4_options.dhcp_ddns.sender_ip }},
+            {% endif %}
+            {% if kea_dhcp4_options.dhcp_ddns.sender_port is defined %}
+            "sender-port": {{ kea_dhcp4_options.dhcp_ddns.sender_port }},
+            {% endif %}
+            {% if kea_dhcp4_options.dhcp_ddns.server_ip is defined %}
+            "server-ip": {{ kea_dhcp4_options.dhcp_ddns.server_ip }},
+            {% endif %}
+            {% if kea_dhcp4_options.dhcp_ddns.server_port is defined %}
+            "server-port": {{ kea_dhcp4_options.dhcp_ddns.server_port }}
+            {% endif %}
+        {{ '},' }}
+        {% endif %}
+        {% if kea_dhcp4_options.dhcp_queue_control is defined %}
+        "dhcp-queue-control": {{ '{' }}
+            {% if kea_dhcp4_options.dhcp_queue_control.capacity is defined %}
+            "capacity": {{ kea_dhcp4_options.dhcp_queue_control.capacity }},
+            {% endif %}
+            {% if kea_dhcp4_options.dhcp_queue_control.enable_queue is defined %}
+            "enable-queue": {{ kea_dhcp4_options.dhcp_queue_control.enable_queue }},
+            {% endif %}
+            {% if kea_dhcp4_options.dhcp_queue_control.queue_type is defined %}
+            "queue-type": {{ kea_dhcp4_options.dhcp_queue_control.queue_type }}
+            {% endif %}
+        {{ '},' }}
+        {% endif %}
+        {% if kea_dhcp4_options.dhcp4o6_port is defined %}
+        "dhcp4o6-port": {{ kea_dhcp4_options.dhcp4o6_port }},
+        {% endif %}
+        {% if kea_dhcp4_options.early_global_reservations_lookup %}
+        "early-global-reservations-lookup": {{ kea_dhcp4_options.early_global_reservations_lookup }},
+        {% endif %}
+        {% if kea_dhcp4_options.echo_client_id is defined %}
+        "echo-client-id": {{ kea_dhcp4_options.echo_client_id }},
+        {% endif %}
+        {% if kea_dhcp4_options.expired_leases_processing is defined %}
+        "expires-leases-processing": {{ '{' }}
+            {% if kea_dhcp4_options.expired_leases_processing.flush_reclaimed_timer_wait_time is defined %}
+            
         {{ '},' }}
         {% endif %}
     {{ '}' }}
