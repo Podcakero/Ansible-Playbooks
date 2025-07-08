@@ -74,11 +74,11 @@
     api_secret: "{{ opnsense_api_secret }}"
     ssl_verify: false
     name: "{{ ansible_hostname }}.podcake.net"
-    description: "Certificate created by Ansible Semaphore"
     enabled: true
+    description: "Certificate created by Ansible Semaphore"
     account: "Greyson"
     validation: "Cloudflare"
-    auto_renew: true
+    auto_renewal: true
     renew_interval: 60
     restart_actions:
       - "Update certificate on {{ ansible_hostname }}.podcake.net"
