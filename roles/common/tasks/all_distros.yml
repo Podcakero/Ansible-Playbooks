@@ -74,6 +74,7 @@
     api_secret: "{{ opnsense_api_secret }}"
     ssl_verify: false
     name: "{{ ansible_hostname }}.podcake.net"
+    description: "Certificate created by Ansible Semaphore"
     enabled: true
     account: "Greyson"
     validation: "Cloudflare"
