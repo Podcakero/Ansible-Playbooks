@@ -53,6 +53,17 @@
     enabled: true
     name: cockpit.socket
 
+- name: Apply Glances API Web Server service
+  ansible.builtin.template:
+    src: glances-api.service.j2
+    dest: /etc/systemd/system/glances-api.service
+
+- name: Enable and Start Glances API Web Server
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: true
+    name: glances-api.service
+
 - name: Create ACME Client Certificate Automation
   ansibleguy.opnsense.acme_action:
     firewall: "{{ opnsense_ip }}"
