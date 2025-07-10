@@ -2347,7 +2347,7 @@ argument_specs:
               secret_file:
                 type: "path"
                 required: false
-      
+
       stork_agent_options:
         type: "dict"
         required: false

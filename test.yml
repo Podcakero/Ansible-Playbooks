@@ -7,6 +7,6 @@
         state: absent
         name: "{{ remove_packages }}"
 
-    #- name: Display variable
-    #  ansible.builtin.debug:
-    #    var: "{{ variable }}"
+    # - name: Display variable
+    #   ansible.builtin.debug:
+    #     var: "{{ variable }}"
