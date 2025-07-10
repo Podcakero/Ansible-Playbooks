@@ -1,6 +1,9 @@
 proxmox:
     hosts:
         10.1.4.22:
+esphome:
+    hosts:
+        10.1.2.5
 dhcp:
     children:
         primary:
@@ -47,18 +50,18 @@ postgresql:
 jellyfin:
     hosts:
         10.1.3.30:
-audiobookshelf:
+watchtower:
     hosts:
         10.1.3.31:
-prowlarr:
-    hosts:
-        10.1.3.32
-lidarr:
+arr:
     hosts:
         10.1.3.32:
-qbittorrent:
+immich:
     hosts:
-        10.1.3.32:
+        10.1.3.33:
+homepage:
+    hosts:
+        10.1.3.35:
 nginx_proxy:
     hosts:
         10.1.3.40:
@@ -74,18 +77,20 @@ web:
             hosts:
         apache:
             hosts:
+                10.1.3.43:
+                10.1.3.44:
 vms:
     hosts:
         10.1.3.15:
-        10.1.3.54:
-        10.1.3.57:
-        10.1.3.58:
-        10.1.3.59:
         10.1.3.16:
         10.1.3.52:
         10.1.3.53:
+        10.1.3.54:
+        10.1.3.57:
+        10.1.3.58:
 containers:
     children:
+        esphome:
         dhcp:
         dhcp_admin:
         dns_auth:
@@ -96,10 +101,10 @@ containers:
         mariadb_maxscale:
         postgresql:
         jellyfin:
-        audiobookshelf:
-        prowlarr:
-        lidarr:
-        qbittorrent:
+        watchtower:
+        arr:
+        immich:
+        homepage:
         nginx_proxy:
         haproxy:
         web:
