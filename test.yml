@@ -5,7 +5,7 @@
     - name: Remove unnecessary packages
       ansible.builtin.package:
         state: absent
-        name: '{{ remove-packages }}''
+        name: '{{ remove_packages }}'
 
     #- name: Display variable
     #  ansible.builtin.debug:
