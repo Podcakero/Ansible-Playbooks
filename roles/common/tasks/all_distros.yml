@@ -1,11 +1,14 @@
 - name: Install NetData
-  ansible.builtin.script: 
-    cmd: netdata.sh --non-interactive --disable-telemetry --stable-channel --claim-token "{{ netdata_claim_token }}" --claim-rooms "{{ netdata_room_token }}" --claim-url https://app.netdata.cloud
- 
-- name: Apply NetData netdata.conf
+  ansible.builtin.script:
+    cmd: netdata.sh --disable-telemetry --stable-channel --claim-token "{{ netdata_claim_token }}" --claim-rooms "{{ netdata_room_token }}" --claim-url https://app.netdata.cloud
+
+- name: Configure Netdata
   ansible.builtin.template:
     src: netdata.conf.j2
     dest: /etc/netdata/netdata.conf
+    mode: '0644'
+    owner: 'root'
+    group: 'root'
 
 - name: Restart NetData service
   ansible.builtin.systemd_service:
@@ -16,47 +19,23 @@
   ansible.builtin.import_tasks: upgrade_packages.yml
 
 - name: Configure SSHD
-  ansible.builtin.import_tasks: sshd_config.yml
+  ansible.builtin.template:
+    src: podcake.conf.j2
+    dest: /etc/ssh/sshd_config.d/podcake.conf
+    mode: '0644'
+    owner: 'root'
+    group: 'root'
 
 - name: Configure SSH Keys
   ansible.builtin.import_tasks: ssh_keys.yml
 
-- name: Create cockpit disallowed users file if it doesn't exist
-  ansible.builtin.lineinfile:
-    path: /etc/cockpit/disallowed-users
-    line: '# List of users which are not allowed to login to Cockpit'
-    create: true
-    mode: "0644"
-
-- name: Remove entry of root in cockpit disallowed users
-  ansible.builtin.lineinfile:
-    path: /etc/cockpit/disallowed-users
-    regexp: '^root'
-    state: absent
-
-- name: Create motd file if it does not exist
-  ansible.builtin.lineinfile:
-    path: /etc/motd
-    line: temp
-    create: true
-    mode: "0644"
-
-- name: Remove text in motd file
-  ansible.builtin.lineinfile:
-    path: /etc/motd
-    regexp: '.*'
-    state: absent
-
-- name: Enable and Start cockpit.socket
-  ansible.builtin.systemd_service:
-    state: started
-    enabled: true
-    name: cockpit.socket
-
 - name: Apply Glances API Web Server service
   ansible.builtin.template:
     src: glances-api.service.j2
-    dest: /etc/systemd/system/glances-api.service
+    dest: /etc/systemd/system/glances-api.
+    mode: '0644'
+    owner: 'root'
+    group: 'root'
 
 - name: Enable and Start Glances API Web Server
   ansible.builtin.systemd_service:

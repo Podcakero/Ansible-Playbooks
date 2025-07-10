@@ -1,9 +1,9 @@
 - name: Run RHEL-based tasks
-  import_tasks: redhat.yml
+  ansible.builtin.import_tasks: redhat.yml
   when:
     - (ansible_facts['distribution'] == "Rocky") or (ansible_facts['distribution'] == "RedHat")
 
 - name: Run Debian-based tasks
-  import_tasks: debian.yml
+  ansible.builtin.import_tasks: debian.yml
   when:
     - (ansible_facts['distribution'] == "Debian") or (ansible_facts['distribution'] == "Ubuntu")

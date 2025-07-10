@@ -1,8 +1,7 @@
 - name: Set SELINUX to Permissive
-  ansible.builtin.lineinfile:
-    path: /etc/selinux/config
-    regexp: '^SELINUX='
-    line: SELINUX=permissive
+  ansible.posix.selinux:
+    policy: 'targeted'
+    state: 'permissive'
   when:
     - inventory_hostname in lookup('inventory_hostnames', 'vms')
 
@@ -14,21 +13,33 @@
       ansible.builtin.template:
         src: rocky-addons.repo.j2
         dest: /etc/yum.repos.d/rocky-addons.repo
+        mode: '0644'
+        owner: 'root'
+        group: 'root'
 
     - name: Configure rocky-devel.repo
       ansible.builtin.template:
         src: rocky-devel.repo.j2
         dest: /etc/yum.repos.d/rocky-devel.repo
-    
+        mode: '0644'
+        owner: 'root'
+        group: 'root'
+
     - name: Configure rocky-extras.repo
       ansible.builtin.template:
         src: templates/rocky-extras.repo.j2
         dest: /etc/yum.repos.d/rocky-extras.repo
+        mode: '0644'
+        owner: 'root'
+        group: 'root'
 
     - name: Configure rocky.repo
       ansible.builtin.template:
         src: templates/rocky.repo.j2
         dest: /etc/yum.repos.d/rocky.repo
+        mode: '0644'
+        owner: 'root'
+        group: 'root'
 
 - name: Install EPEL
   ansible.builtin.dnf:
@@ -41,14 +52,14 @@
   block:
     - name: Install packages (Rocky)
       ansible.builtin.package:
-        state: latest
+        state: present
         name: "{{ rocky_packages }}"
       when:
         - ansible_facts['distribution'] == "Rocky"
 
     - name: Install packages (Redhat)
       ansible.builtin.package:
-        state: latest
+        state: present
         name: "{{ redhat_packages }}"
       when:
         - ansible_facts['distribution'] == "RedHat"
@@ -57,16 +68,16 @@
   ansible.builtin.import_tasks: all_distros.yml
 
 - name: Disable and Mask firewalld
-  when: 
+  when:
     - inventory_hostname in lookup('inventory_hostnames', 'vms')
   ansible.builtin.systemd_service:
     state: stopped
     enabled: false
     masked: true
-    name: firewalld.service
+    name: firewalld.service 
 
 - name: Setup TPM Auto-Unlock
-  when: 
+  when:
     - inventory_hostname in lookup('inventory_hostnames', 'vms')
   block:
     - name: \[Setup TPM Auto-Unlock\] Enroll tpm2 in primary disk on Rocky servers
