@@ -16,24 +16,24 @@
         state: present
         name: "{{ debian_packages }}"
       when:
-        - ansible_facts['distribution'] == "Debian"
+        - ansible_facts["distribution"] == "Debian"
 
     - name: Install packages
       ansible.builtin.package:
         state: present
         name: "{{ ubuntu_packages }}"
       when:
-        - ansible_facts['distribution'] == "Ubuntu"
+        - ansible_facts["distribution"] == "Ubuntu"
 
 - name: Run tasks for all_distros
   ansible.builtin.import_tasks: all_distros.yml
 
 - name: Setup TPM Auto-Unlock
   when:
-    - inventory_hostname in lookup('inventory_hostnames', 'vms')
+    - inventory_hostname in lookup("inventory_hostnames", "vms")
   block:
     - name: \[Setup TPM Auto-Unlock\] Enroll tpm2 in primary disk - Run systemd-tty-ask-password-agent on the system
-      ansible.builtin.raw: 'echo "tmp" | /usr/bin/systemd-cryptenroll /dev/sda3 --tpm2-device=auto --tpm2-pcrs=0+7'
+      ansible.builtin.raw: "echo 'tmp' | /usr/bin/systemd-cryptenroll /dev/sda3 --tpm2-device=auto --tpm2-pcrs=0+7"
       args:
         executable: /bin/bash
       register: output
@@ -51,7 +51,7 @@
     - name: \[Setup TPM Auto-Unlock\] Configure Grub
       ansible.builtin.lineinfile:
         path: /etc/default/grub
-        search_string: 'GRUB_CMDLINE_LINUX='
+        search_string: "GRUB_CMDLINE_LINUX="
         line: 'GRUB_CMDLINE_LINUX="rd.auto rd.luks=1"'
 
     - name: \[Setup TPM Auto-Unlock\] Remove entry from /etc/crypttab
@@ -82,11 +82,11 @@
         state: restarted
         name: sshd.service
       when:
-        - ansible_facts['distribution'] != "Ubuntu"
+        - ansible_facts["distribution"] != "Ubuntu"
 
     - name: Restart SSHD
       ansible.builtin.systemd_service:
         state: restarted
         name: ssh.service
       when:
-        - ansible_facts['distribution'] == "Ubuntu"
+        - ansible_facts["distribution"] == "Ubuntu"

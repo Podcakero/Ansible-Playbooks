@@ -59,7 +59,7 @@
     state: stopped
     enabled: false
     masked: true
-    name: firewalld.service 
+    name: firewalld.service
 
 - name: Setup TPM Auto-Unlock
   when:

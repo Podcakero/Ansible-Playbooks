@@ -6,9 +6,9 @@
   ansible.builtin.template:
     src: netdata.conf.j2
     dest: /etc/netdata/netdata.conf
-    mode: '0644'
-    owner: 'root'
-    group: 'root'
+    mode: "0644"
+    owner: "root"
+    group: "root"
 
 - name: Restart NetData service
   ansible.builtin.systemd_service:
@@ -22,9 +22,9 @@
   ansible.builtin.template:
     src: podcake.conf.j2
     dest: /etc/ssh/sshd_config.d/podcake.conf
-    mode: '0644'
-    owner: 'root'
-    group: 'root'
+    mode: "0644"
+    owner: "root"
+    group: "root"
 
 - name: Configure SSH Keys
   ansible.builtin.import_tasks: ssh_keys.yml
@@ -33,9 +33,9 @@
   ansible.builtin.template:
     src: glances-api.service.j2
     dest: /etc/systemd/system/glances-api.
-    mode: '0644'
-    owner: 'root'
-    group: 'root'
+    mode: "0644"
+    owner: "root"
+    group: "root"
 
 - name: Enable and Start Glances API Web Server
   ansible.builtin.systemd_service:
