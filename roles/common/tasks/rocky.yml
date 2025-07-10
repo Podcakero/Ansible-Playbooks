@@ -6,8 +6,6 @@
     - inventory_hostname in lookup('inventory_hostnames', 'vms')
 
 - name: Configure Rocky Repos
-  when:
-    - ansible_facts['distribution'] == "Rocky"
   block:
     - name: Configure rocky-addons.repo
       ansible.builtin.template:
@@ -45,24 +43,11 @@
   ansible.builtin.dnf:
     state: present
     pkg: epel-release
-  when:
-    - ansible_facts['distribution'] == "Rocky"
 
 - name: Install packages
-  block:
-    - name: Install packages (Rocky)
-      ansible.builtin.package:
-        state: present
-        name: "{{ rocky_packages }}"
-      when:
-        - ansible_facts['distribution'] == "Rocky"
-
-    - name: Install packages (Redhat)
-      ansible.builtin.package:
-        state: present
-        name: "{{ redhat_packages }}"
-      when:
-        - ansible_facts['distribution'] == "RedHat"
+  ansible.builtin.package:
+    state: present
+    name: "{{ rocky_packages }}"
 
 - name: Run tasks for all_distros
   ansible.builtin.import_tasks: all_distros.yml
