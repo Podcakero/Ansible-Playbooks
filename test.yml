@@ -2,11 +2,6 @@
 - name: Test Playbook
   hosts: all
   tasks:
-    - name: Remove unnecessary packages
-      ansible.builtin.package:
-        state: absent
-        name: "{{ remove_packages }}"
-
-    # - name: Display variable
-    #   ansible.builtin.debug:
-    #     var: "{{ variable }}"
+    - name: Display variable
+      ansible.builtin.debug:
+        var: "{{ variable }}"
