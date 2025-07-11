@@ -1,3 +1,4 @@
+{% import macros as macros %}
 {{ '{' }}
     "Dhcp4": {{ '{' }}
         {% if kea_dhcp4_options.allocator is defined %}
@@ -16,8 +17,9 @@
         "control-sockets": {{ '[' }}
             {% for control_socket in kea_dhcp4_options.control_sockets %}
             {{ '{' }}
-                {{ control_socket_macro(control_socket) }}
+                {{ macros.control_socket_macro(control_socket) }}
             {{ '},' }}
+            {% endfor %}
         {{ '],' }}
         {% endif %}
         {% if kea_dhcp4_options.ddns_conflict_resolution_mode is defined %}
@@ -112,8 +114,187 @@
         {% if kea_dhcp4_options.expired_leases_processing is defined %}
         "expires-leases-processing": {{ '{' }}
             {% if kea_dhcp4_options.expired_leases_processing.flush_reclaimed_timer_wait_time is defined %}
-            
+            "flush-reclaimed-timer-wait-time": {{ kea_dhcp4_options.expired_leases_processing.flush_reclaimed_timer_wait_time }},
+            {% endif %}
+            {% if kea_dhcp4_options.expired_leases_processing.hold_reclaimed_time is defined %}
+            "hold-reclaimed-time": {{ kea_dhcp4_options.expired_leases_processing.hold_reclaimed_time }},
+            {% endif %}
+            {% if kea_dhcp4_options.expired_leases_processing.max_reclaim_leases is defined %}
+            "max-reclaim-leases": {{ kea_dhcp4_options.expired_leases_processing.max_reclaim_leases }},
+            {% endif %}
+            {% if kea_dhcp4_options.expired_leases_processing.max_reclaim_time is defined %}
+            "max-reclaim-time": {{ kea_dhcp4_options.expired_leases_processing.max_reclaim_time }},
+            {% endif %}
+            {% if kea_dhcp4_options.expired_leases_processing.reclaim_timer_wait_time is defined %}
+            "reclaim-timer-wait-time": {{ kea_dhcp4_options.expired_leases_processing.reclaim_timer_wait_time }},
+            {% endif %}
+            {% if kea_dhcp4_options.expired_leases_processing.unwarned_reclaim_cycles is defined %}
+            "unwarned-reclaim-cycles": {{ kea_dhcp4_options.expired_leases_processing.unwarned_reclaim_cycles }}
+            {% endif %}
         {{ '},' }}
+        {% endif %}
+        {% if kea_dhcp4_options.hooks_libraries is defined %}
+        "hooks-libraries": {{ '[' }}
+            {% for hook_library in kea_dhcp4_options.hooks_libraries %}
+            {{ '{' }}
+                {{ macros.hooks_library_macro(hook_library) }}
+            {{ '},' }}
+            {% endfor %}
+        {{ '],' }}
+        {% endif %}
+        {% if kea_dhcp4_options.host_reservation_identifiers is defined %}
+        "host-reservation-identifiers": {{ '[' }}
+            {% for identifier in kea_dhcp4_options.host_reservation_identifiers %}
+            {{ identifier }},
+            {% endfor %}
+        {{ '],' }}
+        {% endif %}
+        {% if kea_dhcp4_options.hostname_char_replacement is defined %}
+        "hostname-char-replacement": {{ kea_dhcp4_options.hostname_char_replacement }},
+        {% endif %}
+        {% if kea_dhcp4_options.hostname_char_set is defined %}
+        "hostname-char-set": {{ kea_dhcp4_options.hostname_char_set }},
+        {% endif %}
+        {% if kea_dhcp4_options.hosts_databases is defined %}
+        "hosts-databases": {{ '[' }}
+            {% for database in kea_dhcp4_options.hosts_databases %}
+            {{ '{' }}
+                {{ macros.database_macro(database) }}
+            {{ '},' }}
+            {% endfor %}
+        {{ '],' }}
+        {% endif %}
+        "interfaces-config": {{ '{' }}
+            "interfaces": {{ '[' }}
+                {% for interface in kea_dhcp4_options.interfaces_config.interfaces %}
+                {{ interface }},
+                {% endfor %}
+            {{ '],' }}
+            {% if kea_dhcp4_options.interfaces_config.re_detect is defined %}
+            "re-detect": {{ kea_dhcp4_options.interfaces_config.re_detect }}
+            {% endif %}
+        {{ '},' }}
+        {% if kea_dhcp4_options.ip_reservations_unique is defined %}
+        "ip-reservations-unique": {{ kea_dhcp4_options.ip_reservations_unique }},
+        {% endif %}
+        "lease-database": {{ '{' }}
+            {{ macros.database_macro(kea_dhcp4_options.lease_database )}}
+        {{ '},' }}
+        {% if kea_dhcp4_options.loggers is defined %}
+        "loggers": {{ '[' }}
+            {% for logger in kea_dhcp4_options.loggers %}
+            {{ '{' }}
+                {{ macros.logger_macro(logger) }}
+            {{ '},' }}
+            {% endfor %}
+        {{ '],' }}
+        {% endif %}
+        {% if kea_dhcp4_options.match_client_id is defined %}
+        "match-client-id": {{ kea_dhcp4_options.match_client_id }},
+        {% endif %}
+        {% if kea_dhcp4_options.multi_threading is defined %}
+        "multi-threading": {{ '{' }}
+            {% if kea_dhcp4_options.multi_threading.enable_multi_threading is defined %}
+            "enable-multi-threading": {{ kea_dhcp4_options.multi_threading.enable_multi_threading }},
+            {% endif %}
+            {% if kea_dhcp4_options.multi_threading.packet_queue_size is defined %}
+            "packet-queue-size": {{ kea_dhcp4_options.multi_threading.packet_queue_size }},
+            {% endif %}
+            {% if kea_dhcp4_options.multi_threading.thread_pool_size is defined %}
+            "thread-pool-size": {{ kea_dhcp4_options.multi_threading.thread_pool_size }}
+            {% endif %}
+        {{ '},' }}
+        {% endif %}
+        {% if kea_dhcp4_options.next_server is defined %}
+        "next-server": {{ kea_dhcp4_options.next_server }},
+        {% endif %}
+        {% if kea_dhcp4_options.option_data is defined %}
+        "option-data": {{ '[' }}
+            {% for option in kea_dhcp4_options.option_data %}
+            {{ '{' }}
+                {{ macros.option_data_macro(option) }}
+            {{ '},' }}
+            {% endfor %}
+        {{ '],' }}
+        {% endif %}
+        {% if kea_dhcp4_options.option_def is defined %}
+        "option-data": {{ '[' }}
+            {% for option in kea_dhcp4_options.option_def %}
+            {{ '{' }}
+                {{ macros.option_def_macro(option) }}
+            {{ '},' }}
+            {% endfor %}
+        {{ '],' }}
+        {% endif %}
+        {% if kea_dhcp4_options.parked_packet_limit is defined %}
+        "parked-packet-limit": {{ kea_dhcp4_options.parked_packet_limit }},
+        {% endif %}
+        "rebind-timer": {{ kea_dhcp4_options.rebind_timer }},
+        "renew-timer": {{ kea_dhcp4_options.renew_timer }},
+        {% if kea_dhcp4_options.reservations_global is defined %}
+        "reservations-global": {{ kea_dhcp4_options.reservations_global }},
+        {% endif %}
+        {% if kea_dhcp4_options.reservations_in_subnet is defined %}
+        "reservations-in-subnet": {{ kea_dhcp4_options.reservations_in_subnet }},
+        {% endif %}
+        {% if kea_dhcp4_options.reservations_lookup_first is defined %}
+        "reservations-lookup-first": {{ kea_dhcp4_options.reservations_lookup_first }},
+        {% endif %}
+        {% if kea_dhcp4_options.reservations_out_of_pool is defined %}
+        "reservations-out-of-pool": {{ kea_dhcp4_options.reservations_out_of_pool }},
+        {% endif %}
+        {% if kea_dhcp4_options.sanity_checks is defined %}
+        "sanity_checks": {{ '{' }}
+            {% if kea_dhcp4_options.sanity_checks.extended_info_checks is defined %}
+            "extended-info-checks": {{ kea_dhcp4_options.sanity_checks.extended_info_checks }},
+            {% endif %}
+            {% if kea_dhcp4_options.sanity_checks.lease_checks is defined %}
+            "lease-checks": {{ kea_dhcp4_options.sanity_checks.lease_checks }}
+            {% endif %}
+        {{ '},' }}
+        {% endif %}
+        {% if kea_dhcp4_options.server_hostname is defined %}
+        "server-hostname": {{ kea_dhcp4_options.server_hostname }}
+        {% endif %}
+        {% if kea_dhcp4_options.server_tag is defined %}
+        "server-tag": {{ kea_dhcp4_options.server_tag }}
+        {% endif %}
+        {% if kea_dhcp4_options.shared_networks is defined %}
+        "shared-networks": {{ '[' }}
+            {% for shared_network in kea_dhcp4_options.shared_networks %}
+            {{ '{' }}
+                {{ macros.shared_network_macro(shared_network) }}
+            {{ '},' }}
+            {% endfor %}
+        {{ '],' }}
+        {% endif %}
+        {% if kea_dhcp4_options.stash_agent_options is defined %}
+        "stash-agent-options": {{ kea_dhcp4_options.stash_agent_options }},
+        {% endif %}
+        {% if kea_dhcp4_options.statistic_default_sample_age is defined %}
+        "statistic-default-sample-age": {{ kea_dhcp4_options.statistic_default_sample_age }},
+        {% endif %}
+        {% if kea_dhcp4_options.statistic_default_sample_count is defined %}
+        "statistic-default-sample-count": {{ kea_dhcp4_options.statistic_default_sample_count }},
+        {% endif %}
+        {% if kea_dhcp4_options.store_extended_info is defined %}
+        "store-extended-info": {{ kea_dhcp4_options.store_extended_info }},
+        {% endif %}
+        "subnet4": {{ '[' }}
+            {% for subnet in kea_dhcp4_options.subnet4 %}
+            {{ '{' }}
+                {{ macros.subnet4_macro(subnet) }}
+            {{ '},' }}
+            {% endfor %}
+        {{ '],' }}
+        {% if kea_dhcp4_options.t1_percent is defined %}
+        "t1-percent": {{ kea_dhcp4_options.t1_percent }},
+        {% endif %}
+        {% if kea_dhcp4_options.t2_percent is defined %}
+        "t2-percent": {{ kea_dhcp4_options.t2_percent }},
+        {% endif %}
+        {% if kea_dhcp4_options.valid_lifetime is defined %}
+        "valid-lifetime": {{ kea_dhcp4_options.valid_lifetime }},
         {% endif %}
     {{ '}' }}
 {{ '}' }}
