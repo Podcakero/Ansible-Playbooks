@@ -14,5 +14,5 @@ validate_certs: true
 want_facts: true
 qemu_extended_statuses: true
 want_proxmox_nodes_ansible_host: false
-compose:
-  ansible_host: proxmox_
+# compose:
+#   ansible_host: proxmox_
