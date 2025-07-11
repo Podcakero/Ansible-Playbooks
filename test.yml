@@ -1,7 +1,9 @@
 ---
 - name: Test Playbook
   hosts: all
-  tasks:
-    - name: Display variable
-      ansible.builtin.debug:
-        var: "{{ variable }}"
+#  tasks:
+#    - name: Display variable
+#      ansible.builtin.debug:
+#        var: "{{ variable }}"
+  roles:
+    - isc-kea-dhcp
