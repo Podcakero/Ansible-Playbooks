@@ -1,7 +1,7 @@
 - name: Install NetData
   ansible.builtin.script:
     cmd: netdata.sh --non-interactive --disable-telemetry --stable-channel --claim-token "{{ netdata_claim_token }}" --claim-rooms "{{ netdata_room_token }}" --claim-url https://app.netdata.cloud
-
+ 
 - name: Configure Netdata
   ansible.builtin.template:
     src: netdata.conf.j2
