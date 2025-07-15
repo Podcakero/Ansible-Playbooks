@@ -32,7 +32,7 @@
 - name: Apply Glances API Web Server service
   ansible.builtin.template:
     src: glances-api.service.j2
-    dest: /etc/systemd/system/glances-api.
+    dest: /etc/systemd/system/glances-api.service
     mode: "0644"
     owner: "root"
     group: "root"
