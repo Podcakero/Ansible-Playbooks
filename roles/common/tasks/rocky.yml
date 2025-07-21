@@ -1,9 +1,9 @@
 - name: Set SELINUX to Permissive
-  when:
-    - ansible_facts['virtualization_type'] == "kvm"
   ansible.posix.selinux:
     policy: 'targeted'
     state: 'permissive'
+  when:
+    - ansible_facts['virtualization_type'] == "kvm"
 
 - name: Configure Rocky Repos
   block:
