@@ -68,7 +68,7 @@
     ssl_verify: false
     name: "{{ ansible_hostname }}.podcake.net"
     enabled: true
-    description: "Certificate created by Ansible Semaphore"
+    description: "{{ ansible_hostname }}.podcake.net Certificate created by Ansible Semaphore"
     account: "Greyson"
     validation: "Cloudflare"
     auto_renewal: true
