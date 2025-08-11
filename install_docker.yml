@@ -1,0 +1,5 @@
+---
+- name: Install Docker
+  hosts: all
+  tasks:
+    - ansible.builtin.import_tasks: roles/common/tasks/install_docker.yml

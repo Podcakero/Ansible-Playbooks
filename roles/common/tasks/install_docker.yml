@@ -1,0 +1,35 @@
+- name: Add Docker-CE RHEL Repository
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/rhel/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: "0644"
+    owner: root
+    group: root
+  when:
+    - ansible_facts['distribution'] == "Rocky"
+
+- name: Install Docker Packages
+  ansible.builtin.dnf:
+    state: present
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+
+- name: Add Docker TCP Socket
+  ansible.builtin.lineinfile:
+    path: /usr/lib/systemd/system/docker.service
+    regexp: "ExecStart=/usr/bin/dockerd -H fd://"
+    state: present
+    line: "ExecStart=/usr/bin/dockerd -H fd:// -H 0.0.0.0:2375 --containerd=/run/containerd/containerd.sock"
+    mode: "0644"
+    owner: root
+    group: root
+
+- name: Enable Docker Socket
+  ansible.builtin.systemd:
+    name: docker.socket
+    state: started
+    enabled: true

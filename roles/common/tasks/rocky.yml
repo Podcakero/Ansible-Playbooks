@@ -45,7 +45,7 @@
     pkg: epel-release
 
 - name: Install packages
-  ansible.builtin.package:
+  ansible.builtin.dnf:
     state: present
     name: "{{ rocky_packages }}"
 
