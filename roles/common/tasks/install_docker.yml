@@ -84,7 +84,7 @@
           enabled: true
     body_format: "json"
   when:
-    - result.status is 500
+    - result.status == 500
 
 - name: Update server on Komodo
   ansible.builtin.uri:
@@ -103,4 +103,4 @@
           enabled: true
     body_format: "json"
   when:
-    - result.status is 200
+    - result.status == 200
