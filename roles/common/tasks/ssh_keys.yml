@@ -55,15 +55,17 @@
         line: ""
         create: true
         mode: "0600"
-    - ansible.builtin.lineinfile:
-      path: /root/.ssh/authorized_keys
-      regexp: 'acme-rsa$'
-      line: "{{ acme_rsa_key }}"
-      create: true
-      mode: "0600"
-    - ansible.builtin.lineinfile:
-      path: /root/.ssh/authorized_keys
-      regexp: 'acme-ed25519$'
-      line: "{{ acme_ed25519_key }}"
-      create: true
-      mode: "0600"
+    - name: ACME RSA Key
+      ansible.builtin.lineinfile:
+        path: /root/.ssh/authorized_keys
+        regexp: 'acme-rsa$'
+        line: "{{ acme_rsa_key }}"
+        create: true
+        mode: "0600"
+    - name: ACME ED25519 Key
+      ansible.builtin.lineinfile:
+        path: /root/.ssh/authorized_keys
+        regexp: 'acme-ed25519$'
+        line: "{{ acme_ed25519_key }}"
+        create: true
+        mode: "0600"
