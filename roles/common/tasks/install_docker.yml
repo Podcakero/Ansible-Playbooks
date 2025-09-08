@@ -51,6 +51,22 @@
     state: started
     enabled: true
 
+- name: Check if server exists in Komodo
+  ansible.builtin.uri:
+    url: https://komodo.podcake.net/read
+    method: "POST"
+    headers:
+      Content-Type: application/json
+      X-Api-Key: "{{ komodo_api_key }}"
+      X-Api-Secret: "{{ komodo_api_secret }}"
+    body:
+      type: "GetServer"
+      params:
+        server: "{{ ansible_host }}"
+    body_format: "json"
+    status_code: [200, 500]
+  register: result
+
 - name: Add server to Komodo
   ansible.builtin.uri:
     url: https://komodo.podcake.net/write
@@ -67,3 +83,24 @@
           address: "{{ ansible_host }}.podcake.net"
           enabled: true
     body_format: "json"
+  when:
+    - result.error is defined
+
+- name: Update server on Komodo
+  ansible.builtin.uri:
+    url: https://komodo.podcake.net/write
+    method: "POST"
+    headers:
+      Content-Type: application/json
+      X-Api-Key: "{{ komodo_api_key }}"
+      X-Api-Secret: "{{ komodo_api_secret }}"
+    body:
+      type: "UpdateServer"
+      params:
+        id: "{{ ansible_host }}"
+        config:
+          address: "{{ ansible_host }}.podcake.net"
+          enabled: true
+    body_format: "json"
+  when:
+    - result.error is undefined
