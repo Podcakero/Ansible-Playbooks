@@ -62,8 +62,8 @@
     body: 
       type: "CreateServer"
       params:
-        - name: "{{ ansible_host }}"
+        - name: "{{ ansible_host }}.podcake.net"
         - config:
-            address: "{{ ansible_host }}"
+            address: "{{ ansible_host }}.podcake.net"
             enabled: true
     body_format: "json"
