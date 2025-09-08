@@ -19,14 +19,12 @@
       - docker-compose-plugin
 
 - name: Add Docker TCP Socket
-  ansible.builtin.lineinfile:
-    path: /usr/lib/systemd/system/docker.service
-    regexp: "ExecStart=/usr/bin/dockerd -H fd://"
-    state: present
-    line: "ExecStart=/usr/bin/dockerd -H fd:// -H 0.0.0.0:2375 --containerd=/run/containerd/containerd.sock"
-    mode: "0644"
-    owner: root
-    group: root
+  ansible.builtin.template:
+    src: docker.service.d_override.conf.j2
+    dest: /etc/systemd/system/docker.service.d/override.conf
+    mode: '0644'
+    owner: 'root'
+    group: 'root'
 
 - name: Enable Docker Socket
   ansible.builtin.systemd:
