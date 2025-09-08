@@ -59,11 +59,11 @@
       Content-Type: application/json
       X-Api-Key: "K-C3x33zV8rJarHUwas1UR63i98eCLKjgf8ysKx5WQ"
       X-Api-Secret: "S-2nVXAFMAK1PSZK0S1ZsIPA8Vwv0IZqh6AbFdAGBN"
-    body: 
+    body:
       type: "CreateServer"
       params:
-        - name: "{{ ansible_host }}.podcake.net"
-        - config:
-            address: "{{ ansible_host }}.podcake.net"
-            enabled: true
+        name: "{{ ansible_host }}.podcake.net"
+        config:
+          address: "{{ ansible_host }}.podcake.net"
+          enabled: true
     body_format: "json"
