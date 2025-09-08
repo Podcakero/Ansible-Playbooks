@@ -57,8 +57,8 @@
     method: "POST"
     headers:
       Content-Type: application/json
-      X-Api-Key: "K-C3x33zV8rJarHUwas1UR63i98eCLKjgf8ysKx5WQ"
-      X-Api-Secret: "S-2nVXAFMAK1PSZK0S1ZsIPA8Vwv0IZqh6AbFdAGBN"
+      X-Api-Key: "{{ komodo_api_key }}"
+      X-Api-Secret: "{{ komod_api_secret }}"
     body:
       type: "CreateServer"
       params:
