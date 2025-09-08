@@ -46,10 +46,24 @@
         create: true
         mode: "0600"
 
-- name: Ensure Gutknecht ACME ssh key is in authorized_keys
-  ansible.builtin.lineinfile:
-    path: /root/.ssh/authorized_keys
-    regexp: 'acme$'
-    line: "{{ acme_ssh_key }}"
-    create: true
-    mode: "0600"
+- name: Ensure Gutknecht ACME ssh keys are in authorized_keys
+  block: 
+    - name: Remove old Acme RSA Key
+      ansible.builtin.lineinfile:
+        path: /root/.ssh/authorized_keys
+        regexp: 'acme$'
+        line: ""
+        create: true
+        mode: "0600"
+    - ansible.builtin.lineinfile:
+      path: /root/.ssh/authorized_keys
+      regexp: 'acme-rsa$'
+      line: "{{ acme_rsa_key }}"
+      create: true
+      mode: "0600"
+    - ansible.builtin.lineinfile:
+      path: /root/.ssh/authorized_keys
+      regexp: 'acme-ed25519$'
+      line: "{{ acme_ed25519_key }}"
+      create: true
+      mode: "0600"
