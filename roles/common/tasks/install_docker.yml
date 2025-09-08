@@ -99,7 +99,7 @@
       params:
         id: "{{ ansible_host }}"
         config:
-          address: "{{ ansible_host }}.podcake.net"
+          address: "https://{{ ansible_host }}.podcake.net:8120"
           enabled: true
     body_format: "json"
   when:
