@@ -58,7 +58,7 @@
     headers:
       Content-Type: application/json
       X-Api-Key: "{{ komodo_api_key }}"
-      X-Api-Secret: "{{ komod_api_secret }}"
+      X-Api-Secret: "{{ komodo_api_secret }}"
     body:
       type: "CreateServer"
       params:
