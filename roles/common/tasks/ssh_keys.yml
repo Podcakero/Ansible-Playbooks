@@ -1,18 +1,50 @@
-- name: Ensure Greyson ssh key is in authorized_keys
-  ansible.builtin.lineinfile:
-    path: /root/.ssh/authorized_keys
-    regexp: 'Greyson Weimer$'
-    line: "{{ greyson_ssh_key }}"
-    create: true
-    mode: "0600"
+- name: Ensure Greyson ssh keys are in authorized_keys
+  block:
+    - name: Remove old Greyson RSA Key
+      ansible.builtin.lineinfile:
+        path: /root/.ssh/authorized_keys
+        regexp: 'Greyson Weimer$'
+        line: ""
+        create: true
+        mode: "0600"
+    - name: Greyson RSA Key
+      ansible.builtin.lineinfile:
+        path: /root/.ssh/authorized_keys
+        regexp: 'Greyson Weimer RSA$'
+        line: "{{ greyson_rsa_key }}"
+        create: true
+        mode: "0600"
+    - name: Greyson ED25519 Key
+      ansible.builtin.lineinfile:
+        path: /root/.ssh/authorized_keys
+        regexp: 'Greyson Weimer ED25519$'
+        line: "{{ greyson_ed25519_key }}"
+        create: true
+        mode: "0600"
 
-- name: Ensure Semaphore ssh key is in authorized_keys
-  ansible.builtin.lineinfile:
-    path: /root/.ssh/authorized_keys
-    regexp: 'semaphore$'
-    line: "{{ semaphore_ssh_key }}"
-    create: true
-    mode: "0600"
+- name: Ensure Semaphore ssh keys are in authorized_keys
+  block:
+    - name: Remove old Semaphore RSA Key
+      ansible.builtin.lineinfile:
+        path: /root/.ssh/authorized_keys
+        regexp: 'semaphore$'
+        line: ""
+        create: true
+        mode: "0600"
+    - name: Semaphore RSA key
+      ansible.builtin.lineinfile:
+        path: /root/.ssh/authorized_keys
+        regexp: 'semaphore-rsa'
+        line: "{{ semaphore_rsa_key }}"
+        create: true
+        mode: "0600"
+    - name: Semaphore ED25519 Key
+      ansible.builtin.lineinfile:
+        path: /root/.ssh/authorized_keys
+        regexp: 'semaphore-ed25519'
+        line: "{{ semaphore_ed25519_key }}"
+        create: true
+        mode: "0600"
 
 - name: Ensure Gutknecht ACME ssh key is in authorized_keys
   ansible.builtin.lineinfile:
