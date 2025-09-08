@@ -50,3 +50,20 @@
     name: periphery.service
     state: started
     enabled: true
+
+- name: Add server to Komodo
+  ansible.builtin.uri:
+    url: https://komodo.podcake.net/write
+    method: "POST"
+    headers:
+      Content-Type: application/json
+      X-Api-Key: "K-C3x33zV8rJarHUwas1UR63i98eCLKjgf8ysKx5WQ"
+      X-Api-Secret: "S-2nVXAFMAK1PSZK0S1ZsIPA8Vwv0IZqh6AbFdAGBN"
+    body: 
+      type: "CreateServer"
+      params:
+        - name: "{{ ansible_host }}"
+        - config:
+            address: "{{ ansible_host }}"
+            enabled: true
+    body_format: "json"
