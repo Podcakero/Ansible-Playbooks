@@ -39,7 +39,7 @@
 
 - name: Configure Komodo Periphery
   ansible.builtin.template:
-    src: peripher.config.toml.j2
+    src: periphery.config.toml.j2
     dest: /etc/komodo/periphery.config.toml
     mode: "0644"
     owner: root
