@@ -64,6 +64,6 @@
       params:
         name: "{{ ansible_host }}"
         config:
-          address: "{{ ansible_host }}"
+          address: "{{ ansible_host }}.podcake.net"
           enabled: true
     body_format: "json"
