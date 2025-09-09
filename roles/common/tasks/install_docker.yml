@@ -19,12 +19,21 @@
       - docker-compose-plugin
 
 - name: Add Docker TCP Socket
-  ansible.builtin.template:
-    src: docker.override.conf.j2
-    dest: /etc/systemd/system/docker.service.d/override.conf
-    mode: '0644'
-    owner: 'root'
-    group: 'root'
+  block:
+    - name: Add docker.service.d folder
+      ansible.builtin.file:
+        path: /etc/systemd/system/docker.service.d
+        state: directory
+        mode: '0644'
+        owner: 'root'
+        group: 'root'
+    - name: Apply Docker service override
+      ansible.builtin.template:
+        src: docker.override.conf.j2
+        dest: /etc/systemd/system/docker.service.d/override.conf
+        mode: '0644'
+        owner: 'root'
+        group: 'root'
 
 - name: Enable and Start Docker Socket
   ansible.builtin.systemd:
