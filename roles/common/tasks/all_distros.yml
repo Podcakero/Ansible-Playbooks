@@ -59,19 +59,19 @@
     sftp_identity_type: rsa
     sftp_remote_path: "/etc/pki/tls/certs"
 
-#- name: Create ACME Client Certificate
-#  ansibleguy.opnsense.acme_certificate:
-#    firewall: "{{ opnsense_ip }}"
-#    api_key: "{{ opnsense_api_key }}"
-#    api_port: 444
-#    api_secret: "{{ opnsense_api_secret }}"
-#    ssl_verify: false
-#    name: "{{ ansible_hostname }}.podcake.net"
-#    enabled: true
-#    description: "{{ ansible_hostname }}.podcake.net Certificate created by Ansible Semaphore"
-#    account: "Greyson"
-#    validation: "Cloudflare"
-#    auto_renewal: true
-#    renew_interval: 60
-#    restart_actions:
-#      - "Update certificate on {{ ansible_hostname }}.podcake.net"
+- name: Create ACME Client Certificate
+  ansibleguy.opnsense.acme_certificate:
+    firewall: "{{ opnsense_ip }}"
+    api_key: "{{ opnsense_api_key }}"
+    api_port: 444
+    api_secret: "{{ opnsense_api_secret }}"
+    ssl_verify: false
+    name: "{{ ansible_hostname }}.podcake.net"
+    enabled: true
+    description: "{{ ansible_hostname }}.podcake.net Certificate created by Ansible Semaphore"
+    account: "Greyson"
+    validation: "Cloudflare"
+    auto_renewal: true
+    renew_interval: 60
+    restart_actions:
+      - "Update certificate on {{ ansible_hostname }}.podcake.net"
