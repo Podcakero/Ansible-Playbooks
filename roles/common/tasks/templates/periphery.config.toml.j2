@@ -102,6 +102,23 @@ exclude_disk_mounts = []
 # AUTH #
 ########
 
+## The address of Komodo Core. Must be reachable from this host.
+## If provided, Periphery will operate in outbound mode.
+## Env: PERIPHERY_CORE_ADDRESS
+## Default: None
+core_address = "komodo.podcake.net" # Example: demo.komo.do, ws://localhost:9120
+
+## The Server this Periphery agent should "connect as".
+## Systemd periphery can use the system hostname by setting `connect_as = "$(hostname)"`.
+## Env: PERIPHERY_CONNECT_AS
+## Default: None
+connect_as = "{{ ansible_facts["hostname"] }}"
+
+## Make Onboarding Keys in Server settings.
+## Not needed if connecting as Server that already exists.
+## Env: PERIPHERY_ONBOARDING_KEY
+onboarding_key = "{{ komodo_onboarding_key }}"
+
 ## Optional. Limit the ip addresses which can call the periphery api.
 ## Supports Ipv4 / Ipv6 addresses and subnets.
 ## Examples: allowed_ips = ["::ffff:12.34.56.78", "10.0.10.0/24"]
