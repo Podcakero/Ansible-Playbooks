@@ -33,10 +33,10 @@
     api_port: 444
     api_secret: "{{ opnsense_api_secret }}"
     ssl_verify: false
-    name: "Update certificate on {{ ansible_facts['hostname'].podcake.net }}"
+    name: "Update certificate on {{ ansible_facts['hostname'] }}.podcake.net"
     enabled: true
     type: configd_upload_sftp
-    sftp_host: "{{ ansible_facts['hostname'].podcake.net }}"
+    sftp_host: "{{ ansible_facts['hostname'] }}.podcake.net"
     sftp_user: root
     sftp_identity_type: ed25519
     sftp_remote_path: "/etc/pki/tls/certs"
@@ -50,10 +50,10 @@
     ssl_verify: false
     name: "{{ ansible_hostname }}"
     enabled: true
-    description: "{{ ansible_facts['hostname'].podcake.net }} Certificate created by Ansible Semaphore"
+    description: "{{ ansible_facts['hostname'] }}.podcake.net Certificate created by Ansible Semaphore"
     account: "Greyson"
     validation: "Cloudflare"
     auto_renewal: true
     renew_interval: 60
     restart_actions:
-      - "Update certificate on {{ ansible_facts['hostname'].podcake.net }}"
+      - "Update certificate on {{ ansible_facts['hostname'] }}.podcake.net"
