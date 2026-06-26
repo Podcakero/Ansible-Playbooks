@@ -71,7 +71,7 @@
     body:
       type: "GetServer"
       params:
-        server: "{{ ansible_facts['hostname'] }}.podcake.net"
+        server: "{{ ansible_facts['hostname'] }}"
     body_format: "json"
     status_code: [200, 500]
   register: result
@@ -87,7 +87,7 @@
     body:
       type: "CreateServer"
       params:
-        name: "{{ ansible_facts['hostname'] }}.podcake.net"
+        name: "{{ ansible_facts['hostname'] }}"
         config:
           address: "https://{{ ansible_facts['hostname'] }}.podcake.net:8120"
           enabled: true
@@ -106,7 +106,7 @@
     body:
       type: "UpdateServer"
       params:
-        id: "{{ ansible_facts['hostname'] }}.podcake.net"
+        id: "{{ ansible_facts['hostname'] }}"
         config:
           address: "https://{{ ansible_facts['hostname'] }}.podcake.net:8120"
           enabled: true
