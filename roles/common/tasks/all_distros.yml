@@ -48,7 +48,7 @@
     api_port: 444
     api_secret: "{{ opnsense_api_secret }}"
     ssl_verify: false
-    name: "{{ ansible_hostname }}"
+    name: "{{ ansible_facts['hostname'] }}.podcake.net"
     enabled: true
     description: "{{ ansible_facts['hostname'] }}.podcake.net Certificate created by Ansible Semaphore"
     account: "Greyson"
