@@ -177,7 +177,7 @@ user_careful=50
 user_warning=70
 user_critical=90
 user_log=False
-#user_critical_action=echo "{{time}} User CPU {{user}} higher than {{critical}}" > /tmp/cpu.alert
+#user_critical_action=echo {% raw %}"{{time}} User CPU {{user}} higher than {{critical}}"{% endraw %} > /tmp/cpu.alert
 #
 system_careful=50
 system_warning=70
@@ -256,7 +256,7 @@ disable=False
 careful=50
 warning=70
 critical=90
-#critical_action_repeat=echo "{{time}} {{percent}} higher than {{critical}}"" >> /tmp/memory.alert
+#critical_action_repeat=echo {% raw %}"{{time}} {{percent}} higher than {{critical}}"{% endraw %} >> /tmp/memory.alert
 
 [memswap]
 disable=False
@@ -265,7 +265,7 @@ disable=False
 careful=50
 warning=70
 critical=90
-#warning_action=echo "{{time}} {{percent}} higher than {{warning}}"" > /tmp/memory.alert
+#warning_action=echo {% raw %}"{{time}} {{percent}} higher than {{warning}}"{% endraw %} > /tmp/memory.alert
 
 [load]
 disable=False
@@ -312,7 +312,7 @@ hide_zero=False
 #wlan0_tx_warning=900000
 #wlan0_tx_critical=1000000
 #wlan0_tx_log=True
-#wlan0_rx_critical_action=echo "{{time}} {{interface_name}} RX {{bytes_recv_rate_per_sec}}Bps" > /tmp/network.alert
+#wlan0_rx_critical_action=echo {% raw %}"{{time}} {{interface_name}} RX {{bytes_recv_rate_per_sec}}Bps"{% endraw %} > /tmp/network.alert
 # Alias for network interface name
 #alias=wlp0s20f3:WIFI
 
@@ -421,7 +421,7 @@ critical=90
 #/_careful=1
 #/_warning=5
 #/_critical=10
-#/_critical_action=echo "{{time}} {{mnt_point}} filesystem space {{percent}}% higher than {{critical}}%" > /tmp/fs.alert
+#/_critical_action=echo {% raw %}"{{time}} {{mnt_point}} filesystem space {{percent}}% higher than {{critical}}%"{% endraw %} > /tmp/fs.alert
 # Allow additional file system types (comma-separated FS type)
 #allow=shm
 # Alias for root file system
@@ -522,7 +522,7 @@ temperature_core_critical=80
 #temperature_core_Ambient_warning=60
 #temperature_core_Ambient_critical=85
 #temperature_core_Ambient_log=True
-#temperature_core_Ambient_critical_action=echo "{{time}} {{label}} temperature {{value}}{{unit}} higher than {{critical}}{{unit}}" > /tmp/temperature.alert
+#temperature_core_Ambient_critical_action=echo {% raw %}"{{time}} {{label}} temperature {{value}}{{unit}} higher than {{critical}}{{unit}}"{% endraw %} > /tmp/temperature.alert
 # Sensors alias
 #alias=core 0:CPU Core 0,core 1:CPU Core 1
 
