@@ -65,25 +65,19 @@
   when:
     - ansible_facts['virtualization_type'] == "kvm"
   block:
-    - name: \[Setup TPM Auto-Unlock\] Install systemd-cryptsetup on Rocky servers
-      ansible.builtin.dnf:
-        state: present
-        pkg: "systemd-cryptsetup"
-    - name: \[Setup TPM Auto-Unlock\] Loop over the encrypted disks
-      block:
-        - name: \[Setup TPM Auto-Unlock\] Clear existing TPM2 keys on disks
-          community.crypto.luks_device:
-            device: "{{ item }}"
-            passphrase: "{{ encryption_passphrase }}"
-            remove_tpm2: true
-          loop: "{{ ansible_facts['mounts'] | items2dict(key_name='mount', value_name='device') | extract(['/', '/var/lib/docker']) | list }}"
-        - name: \[Setup TPM Auto-Unlock\] Enroll TPM2 in primary boot disk
-          community.crypto.luks_device:
-            device: "{{ item }}"
-            passphrase: "{{ encryption_passphrase }}"
-            new_tpm2: auto
-            new_tpm2_pcrs: "1+3+5+7+11+12+14"
-          loop: "{{ ansible_facts['mounts'] | items2dict(key_name='mount', value_name='device') | extract(['/', '/var/lib/docker']) | list }}"
+    - name: \[Setup TPM Auto-Unlock\] Clear existing TPM2 keys on disks
+      community.crypto.luks_device:
+        device: "{{ item }}"
+        passphrase: "{{ encryption_passphrase }}"
+        remove_tpm2: true
+      loop: "{{ ansible_facts['mounts'] | items2dict(key_name='mount', value_name='device') | extract(['/', '/var/lib/docker']) | list }}"
+    - name: \[Setup TPM Auto-Unlock\] Enroll TPM2 in primary boot disk
+      community.crypto.luks_device:
+        device: "{{ item }}"
+        passphrase: "{{ encryption_passphrase }}"
+        new_tpm2: auto
+        new_tpm2_pcrs: "1+3+5+7+11+12+14"
+      loop: "{{ ansible_facts['mounts'] | items2dict(key_name='mount', value_name='device') | extract(['/', '/var/lib/docker']) | list }}"
 
 #- name: Setup TPM Auto-Unlock
 #  when:
