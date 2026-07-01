@@ -12,6 +12,20 @@
 - name: Configure SSH Keys
   ansible.builtin.import_tasks: ssh_keys.yml
 
+- name: Install Glances
+  ansible.builtin.pip:
+    break_system_packages: true
+    name: "{{ pip_packages }}"
+    state: latest
+
+- name: Apply Glances Config File
+  ansible.builtin.template:
+    src: glances.conf.j2
+    dest: /etc/glances/glances.conf
+    mode: "0644"
+    owner: "root"
+    group: "root"
+
 - name: Apply Glances API Web Server service
   ansible.builtin.template:
     src: glances-api.service.j2
