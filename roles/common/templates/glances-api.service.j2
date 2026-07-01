@@ -5,7 +5,7 @@ Documentation=https://github.com/nicolargo/glances
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/glances -w --disable-webui -C /etc/glances/glances.conf --disable-autodiscover
+ExecStart=/usr/local/bin/glances -w --disable-webui -C /etc/glances.conf --disable-autodiscover
 Restart=on-abort
 
 [Install]
