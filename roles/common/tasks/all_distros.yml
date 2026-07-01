@@ -16,7 +16,7 @@
   ansible.builtin.pip:
     break_system_packages: true
     name: "{{ pip_packages }}"
-    state: latest
+    state: present
 
 - name: Apply Glances Config File
   ansible.builtin.template:
