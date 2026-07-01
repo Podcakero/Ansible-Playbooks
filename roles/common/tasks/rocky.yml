@@ -70,7 +70,7 @@
         device: "{{ item }}"
         passphrase: "{{ encryption_passphrase }}"
         remove_tpm2: true
-      loop: "{{ ansible_facts['mounts'] | items2dict(key_name='mount', value_name='device') | extract(['/', '/var/lib/docker']) | list }}"
+      loop: "{{ ['/', '/var/lib/docker'] | extract(ansible_facts['mounts'] | items2dict(key_name='mount', value_name='device')) | list }}"
     - name: \[Setup TPM Auto-Unlock\] Enroll TPM2 in primary boot disk
       community.crypto.luks_device:
         device: "{{ item }}"
