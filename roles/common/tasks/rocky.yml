@@ -67,7 +67,7 @@
   block:
     - name: \[Setup TPM Auto-Unlock\] Clear existing TPM2 keys on boot disk
       community.crypto.luks_device:
-        device: "{{ ansible_facts['mounts'] | items2dict(key_name='mount', value_name='device')[item] }}"
+        device: "{{ item | extract(ansible_facts['mounts'] | items2dict(key_name='mount', value_name='device')) }}"
         passphrase: "{{ encryption_passphrase }}"
         remove_tpm2: true
       loop: "{{ ['/', '/var/lib/docker'] }}"
