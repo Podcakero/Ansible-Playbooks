@@ -8,12 +8,12 @@
       - "/dev/disk/by-uuid/{{ item | regex_replace('^.*-luks-(.*)$', '\\1') }}"
   register: slots
   failed_when:
-    - 'is not a supported LUKS device!' in slots.stderr
+    - "'is not a supported LUKS device!' in slots.stderr"
 
 - name: \[Setup TPM Auto-Unlock\] Reconfigure tpm2 binding on Rocky Servers
   when:
     - slots.rc == 0
-    - 'tpm2' in slots.stdout
+    - "'tpm2' in slots.stdout"
   ansible.builtin.command:
     argv:
       - /usr/bin/clevis
@@ -28,12 +28,12 @@
   changed_when: output.rc == 0
   failed_when:
     - output.rc == 1
-    - 'Error' in output.stderr
+    - "'Error' in output.stderr"
 
 - name: \[Setup TPM Auto-Unlock\] Regenerate tpm2 binding on Rocky Servers
   when: 
     - slots.rc == 0
-    - 'tpm2' in slots.stdout
+    - "'tpm2' in slots.stdout"
   ansible.builtin.command:
     argv:
       - /usr/bin/clevis
@@ -49,11 +49,11 @@
   changed_when: output.rc == 0
   failed_when:
     - output.rc == 1
-    - 'Error' in output.stderr
+    - "'Error' in output.stderr"
 
 - name: \[Setup TPM Auto-Unlock\] Enroll tpm2 in primary disk on Rocky Servers
   when: 
-    - slots.rc != 0 or 'tpm2' not in slots.stdout
+    - "slots.rc != 0 or 'tpm2' not in slots.stdout"
   ansible.builtin.command:
     argv:
       - /usr/bin/clevis
