@@ -1,0 +1,68 @@
+- name: \[Setup TPM Auto-Unlock\] Check for an existing TPM2 Slot on Rocky Servers
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/clevis
+      - luks
+      - list
+      - -d
+      - "/dev/disk/by-uuid/{{ item | regex_replace('^.*-luks-(.*)$', '\\1') }}"
+  register: slots
+  failed_when:
+    - 'is not a supported LUKS device!' in slots.stderr
+
+- name: \[Setup TPM Auto-Unlock\] Reconfigure tpm2 binding on Rocky Servers
+  when:
+    - slots.rc == 0
+    - 'tpm2' in slots.stdout
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/clevis
+      - luks
+      - edit
+      - -d
+      - "/dev/disk/by-uuid/{{ item | regex_replace('^.*-luks-(.*)$', '\\1') }}"
+      - -s
+      - 1
+      - -c '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"{{ pcr_ids }}"}'
+  register: output
+  changed_when: output.rc == 0
+  failed_when:
+    - output.rc == 1
+    - 'Error' in output.stderr
+
+- name: \[Setup TPM Auto-Unlock\] Regenerate tpm2 binding on Rocky Servers
+  when: 
+    - slots.rc == 0
+    - 'tpm2' in slots.stdout
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/clevis
+      - luks
+      - regen
+      - -d
+      - "/dev/disk/by-uuid/{{ item | regex_replace('^.*-luks-(.*)$', '\\1') }}"
+      - -s
+      - 1
+      - -q
+    stdin: "{{ encryption_passphrase }}"
+  register: output
+  changed_when: output.rc == 0
+  failed_when:
+    - output.rc == 1
+    - 'Error' in output.stderr
+
+- name: \[Setup TPM Auto-Unlock\] Enroll tpm2 in primary disk on Rocky Servers
+  when: 
+    - slots.rc != 0 or 'tpm2' not in slots.stdout
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/clevis
+      - luks
+      - bind
+      - -d
+      - "/dev/disk/by-uuid/{{ item | regex_replace('^.*-luks-(.*)$', '\\1') }}"
+      - tpm2
+      - '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"{{ pcr_ids }}"}'
+    stdin: "{{ encryption_passphrase }}"
+  register: output
+  changed_when: output.rc == 0
