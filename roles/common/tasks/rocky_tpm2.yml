@@ -5,7 +5,7 @@
       - luks
       - list
       - -d
-      - "/dev/disk/by-uuid/{{ item | regex_replace('^.*-luks-(.*)$', '\\1') }}"
+      - "/dev/disk/by-uuid/{{ item }}"
   register: slots
   failed_when:
     - "'is not a supported LUKS device!' in slots.stderr"
@@ -20,7 +20,7 @@
       - luks
       - edit
       - -d
-      - "/dev/disk/by-uuid/{{ item | regex_replace('^.*-luks-(.*)$', '\\1') }}"
+      - "/dev/disk/by-uuid/{{ item }}"
       - -s
       - 1
       - -c '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"{{ pcr_ids }}"}'
@@ -40,7 +40,7 @@
       - luks
       - regen
       - -d
-      - "/dev/disk/by-uuid/{{ item | regex_replace('^.*-luks-(.*)$', '\\1') }}"
+      - "/dev/disk/by-uuid/{{ item }}"
       - -s
       - 1
       - -q
@@ -60,7 +60,7 @@
       - luks
       - bind
       - -d
-      - "/dev/disk/by-uuid/{{ item | regex_replace('^.*-luks-(.*)$', '\\1') }}"
+      - "/dev/disk/by-uuid/{{ item }}"
       - tpm2
       - '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"{{ pcr_ids }}"}'
     stdin: "{{ encryption_passphrase }}"
