@@ -64,14 +64,8 @@
 - name: Setup TPM Auto-Unlock
   when:
     - ansible_facts['virtualization_type'] == "kvm"
-  ansible.builtin.debug:
-    msg: "{{ ansible_facts['device_links'].ids }}"
-
-#- name: Setup TPM Auto-Unlock
-#  when:
-#    - ansible_facts['virtualization_type'] == "kvm"
-#  ansible.builtin.include_tasks: rocky_tpm2.yml
-#  loop: "{{ query('ansible.builtin.subelements', ansible_facts['device_links'].ids | dict2items, 'value') | map('regex_search', '^dm-uuid-CRYPT-LUKS2-[a-zA-Z0-9]+-luks-([a-zA-Z0-9-]+)$', '\\1') | select('string') | list }}"
+  ansible.builtin.include_tasks: rocky_tpm2.yml
+  loop: "{{ query('ansible.builtin.dict', ansible_facts['device_links'].ids) | map(attribute='value') | flatten | map('regex_search', '^dm-uuid-CRYPT-LUKS2-[a-zA-Z0-9]+-luks-([a-zA-Z0-9-]+)$', '\\1') | flatten | select('string') }}"
 
 #- name: Regenerate Dracut on Rocky servers
 #  when:
