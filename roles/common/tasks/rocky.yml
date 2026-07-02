@@ -65,7 +65,7 @@
   when:
     - ansible_facts['virtualization_type'] == "kvm"
   ansible.builtin.include_tasks: rocky_tpm2.yml
-  loop: "{{ query('ansible.builtin.subelements', ansible_facts['device_links'].ids | dict2items, 'value') | map('regex_search', 'dm-uuid-CRYPT-LUKS2-(.*)') | select('string') | list }}"
+  loop: "{{ query('ansible.builtin.subelements', ansible_facts['device_links'].ids | dict2items, 'value') | map('regex_search', 'dm-uuid-CRYPT-LUKS2-(.*)') | select('string') | map('regex_replace', '^.*-luks-(.*)\')$', '\\1') | list }}"
 
 - name: Regenerate Dracut on Rocky servers
   when:
