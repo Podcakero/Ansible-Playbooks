@@ -65,7 +65,7 @@
   when:
     - ansible_facts['virtualization_type'] == "kvm"
   ansible.builtin.debug:
-    msg: "{{ query('ansible.builtin.subelements', ansible_facts['device_links'].ids | dict2items, 'value') }}"
+    msg: "{{ ansible_facts['device_links'].ids }}"
 
 #- name: Setup TPM Auto-Unlock
 #  when:
