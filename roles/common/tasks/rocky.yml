@@ -64,19 +64,25 @@
 - name: Setup TPM Auto-Unlock
   when:
     - ansible_facts['virtualization_type'] == "kvm"
-  ansible.builtin.include_tasks: rocky_tpm2.yml
-  loop: "{{ query('ansible.builtin.subelements', ansible_facts['device_links'].ids | dict2items, 'value') | map('regex_search', '^dm-uuid-CRYPT-LUKS2-[a-zA-Z0-9]+-luks-([a-zA-Z0-9-]+).*$', '\\1') | select('string') | list }}"
+  ansible.builtin.debug:
+    msg: "{{ query('ansible.builtin.subelements', ansible_facts['device_links'].ids | dict2items, 'value') }"
 
-- name: Regenerate Dracut on Rocky servers
-  when:
-    - ansible_facts['virtualization_type'] == "kvm"
-  ansible.builtin.command:
-    argv:
-      - dracut
-      - -fv
-      - --regenerate-all
-  register: output
-  changed_when: output.rc == 0
+#- name: Setup TPM Auto-Unlock
+#  when:
+#    - ansible_facts['virtualization_type'] == "kvm"
+#  ansible.builtin.include_tasks: rocky_tpm2.yml
+#  loop: "{{ query('ansible.builtin.subelements', ansible_facts['device_links'].ids | dict2items, 'value') | map('regex_search', '^dm-uuid-CRYPT-LUKS2-[a-zA-Z0-9]+-luks-([a-zA-Z0-9-]+)$', '\\1') | select('string') | list }}"
+
+#- name: Regenerate Dracut on Rocky servers
+#  when:
+#    - ansible_facts['virtualization_type'] == "kvm"
+#  ansible.builtin.command:
+#    argv:
+#      - dracut
+#      - -fv
+#      - --regenerate-all
+#  register: output
+#  changed_when: output.rc == 0
 
 #    - name: \[Setup TPM Auto-Unlock\] Regenerate Dracut on Rocky servers
 #      ansible.builtin.command:
