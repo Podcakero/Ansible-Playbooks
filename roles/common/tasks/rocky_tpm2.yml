@@ -23,7 +23,8 @@
       - "/dev/disk/by-uuid/{{ item }}"
       - -s
       - 1
-      - -c '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"{{ pcr_ids }}"}'
+      - -c
+      - '{"hash":"sha256","key":"rsa","pcr_bank":"sha256","pcr_ids":"{{ pcr_ids }}"}'
   register: output
   changed_when: output.rc == 0
   failed_when:
