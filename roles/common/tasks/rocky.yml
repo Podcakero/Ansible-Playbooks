@@ -64,20 +64,46 @@
 - name: Setup TPM Auto-Unlock
   when:
     - ansible_facts['virtualization_type'] == "kvm"
-  block:
-    - name: \[Setup TPM Auto-Unlock\] Clear existing TPM2 keys on boot disk
-      community.crypto.luks_device:
-        uuid: "{{ item | extract(ansible_facts['mounts'] | items2dict(key_name='mount', value_name='uuid')) }}"
-        passphrase: "{{ encryption_passphrase }}"
-        remove_tpm2: true
-      loop: "{{ ['/', '/var/lib/docker'] }}"
-    - name: \[Setup TPM Auto-Unlock\] Enroll TPM2 in primary boot disk
-      community.crypto.luks_device:
-        uuid: "{{ tem | extract(ansible_facts['mounts'] | items2dict(key_name='mount', value_name='uuid')) }}"
-        passphrase: "{{ encryption_passphrase }}"
-        new_tpm2: auto
-        new_tpm2_pcrs: "1+3+5+7+11+12+14"
-      loop: "{{ ['/', '/var/lib/docker'] }}"
+  ansible.builtin.import_tasks: rocky_tpm2.yml
+  loop: "{{ query('ansible.builtin.subelements', ansible_facts['device_links'].ids | dict2items, 'value') | map('regex_search', 'dm-uuid-CRYPT-LUKS2-.*') | select('string') | list }}"
+
+- name: Regenerate Dracut on Rocky servers
+  when:
+    - ansible_facts['virtualization_type'] == "kvm"
+  ansible.builtin.command:
+    argv:
+      - dracut
+      - -fv
+      - --regenerate-all
+  register: output
+  changed_when: output.rc == 0
+
+#    - name: \[Setup TPM Auto-Unlock\] Regenerate Dracut on Rocky servers
+#      ansible.builtin.command:
+#        argv:
+#          - dracut
+#          - -fv
+#          - --regenerate-all
+#      register: output
+#      changed_when: output.rc == 0
+
+#- name: Setup TPM Auto-Unlock
+#  when:
+#    - ansible_facts['virtualization_type'] == "kvm"
+#  block:
+#    - name: \[Setup TPM Auto-Unlock\] Clear existing TPM2 keys on boot disk
+#      community.crypto.luks_device:
+#        uuid: "{{ item | extract(ansible_facts['mounts'] | items2dict(key_name='mount', value_name='uuid')) }}"
+#        passphrase: "{{ encryption_passphrase }}"
+#        remove_tpm2: true
+#      loop: "{{ ['/', '/var/lib/docker'] }}"
+#    - name: \[Setup TPM Auto-Unlock\] Enroll TPM2 in primary boot disk
+#      community.crypto.luks_device:
+#        uuid: "{{ tem | extract(ansible_facts['mounts'] | items2dict(key_name='mount', value_name='uuid')) }}"
+#        passphrase: "{{ encryption_passphrase }}"
+#        new_tpm2: auto
+#        new_tpm2_pcrs: "1+3+5+7+11+12+14"
+#      loop: "{{ ['/', '/var/lib/docker'] }}"
 
 #- name: Setup TPM Auto-Unlock
 #  when:
